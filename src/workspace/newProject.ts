@@ -94,7 +94,7 @@ export async function prepareNewProject(parent: vscode.Uri, options: NewProjectO
   validateRootUri(parent);
   const manifest = bundle.manifests.find(item => item.id === `al-${options.profile}`);
   if (!manifest) throw new NewProjectError('Das gewählte Strukturprofil fehlt.');
-  const draft = createNewProjectDraft(options, manifest, bundle.gitignore, guide);
+  const draft = createNewProjectDraft(options, manifest, bundle.gitignore, guide, bundle.agentDocs);
   const root = vscode.Uri.joinPath(parent, draft.name);
   const plan: NewProjectPlan = { ...draft, parentUri: parent.toString(), rootUri: root.toString(),
     workspaceUri: vscode.Uri.joinPath(root, draft.workspaceFile).toString(), hasAppJson: options.appJsonContent !== undefined || options.alConfiguration !== undefined,

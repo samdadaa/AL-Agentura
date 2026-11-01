@@ -13,7 +13,7 @@ function validation(action: () => void): string | undefined {
   catch (error: unknown) { return error instanceof TemplateValidationError ? error.message : 'Ungültige Eingabe.'; }
 }
 
-export async function newProjectWizard(): Promise<NewProjectSelection | undefined> {
+export async function newProjectWizard(structureOnly = false): Promise<NewProjectSelection | undefined> {
   const parent = (await vscode.window.showOpenDialog({ canSelectFiles: false, canSelectFolders: true, canSelectMany: false,
     title: 'Neues AL-Projekt: übergeordneten Ordner auswählen', openLabel: 'Übergeordneten Ordner wählen' }))?.[0];
   if (!parent) return undefined;
@@ -33,6 +33,8 @@ export async function newProjectWizard(): Promise<NewProjectSelection | undefine
     if (text === undefined) return undefined;
     modules = parseModuleList(text);
   }
+  // Without Microsoft AL Language: prepare only AL folder and agent documentation.
+  if (structureOnly) return { parent, options: { name, profile: chosen.profile, modules, includeLaunchJson: false } };
   const config = await vscode.window.showQuickPick([
     { label: 'Vorhandene app.json übernehmen', description: 'Quelle bleibt unverändert; keine eigene AL-Konfiguration erfinden', copyApp: true },
     { label: 'Neue app.json erstellen', description: 'Publisher, Version, Runtime und Objekt-IDs bewusst festlegen', copyApp: false, createApp: true },

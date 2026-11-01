@@ -13,7 +13,10 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:alAgentura.createProject"
+    "onCommand:alAgentura.createProject",
+    "onCommand:alAgentura.setupCurrentProject",
+    "onCommand:alAgentura.openProject",
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -25,6 +28,18 @@
       {
         "command": "alAgentura.analyzeExistingProject",
         "title": "AL Agent: Analyze Existing Project"
+      },
+      {
+        "command": "alAgentura.setupCurrentProject",
+        "title": "AL Agent: Setup Current Project"
+      },
+      {
+        "command": "alAgentura.openProject",
+        "title": "AL Agent: Open Project"
+      },
+      {
+        "command": "alAgentura.testALGoIntegration",
+        "title": "AL Agent: Test AL Go Integration"
       }
     ]
   },

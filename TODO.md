@@ -34,7 +34,7 @@ Nachweise: `docs/quality/NAMING.md`; bestehende Ticketabnahmen bleiben unveränd
 | EXT-004 | Standard-/Modular-AL-Ordnerstruktur und Git-Regeln | Zur Prüfung | P0 | EXT-002, EXT-003 |
 | EXT-005 | Neues AL-Projekt inklusive VS-Code-Workspace erstellen | Zur Prüfung | P0 | EXT-003, EXT-004 |
 | EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | Zur Prüfung | P0 | EXT-003, EXT-005 |
-| EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | Offen | P0 | EXT-002, EXT-004 |
+| EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | Zur Prüfung | P0 | EXT-002, EXT-004 |
 | EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | Offen | P1 | EXT-003, EXT-007 |
 | EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | Offen | P0 | EXT-002, EXT-003 |
 | EXT-010 | Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren | Offen | P0 | EXT-003, EXT-007, EXT-009 |
@@ -269,7 +269,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 
 ## EXT-007 — Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-004
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-004
 
 ### Beschreibung und Hintergrund
 Das zentrale Produktversprechen ist nicht nur Ordneranlage, sondern ein agentenbereiter Projektstart. Die erzeugten MD-Dateien sollen unerfahrenen Entwicklern erklären, wie sie mit einem Coding-Agenten sicher arbeiten, ohne dass die Extension selbst KI benötigt.
@@ -278,27 +278,35 @@ Das zentrale Produktversprechen ist nicht nur Ordneranlage, sondern ein agentenb
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Generierte `AGENTS.md` mit verpflichtender Lesereihenfolge, Ticketgrenzen, AL-Regeln, Nicht-Überschreiben und Testpflicht erstellen.
-- [ ] `TODO.md` mit Ticket-ID, Ziel, Beschreibung, Anforderungen, Akzeptanz, Tests, Status und Beispiel definieren.
-- [ ] `GETTING_STARTED.md` für Menschen mit Dateiverzeichnis, Startprompt, Ticketbeispiel und Prüfschritten erstellen.
-- [ ] `docs/PROJECT.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, `SECURITY.md`, `TESTS.md`, `modules/INDEX.md` als sinnvolle, nicht erfundene Platzhalter erzeugen.
-- [ ] Konfigurationswerte aus Projektkontext einsetzen, Unbekanntes als `Zu prüfen` markieren.
-- [ ] Vorlagen mit AL-Fachwissen und vorhandenen Projektmustern gegenprüfen; keine fremden Projektdaten übernehmen.
+- [x] Generierte `AGENTS.md` mit verpflichtender Lesereihenfolge, Ticketgrenzen, AL-Regeln, Nicht-Überschreiben und Testpflicht erstellen.
+- [x] `TODO.md` mit Ticket-ID, Ziel, Beschreibung, Anforderungen, Akzeptanz, Tests, Status und Beispiel definieren.
+- [x] `GETTING_STARTED.md` für Menschen mit Dateiverzeichnis, Startprompt, Ticketbeispiel und Prüfschritten erstellen.
+- [x] `docs/PROJECT.md`, `ARCHITECTURE.md`, `CONVENTIONS.md`, `SECURITY.md`, `TESTS.md`, `modules/INDEX.md` als sinnvolle, nicht erfundene Platzhalter erzeugen.
+- [x] Konfigurationswerte aus Projektkontext einsetzen, Unbekanntes als `Zu prüfen` markieren.
+- [x] Vorlagen mit AL-Fachwissen und vorhandenen Projektmustern gegenprüfen; keine fremden Projektdaten übernehmen.
 
 ### Akzeptanzkriterien
-- [ ] Alle Dateien haben substanziellen, verständlichen Inhalt statt Einzeilern.
-- [ ] AGENTS verweist auf tatsächliche Dateien; Startprompt funktioniert ohne agentenspezifische Integration.
-- [ ] Kein erfundener fachlicher Projektinhalt.
+- [x] Alle Dateien haben substanziellen, verständlichen Inhalt statt Einzeilern.
+- [x] AGENTS verweist auf tatsächliche Dateien; Startprompt funktioniert ohne agentenspezifische Integration.
+- [x] Kein erfundener fachlicher Projektinhalt.
 
 ### Tests und Nachweise
-- [ ] Snapshot-Tests Vorlagen: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Platzhalter vollständig: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Vorlagen-/Inhalts- und Determinismus-Tests: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Platzhalter vollständig: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 - [ ] manuelle AL-Fachprüfung: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+
+### Umsetzung und Prüfnachweis (01.11.2026)
+- Neun ausführliche AL-Guidelines-orientierte Vorlagen aus `resources/templates/agent-docs/` werden bei neuen Projekten gebündelt, mit `{{PROJECT_NAME}}` gerendert und im bestätigten Neuprojekt angelegt.
+- Validierung verhindert fehlende/zusätzliche Vorlagen, leere Inhalte und unbekannte Platzhalter; kein Zugriff auf externe Agenten oder KI-Dienste.
+- Bestehender Projektbefehl `AL Agent: Setup Current Project` ergänzt ausschließlich fehlende Dateien/Ordner nach Analyse, Vorschau und ausdrücklicher Bestätigung; er ersetzt keine vorhandenen Dateien. `AL Agent: Open Project` ermöglicht die direkte Ordneröffnung.
+- 48 Node-Tests nach isolierter TypeScript-Transpilierung bestanden, davon drei neue gezielte Template-Tests. **Vollständiges `npm ci`, regulärer `npm run compile`, VS-Code-Host und manuelle Business-Central-Fachprüfung in dieser Umgebung nicht abschließend nachgewiesen** (fehlende npm-Abhängigkeiten/offline). Vor Freigabe lokal ausführen.
+- Nicht Bestandteil dieses Tickets: semantische Analyse vorhandener Module, automatisches Übersetzen bestehender Agent-Dateien und komplexe Bestandsprojekt-Migrationen (EXT-008/009/010).
 
 ---
 
@@ -544,3 +552,12 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
+
+## Microsoft-Projektintegration – Teststand (01.11.2026)
+- Ein gemeinsamer Einstiegspunkt `AL Agent: Create Project` bietet mit installierter AL Language **Standard**, **Modular**, **BC AI Agent** sowie den bisherigen unabhängigen Generator an.
+- Microsoft-Befehl wird zur Laufzeit aus dem Manifest der installierten Erweiterung ermittelt, nicht hart codiert.
+- Nach einem neuen Workspace mit `app.json` kann Agentura nach ausdrücklicher Zustimmung und bestehender Vorschau die fehlende Projektstruktur ergänzen; BC AI Agent ergänzt ausschließlich Agentura-MD-Dokumentation.
+- Ohne AL Language wird nur ein Gerüst angelegt; keine `app.json`, `launch.json` oder `.alpackages` generiert.
+- Technisch getestet: 51 transpiliert ausgeführte Node-Tests. Vollständiger VS Code Host E2E / regulärer TypeScript-Build müssen lokal geprüft werden (fehlende npm-Abhängigkeiten in dieser Ausführungsumgebung).
+- **Noch zu testen:** Reale Microsoft-Command-IDs pro AL-Version, neue Host-Fenster mit geteiltem `globalState`, ggf. Verzögerung beim Erzeugen von `app.json`, Nutzerabbruch, tatsächliche Agent-Vorlage.
+- Details und Testschritte: `docs/quality/MICROSOFT-AL-WORKFLOW.md`.

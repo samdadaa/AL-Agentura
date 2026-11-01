@@ -7,6 +7,7 @@ export interface BundledTemplates {
   readonly catalog: ProfileCatalog;
   readonly manifests: readonly TemplateManifest[];
   readonly gitignore: string;
+  readonly agentDocs: Readonly<Record<string, string>>;
 }
 
 export async function loadBundledTemplates(extensionUri: vscode.Uri): Promise<BundledTemplates> {
@@ -23,5 +24,18 @@ export async function loadBundledTemplates(extensionUri: vscode.Uri): Promise<Bu
     manifests.push(manifest);
   }
   for (const profile of catalog.profiles) resolveProfile(profile.id, catalog, manifests);
-  return { catalog, manifests, gitignore: await read('al.gitignore') };
+  const templatePaths = [
+    'AGENTS.md', 'TODO.md', 'GETTING_STARTED.md',
+    'docs/PROJECT.md', 'docs/ARCHITECTURE.md', 'docs/CONVENTIONS.md',
+    'docs/SECURITY.md', 'docs/TESTS.md', 'docs/modules/INDEX.md'
+  ];
+  const agentDocs: Record<string, string> = {};
+  for (const path of templatePaths) {
+    const content = await read('agent-docs', ...path.split('/'));
+    if (!content.trim() || /\{\{(?!PROJECT_NAME\}\})[^{}]+\}\}/.test(content)) {
+      throw new Error(`Unvollständige Agenten-Vorlage: ${path}`);
+    }
+    agentDocs[path] = content;
+  }
+  return { catalog, manifests, gitignore: await read('al.gitignore'), agentDocs };
 }

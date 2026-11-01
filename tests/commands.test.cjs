@@ -59,7 +59,7 @@ test('Activation registers the contributed command and releases all resources', 
   const h = harness();
   const manifest = require('../package.json');
   assert.deepEqual([...h.commands.keys()], manifest.contributes.commands.map(c => c.command));
-  assert.equal(h.context.subscriptions.length, 3);
+  assert.equal(h.context.subscriptions.length, 6);
   h.context.subscriptions.forEach(d => d.dispose());
   assert.equal(h.commands.size, 0);
   assert.equal(h.disposed(), 1);

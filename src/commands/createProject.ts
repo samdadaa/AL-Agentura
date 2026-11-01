@@ -9,6 +9,8 @@ import { presentNewProjectResult } from '../ui/newProjectResult';
 import { newProjectWizard } from '../ui/newProjectWizard';
 import { NewProjectPlan, prepareNewProject, readAppJsonSource } from '../workspace/newProject';
 import { runCommand } from './runCommand';
+import { startMicrosoftProjectFlow } from './microsoftProjectFlow';
+import { AgenturaProfile } from './setupCurrentProject';
 
 export const CREATE_PROJECT_COMMAND = 'alAgentura.createProject';
 
@@ -20,7 +22,21 @@ export function registerCreateProjectCommand(context: vscode.ExtensionContext, l
     let result: NewProjectResult | undefined;
     try {
       await runCommand(logger, async () => {
-        const selection = await newProjectWizard();
+        const al = vscode.extensions?.getExtension('ms-dynamics-smb.al');
+        if (al) {
+          const mode = await vscode.window.showQuickPick([
+            { label: 'Standard AL', description: 'Microsoft AL: Go! + Agentura-Standardstruktur', profile: 'standard' as AgenturaProfile },
+            { label: 'Modular AL', description: 'Microsoft AL: Go! + Agentura-Modulstruktur', profile: 'modular' as AgenturaProfile },
+            { label: 'BC AI Agent', description: 'Microsoft-Agent-Projekt + Agentura-Dokumentation', profile: 'bc-agent' as AgenturaProfile },
+            { label: 'Agentura allein (ohne Microsoft)', description: 'Bestehender unabhängiger Generator', profile: 'fallback' as const }
+          ], { title: 'AL Agent: Create Project – Projektmodus' });
+          if (!mode) return;
+          if (mode.profile !== 'fallback') {
+            await startMicrosoftProjectFlow(context, logger, mode.profile);
+            return;
+          }
+        }
+        const selection = await newProjectWizard(!al);
         if (!selection) { logger.info('Neuprojekt-Wizard abgebrochen; keine Änderungen vorgenommen.'); return; }
         let plan: NewProjectPlan;
         try {

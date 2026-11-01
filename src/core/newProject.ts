@@ -1,3 +1,4 @@
+import { renderAgentDocs } from './agentDocs';
 import { parseAppJson } from '../analysis/appJson';
 import { ALConfiguration, generateALAppJson, generateLaunchJson, validateExistingALAppJson } from './alConfiguration';
 import { normalizeModules, StructureOptions } from './alStructure';
@@ -33,7 +34,7 @@ export function parseModuleList(text: string): readonly string[] {
   return normalizeModules(names);
 }
 
-export function createNewProjectDraft(options: NewProjectOptions, manifest: TemplateManifest, gitignore: string, guide: string): NewProjectDraft {
+export function createNewProjectDraft(options: NewProjectOptions, manifest: TemplateManifest, gitignore: string, guide: string, agentDocs?: Readonly<Record<string, string>>): NewProjectDraft {
   validateProjectName(options.name);
   if (options.modules.length > 50) fail('input', 'Höchstens 50 Module pro Neuprojekt auswählen.');
   const context = { rootUri: '', state: 'new' as const, appJsonStatus: 'missing' as const,
@@ -52,7 +53,7 @@ export function createNewProjectDraft(options: NewProjectOptions, manifest: Temp
   const workspaceFile = `${options.name}.code-workspace`;
   const files = [
     { path: workspaceFile, content: JSON.stringify({ folders: [{ path: '.' }], extensions: { recommendations: ['ms-dynamics-smb.al'] } }, null, 2) + '\n' },
-    { path: 'GETTING_STARTED.md', content: guide },
+    ...(agentDocs ? renderAgentDocs(agentDocs, options.name) : [{ path: 'GETTING_STARTED.md', content: guide }]),
     ...(appJsonContent !== undefined ? [{ path: 'app.json', content: appJsonContent }] : []),
     ...(options.includeLaunchJson ? [{ path: '.vscode/launch.json', content: generateLaunchJson() }] : [])
   ];
