@@ -1,0 +1,20 @@
+{
+  "id": "al-standard",
+  "folders": [
+    "Codeunits",
+    "Pages",
+    "PageExtensions",
+    "Tables",
+    "TableExtensions",
+    "Enums",
+    "EnumExtensions",
+    "Reports",
+    "ReportExtensions",
+    "Queries",
+    "XmlPorts",
+    "Interfaces",
+    "Permissions",
+    "Profiles"
+  ],
+  "root": "src"
+}

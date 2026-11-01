@@ -1,0 +1,5 @@
+{
+  "id": "al-modular",
+  "root": "src/{module}",
+  "inherit": "al-standard"
+}

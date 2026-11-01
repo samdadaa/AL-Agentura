@@ -1,0 +1,38 @@
+{
+  "name": "al-project-assistant",
+  "displayName": "AL Project Assistant",
+  "description": "AL workspace and agent documentation scaffolding",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "local-development",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:alProjectAssistant.setup"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "alProjectAssistant.setup",
+        "title": "AL Project Assistant: Setup Project"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "node --test tests/*.test.cjs",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.6.0",
+    "@vscode/vsce": "^3.0.0"
+  }
+}
