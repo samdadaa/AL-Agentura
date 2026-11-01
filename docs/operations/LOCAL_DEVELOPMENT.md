@@ -3,13 +3,13 @@
 Voraussetzungen: Node.js >=22, npm, VS Code >=1.90.0. Für reproduzierbare Installationen ist `package-lock.json` eingecheckt. Die API-Typen sind auf die Mindestversion 1.90.0 festgelegt; die Extension enthält keine Laufzeitabhängigkeiten.
 
 ## Entwicklungszyklus
-1. `AL-extension.code-workspace` in VS Code öffnen.
+1. `al-agentura.code-workspace` in VS Code öffnen.
 2. `npm ci` installiert Entwicklungsabhängigkeiten; dieser Schritt benötigt Netzwerk oder einen gefüllten npm-Cache. Die Extension selbst bleibt offline.
 3. `npm run compile` baut ausschließlich `src/**/*.ts` nach `out/`; `npm run watch` baut bei Änderungen.
 4. `npm test` kompiliert und startet die Node-Tests mit isolierter VS-Code-API-Nachbildung.
-5. F5 mit **Run AL Project Assistant** startet den Extension Development Host. Die bestehende Launch-Konfiguration nutzt `npm: compile` und die Source Maps unter `out/`.
-6. Im Host die Command Palette öffnen (macOS: Cmd+Shift+P, Windows: Ctrl+Shift+P) und **AL Project Assistant: Setup Project** ausführen. Erwartet: Auswahl des Elternordners. Abbruch legt keine Projektdateien an. Für den vollständigen Test den Neuprojektablauf unten verwenden.
-7. Unter **Ausgabe → AL Project Assistant** stehen feste Aktivierungs-/Aufrufmeldungen. Keine Exception-Texte oder Workspace-Inhalte werden protokolliert. Beim Deaktivieren entsorgt VS Code Command und Kanal über `context.subscriptions`.
+5. F5 mit **Run AL Agentura** startet den Extension Development Host. Die bestehende Launch-Konfiguration nutzt `npm: compile` und die Source Maps unter `out/`.
+6. Im Host die Command Palette öffnen (macOS: Cmd+Shift+P, Windows: Ctrl+Shift+P) und **AL Agent: Create Project** ausführen. Erwartet: Auswahl des Elternordners. Abbruch legt keine Projektdateien an. Für den vollständigen Test den Neuprojektablauf unten verwenden.
+7. Unter **Ausgabe → AL Agentura** stehen feste Aktivierungs-/Aufrufmeldungen. Keine Exception-Texte oder Workspace-Inhalte werden protokolliert. Beim Deaktivieren entsorgt VS Code Command und Kanal über `context.subscriptions`.
 
 ## Echter Extension-Host-Test
 `npm run test:host` startet das installierte `code` in einem separaten Fenster mit temporärem Benutzer-/Extension-Verzeichnis und ohne Workspace. Es verändert keine persönlichen VS-Code-Einstellungen oder Projekte. Der Test wartet maximal 120 Sekunden, prüft einen Ergebnisnachweis aus dem Host und entfernt anschließend seine temporären Dateien.
@@ -23,14 +23,14 @@ VSCODE_EXECUTABLE='/Applications/Visual Studio Code.app/Contents/Resources/app/b
 Unter PowerShell zuerst `$env:VSCODE_EXECUTABLE` auf den vollständigen Pfad von `code.cmd` setzen. Der Test prüft tatsächliche Aktivierung, Manifest-Beitrag, Registrierung und zwei Command-Aufrufe. Die Benachrichtigungsfunktion wird im Test ersetzt, damit keine Interaktion zum Schließen nötig ist. Sichtbare Palette, Meldungsdarstellung und F5 bleiben manuelle Prüfungen.
 
 ## Lokale Paketierung
-`npm run package` kompiliert über `vscode:prepublish` und erzeugt `al-project-assistant-0.0.1.vsix`. Kein Publishing. `local-development` ist der lokale Publisher-Platzhalter. `.vscodeignore` schließt Quellcode, Tests, Entwicklungsdokumente und Metadaten aus; `out/**/*.js` und `resources/templates` werden ausgeliefert. Die Vorlagen sind vorbereitet und werden noch nicht angewendet.
+`npm run package` kompiliert über `vscode:prepublish` und erzeugt `al-agentura-0.0.1.vsix`. Kein Publishing. `local-development` ist der lokale Publisher-Platzhalter. `.vscodeignore` schließt Quellcode, Tests, Entwicklungsdokumente und Metadaten aus; `out/**/*.js` und `resources/templates` werden ausgeliefert. Die Vorlagen sind vorbereitet und werden noch nicht angewendet.
 
-Paketinhalt mit `unzip -l al-project-assistant-0.0.1.vsix` oder einem ZIP-Programm prüfen. Die fehlende Lizenzdatei führt derzeit zu einer Warnung; eine Lizenzentscheidung wird nicht erfunden. Vollständige Installations-/Generatorabnahme bleibt EXT-012.
+Paketinhalt mit `unzip -l al-agentura-0.0.1.vsix` oder einem ZIP-Programm prüfen. Die fehlende Lizenzdatei führt derzeit zu einer Warnung; eine Lizenzentscheidung wird nicht erfunden. Vollständige Installations-/Generatorabnahme bleibt EXT-012.
 
 Für eine manuelle lokale Installation in einem separaten VS-Code-Profil **Extensions → … → Install from VSIX** wählen, VSIX öffnen und den Setup-Befehl wie oben prüfen. Noch nicht als durchgeführt dokumentiert.
 
 ## Fehler und Abbruch
-Der Platzhalter besitzt keinen Wizard und schreibt keine Dateien. Schließen der Informationsmeldung beendet den Aufruf. Ein `CancellationError` wird still als Abbruch behandelt; andere Fehler liefern eine feste deutsche Fehlermeldung mit Wiederholungs-/Meldehinweis. Zur Reproduktion nur bereinigte Schritte melden. Bei „command not found“ Build, aktiven Development Host und Command-ID `alProjectAssistant.setup` prüfen; für Host-Tests muss die CLI erreichbar sein.
+Der Platzhalter besitzt keinen Wizard und schreibt keine Dateien. Schließen der Informationsmeldung beendet den Aufruf. Ein `CancellationError` wird still als Abbruch behandelt; andere Fehler liefern eine feste deutsche Fehlermeldung mit Wiederholungs-/Meldehinweis. Zur Reproduktion nur bereinigte Schritte melden. Bei „command not found“ Build, aktiven Development Host und Command-ID `alAgentura.createProject` prüfen; für Host-Tests muss die CLI erreichbar sein.
 
 Aktuelle Ergebnisse und Einschränkungen: [EXT-001](../quality/EXT-001.md).
 
@@ -54,7 +54,7 @@ validateProfileInputs('modular', catalog, manifests, { MODULES: ['Sales', 'Purch
 Hier liest Node nur die lokalen Entwicklungsressourcen. Ein späterer Extension-Adapter muss Ressourcen und Zielprojekte URI-basiert mit `vscode.workspace.fs` lesen. Die neuen Loader/Validatoren selbst verwenden kein Dateisystem. Format: [Templates](../modules/Templates.md), Entscheidung: [ADR 0001](../architecture/adr/0001-template-manifest-contract.md).
 
 ## Projektanalyse und Strukturplanung (EXT-003/004)
-Im Extension Development Host die Command Palette öffnen und **AL Project Assistant: Projekt analysieren** starten. Ohne Workspace wird ein Ordnerdialog angeboten; mit einem Root wird dieser verwendet, bei mehreren Roots ist eine Auswahl erforderlich. Abbruch verändert nichts. Die Meldung unterscheidet leeren Zielordner, Projekt mit lesbarer app.json und unvollständigen Bestand. AL-Dateien und Strukturkandidaten werden gezählt; ungültige JSON, Scanlimits, Symlinks und Lesefehler bleiben sichtbar. Es werden keine Dateien angelegt oder geändert.
+Im Extension Development Host die Command Palette öffnen und **AL Agent: Analyze Existing Project** starten. Ohne Workspace wird ein Ordnerdialog angeboten; mit einem Root wird dieser verwendet, bei mehreren Roots ist eine Auswahl erforderlich. Abbruch verändert nichts. Die Meldung unterscheidet leeren Zielordner, Projekt mit lesbarer app.json und unvollständigen Bestand. AL-Dateien und Strukturkandidaten werden gezählt; ungültige JSON, Scanlimits, Symlinks und Lesefehler bleiben sichtbar. Es werden keine Dateien angelegt oder geändert.
 
 **Setup Project** bietet seit EXT-005 den unten beschriebenen lokalen Neuprojekt-Wizard. EXT-004 stellt vorerst eine Modulschnittstelle zur Strukturplanung bereit; keine sichtbare Vorschau oder Anwendung. In Extension-Code kann nach `loadBundledTemplates(context.extensionUri)` und `inspectProject(root, { objectTypes: objectTypesFromManifest(standardManifest) })` folgendes geplant werden:
 
@@ -72,7 +72,7 @@ const plan = createStructurePlan(projectContext, modularManifest, {
 [Verträge Workspace](../modules/Workspace.md), [Analysis](../modules/Analysis.md), [Generation](../modules/Generation.md), [Testnachweis](../quality/EXT-003-004.md).
 
 ## Neuprojekt-Wizard (EXT-005)
-1. **AL Project Assistant: Setup Project** starten. Der Ablauf benötigt keinen geöffneten Workspace.
+1. **AL Agent: Create Project** starten. Der Ablauf benötigt keinen geöffneten Workspace.
 2. Einen vorhandenen lokalen Elternordner wählen und einen neuen Projektnamen eingeben. Auch vorhandene leere Zielordner werden abgewiesen. Name maximal 128 Zeichen; keine Traversal-/URI-/Gerätenamen. Symlinks in der erkannten Elternkette werden abgewiesen.
 3. Standard oder Modular wählen. Module optional kommagetrennt eingeben; Wiederholungen werden case-insensitiv dedupliziert, höchstens 50 Einträge.
 4. Eine vorhandene app.json als Quelle wählen oder die AL-Konfiguration ausdrücklich für später lassen. Die Quelle wird typ-/JSON-geprüft und inhaltstreu kopiert; keine Compiler-/vollständige AL-Schema-Garantie. Ohne Quelle ist die App noch nicht kompilierbar. AL: Go! und Launch-Konfiguration werden nicht automatisch erzeugt/gestartet.

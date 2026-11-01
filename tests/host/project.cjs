@@ -86,11 +86,11 @@ exports.run = async function (extension) {
     // Command uses the default dialog path in this no-workspace host.
     vscode.window.showOpenDialog = async () => [invalid];
     vscode.window.showWarningMessage = async message => { warnings.push(message); };
-    const reported = await vscode.commands.executeCommand('alProjectAssistant.inspect');
+    const reported = await vscode.commands.executeCommand('alAgentura.analyzeExistingProject');
     assert.equal(reported.appJsonStatus, 'invalid');
     assert.ok(warnings.some(message => /keine Dateien geändert/.test(message) && /JSON/.test(message)));
     vscode.window.showOpenDialog = async () => undefined;
-    assert.equal(await vscode.commands.executeCommand('alProjectAssistant.inspect'), undefined);
+    assert.equal(await vscode.commands.executeCommand('alAgentura.analyzeExistingProject'), undefined);
 
     // Apply only creates in a dedicated fixture helper, never through product code.
     const idempotent = await folder('idempotent');

@@ -1,9 +1,9 @@
-# AGENTS.md — Verbindlicher Arbeitsvertrag für AL-extension
+# AGENTS.md — Verbindlicher Arbeitsvertrag für AL Agentura
 
 > Gilt für das gesamte Repository. Ein Agent darf dieses Dokument nicht als Ersatz für das Lesen von Quellcode und Tickets behandeln. Die Extension selbst ist **KI-frei**; diese Regeln steuern ausschließlich externe Coding-Agenten, die an der Extension entwickeln.
 
 ## 1. Produktmission und Grenzen
-AL-extension ist eine lokale VS-Code-Extension für **Microsoft Dynamics 365 Business Central AL**. Sie erstellt neue AL-Projekte inklusive VS-Code-Workspace, AL-Struktur, Git-Regeln und Agenten-Dokumentation oder ergänzt bestehende Projekte **nicht destruktiv**. Sie ist kein AL-Compiler, keine Cloud-Plattform, kein eigenes KI-Modell und kein Agenten-Orchestrator. Der Anwender soll nach dem Setup ein konkretes Ticket in `TODO.md` schreiben und seinen vorhandenen Agenten starten können.
+AL Agentura ist eine lokale VS-Code-Extension für **Microsoft Dynamics 365 Business Central AL**. Sie erstellt neue AL-Projekte inklusive VS-Code-Workspace, AL-Struktur, Git-Regeln und Agenten-Dokumentation oder ergänzt bestehende Projekte **nicht destruktiv**. Sie ist kein AL-Compiler, keine Cloud-Plattform, kein eigenes KI-Modell und kein Agenten-Orchestrator. Der Anwender soll nach dem Setup ein konkretes Ticket in `TODO.md` schreiben und seinen vorhandenen Agenten starten können.
 
 ## 2. Pflichtlektüre und Reihenfolge
 1. `README.md` für tatsächlichen Projektstand und Befehle.

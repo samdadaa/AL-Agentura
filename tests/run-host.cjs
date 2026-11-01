@@ -4,7 +4,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'al-extension-host-'));
+const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'al-agentura-host-'));
 const executable = process.env.VSCODE_EXECUTABLE || 'code';
 const report = path.join(temporary, 'result.json');
 try {

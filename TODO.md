@@ -1,4 +1,4 @@
-# Master TODO — AL-extension
+# Master TODO — AL Agentura
 
 **Stand:** 01.11.2026 · **Umsetzung:** EXT-001 bis EXT-005 technisch umgesetzt und zur Prüfung; Projektanalyse, Strukturpläne und bestätigte lokale Neuanlage vorhanden. Eigene AL-Konfigurationsgenerierung und allgemeine Bestandsanwendung bleiben offen. Die folgenden Tickets sind spezifizierte Arbeitsaufträge, keine abgeschlossenen Features.
 
@@ -12,6 +12,19 @@
 - P0 = MVP-kritisch, P1 = wichtig, P2 = nach MVP.
 - Vorhandene Daten, AL-Dateien und MD-Dateien nicht stillschweigend verändern.
 
+## Namensumstellung — ausdrücklicher Nutzerauftrag
+**Status:** In Arbeit · **Name:** AL Agentura · **Technische Paket-/Repository-ID:** `al-agentura` · **Befehlspräfix:** `AL Agent:`
+
+- [x] Manifest, Paket-ID, Lockfile und Beschreibung umbenennen.
+- [ ] Verfügbare Command-Titel/-IDs und Laufzeittexte konsistent umbenennen; künftige Befehle als geplant dokumentieren.
+- [ ] Quellcode, Ressourcen, Tests, Dokumentation, Debug-Konfiguration und Entwicklungs-Workspace umbenennen.
+- [ ] Build, Node-Tests, echter Host und neue VSIX samt Inhalt prüfen.
+- [ ] GitHub-Repository und origin auf `al-agentura` umbenennen und prüfen.
+- [ ] Lokalen Projektordner in `al-agentura` umbenennen und Prüfungen aus dem neuen Pfad ausführen.
+- [ ] Benutzer hat die Umbenennung ausdrücklich abgenommen.
+
+Nachweise: `docs/quality/NAMING.md`; bestehende Ticketabnahmen bleiben unverändert.
+
 ## Paketübersicht
 | Ticket | Thema | Status | Prio | Abhängigkeiten |
 |---|---|---|---|---|
@@ -20,7 +33,7 @@
 | EXT-003 | Workspace-Resolver und AL-Projekterkennung | Zur Prüfung | P0 | EXT-001 |
 | EXT-004 | Standard-/Modular-AL-Ordnerstruktur und Git-Regeln | Zur Prüfung | P0 | EXT-002, EXT-003 |
 | EXT-005 | Neues AL-Projekt inklusive VS-Code-Workspace erstellen | Zur Prüfung | P0 | EXT-003, EXT-004 |
-| EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | Offen | P0 | EXT-003, EXT-005 |
+| EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | Zur Prüfung | P0 | EXT-003, EXT-005 |
 | EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | Offen | P0 | EXT-002, EXT-004 |
 | EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | Offen | P1 | EXT-003, EXT-007 |
 | EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | Offen | P0 | EXT-002, EXT-003 |
@@ -99,7 +112,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ### Umsetzungs- und Testnachweis (01.11.2026)
 Typisierte Modelle, Schema-1-Loader, Manifest-/Profilvalidierung und deklarative Standard-/Modular-Profile implementiert. Nachweis: [EXT-002](docs/quality/EXT-002.md). Folgeprüfung mit EXT-003/004: Compile, 35 Node-Tests einschließlich der 19 Manifesttests, echter Extension-Host und VSIX-Inhalt erfolgreich. Benutzerabnahme offen.
@@ -137,10 +150,10 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ### Umsetzungs- und Testnachweis (01.11.2026)
-Workspace-Resolver, lesende app.json-/AL-Projekterkennung, typisierter Kontext und Command **AL Project Assistant: Projekt analysieren** implementiert. Lokale Bestände, No-root-/Single-/Multi-root-Auswahl mit ersetzten Pickern, Abbruch, JSON-Fehler und schreibgeschützter URI-Provider geprüft. Kein echter SSH-Server oder manuell bediente Picker behauptet. [Dateien, Ergebnisse und Grenzen](docs/quality/EXT-003-004.md). Benutzerabnahme offen.
+Workspace-Resolver, lesende app.json-/AL-Projekterkennung, typisierter Kontext und Command **AL Agent: Analyze Existing Project** implementiert. Lokale Bestände, No-root-/Single-/Multi-root-Auswahl mit ersetzten Pickern, Abbruch, JSON-Fehler und schreibgeschützter URI-Provider geprüft. Kein echter SSH-Server oder manuell bediente Picker behauptet. [Dateien, Ergebnisse und Grenzen](docs/quality/EXT-003-004.md). Benutzerabnahme offen.
 
 ---
 
@@ -174,7 +187,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ### Umsetzungs- und Testnachweis (01.11.2026)
 Standard-/Modular-Strukturpläne mit Objekttypauswahl, validierten/deduplizierten Modulen, gezielten .gitkeep-Dateien und Gitignore-Empfehlung implementiert. Unit-Pläne, Gitignore-Snapshot und echte Host-Idempotenz für Standard und Modular bestanden; Bestandsdateien bleiben unverändert. Produktive Vorschau/Zustimmung/Dateianwendung folgt mit EXT-009. [Dateien, Ergebnisse und Grenzen](docs/quality/EXT-003-004.md). Benutzerabnahme offen.
@@ -213,7 +226,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ### Umsetzungs- und Testnachweis (01.11.2026)
 Neuprojekt-Wizard mit vollständiger Vorschau/Zustimmung, tatsächlicher lokaler Anlage, relativem Workspace, Einstieg und optional inhaltstreuer app.json-Übernahme implementiert. 42 Node-Tests, erweiterter echter Host und VSIX-Inhaltsprüfung erfolgreich. Alle sieben Abbruchstellen, Ziel-/Namenskonflikte, nachträgliche Belegung, reale Symlinks, Quelltreue und Teilfehler geprüft. Workspace-Öffnen als API-Dispatch geprüft; sichtbare Fenster/Picker nicht manuell bedient. Neuanlage nur native lokale file-Ziele: der anfänglich fehlgeschlagene Copy-Fallback-Race-Test führte zur expliziten Provider-Sperre. Ohne app.json-Quelle bleibt die AL-Konfiguration ausstehend; keine erfundenen Versions-/Serverdaten. [Dateien, genaue Ergebnisse und offene Prüfungen](docs/quality/EXT-005.md), [ADR 0003](docs/architecture/adr/0003-new-project-creation.md). Benutzerabnahme offen.
@@ -222,7 +235,7 @@ Neuprojekt-Wizard mit vollständiger Vorschau/Zustimmung, tatsächlicher lokaler
 
 ## EXT-006 — AL-app.json und Launch-Konfiguration sicher handhaben
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-005
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-005
 
 ### Beschreibung und Hintergrund
 Business-Central-Projekte benötigen eine korrekte `app.json`. Falsche IDs, unpassende Versionen oder frei erfundene BC-Serverdaten machen einen Generator unzuverlässig. Deshalb müssen Pflichtangaben bewusst erfasst und bestehende Konfigurationen geschützt werden.
@@ -231,25 +244,25 @@ Business-Central-Projekte benötigen eine korrekte `app.json`. Falsche IDs, unpa
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Für neue Projekte erforderliche `app.json`-Felder und valide Defaultwerte gemäß unterstützter AL-Version definieren.
-- [ ] Publisher, App-ID, Name, Version, Runtime, ID-Ranges und Dependencies konfigurieren bzw. bewusst leer lassen.
-- [ ] Vorhandene `app.json` nur analysieren; Änderungen nur als selektiven Diff mit Zustimmung.
-- [ ] `.vscode/launch.json` als optionales Profil anbieten, keine realen Zugangsdaten eintragen.
-- [ ] Bei nicht unterstützten Kombinationen Warnung statt stiller Korrektur.
+- [x] Für neue Projekte erforderliche `app.json`-Felder und valide Defaultwerte gemäß unterstützter AL-Version definieren.
+- [x] Publisher, App-ID, Name, Version, Runtime, ID-Ranges und Dependencies konfigurieren bzw. bewusst leer lassen.
+- [x] Vorhandene `app.json` ausschließlich lesen/kopieren, nie automatisch ändern; selektive Diffs für Bestandsprojekte bleiben abhängig von EXT-009/010.
+- [x] `.vscode/launch.json` als optionales Profil anbieten, keine realen Zugangsdaten eintragen.
+- [x] Bei nicht unterstützten Kombinationen Warnung statt stiller Korrektur.
 
 ### Akzeptanzkriterien
-- [ ] Neue Konfiguration ist parsebar und AL-konform für gewähltes Profil.
-- [ ] Bestehende Konfiguration bleibt unverändert ohne explizite Zustimmung.
-- [ ] Keine Credentials oder Kundendaten in Vorlagen.
+- [x] Neue Konfiguration ist parsebar und AL-konform für gewähltes Profil.
+- [x] Bestehende Konfiguration bleibt unverändert ohne explizite Zustimmung.
+- [x] Keine Credentials oder Kundendaten in Vorlagen.
 
 ### Tests und Nachweise
-- [ ] JSON Schema/Fixture: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Konfliktfälle: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] optionale Launch-Datei: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] JSON Schema/Fixture: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Konfliktfälle: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] optionale Launch-Datei: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---

@@ -1,7 +1,7 @@
 {
-  "name": "al-project-assistant",
-  "displayName": "AL Project Assistant",
-  "description": "AL workspace and agent documentation scaffolding",
+  "name": "al-agentura",
+  "displayName": "AL Agentura",
+  "description": "AL Project Scaffolding & AI Agent Workspace Setup",
   "version": "0.0.1",
   "private": true,
   "publisher": "local-development",
@@ -13,18 +13,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:alProjectAssistant.setup"
+    "onCommand:alAgentura.createProject"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "alProjectAssistant.setup",
-        "title": "AL Project Assistant: Setup Project"
+        "command": "alAgentura.createProject",
+        "title": "AL Agent: Create Project"
       },
       {
-        "command": "alProjectAssistant.inspect",
-        "title": "AL Project Assistant: Projekt analysieren"
+        "command": "alAgentura.analyzeExistingProject",
+        "title": "AL Agent: Analyze Existing Project"
       }
     ]
   },
@@ -41,5 +41,9 @@
     "@types/vscode": "1.90.0",
     "typescript": "^5.6.0",
     "@vscode/vsce": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samdadaa/al-agentura.git"
   }
 }

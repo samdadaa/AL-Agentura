@@ -10,12 +10,12 @@ import { newProjectWizard } from '../ui/newProjectWizard';
 import { NewProjectPlan, prepareNewProject, readAppJsonSource } from '../workspace/newProject';
 import { runCommand } from './runCommand';
 
-export const SETUP_COMMAND = 'alProjectAssistant.setup';
+export const CREATE_PROJECT_COMMAND = 'alAgentura.createProject';
 
-export function registerSetupCommand(context: vscode.ExtensionContext, logger: Logger): vscode.Disposable {
+export function registerCreateProjectCommand(context: vscode.ExtensionContext, logger: Logger): vscode.Disposable {
   let running = false;
-  return vscode.commands.registerCommand(SETUP_COMMAND, async (): Promise<NewProjectResult | undefined> => {
-    if (running) { await vscode.window.showInformationMessage('AL Project Assistant: Ein Setup ist bereits geöffnet. Bitte zuerst diesen Ablauf abschließen.'); return undefined; }
+  return vscode.commands.registerCommand(CREATE_PROJECT_COMMAND, async (): Promise<NewProjectResult | undefined> => {
+    if (running) { await vscode.window.showInformationMessage('AL Agentura: Ein Setup ist bereits geöffnet. Bitte zuerst diesen Ablauf abschließen.'); return undefined; }
     running = true;
     let result: NewProjectResult | undefined;
     try {
@@ -31,7 +31,7 @@ export function registerSetupCommand(context: vscode.ExtensionContext, logger: L
           plan = await prepareNewProject(selection.parent, { ...selection.options, ...(appJsonContent !== undefined ? { appJsonContent } : {}) }, bundle, guide);
         } catch (error: unknown) {
           if (error instanceof NewProjectError || error instanceof TemplateValidationError) {
-            await vscode.window.showErrorMessage(`AL Project Assistant: Keine Projektdateien erstellt. ${error.message}`);
+            await vscode.window.showErrorMessage(`AL Agentura: Keine Projektdateien erstellt. ${error.message}`);
             return;
           }
           throw error;

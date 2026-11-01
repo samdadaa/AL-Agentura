@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { NewProjectOptions, parseModuleList, validateProjectName } from '../core/newProject';
+import { ALConfiguration, validateALConfiguration } from '../core/alConfiguration';
 import { TemplateValidationError } from '../core/templateValidation';
 
 export interface NewProjectSelection {
@@ -34,7 +35,8 @@ export async function newProjectWizard(): Promise<NewProjectSelection | undefine
   }
   const config = await vscode.window.showQuickPick([
     { label: 'Vorhandene app.json übernehmen', description: 'Quelle bleibt unverändert; keine eigene AL-Konfiguration erfinden', copyApp: true },
-    { label: 'AL-Konfiguration später ergänzen', description: 'Nur Workspace/Struktur vorbereiten; noch keine kompilierbare AL-App', copyApp: false }
+    { label: 'Neue app.json erstellen', description: 'Publisher, Version, Runtime und Objekt-IDs bewusst festlegen', copyApp: false, createApp: true },
+    { label: 'AL-Konfiguration später ergänzen', description: 'Nur Workspace/Struktur vorbereiten; noch keine kompilierbare AL-App', copyApp: false, createApp: false }
   ], { title: 'Neues AL-Projekt: AL-Konfiguration' });
   if (!config) return undefined;
   let appJsonSource: vscode.Uri | undefined;
@@ -43,5 +45,28 @@ export async function newProjectWizard(): Promise<NewProjectSelection | undefine
       title: 'app.json-Quelldatei auswählen', filters: { JSON: ['json'] }, openLabel: 'app.json übernehmen' }))?.[0];
     if (!appJsonSource) return undefined;
   }
-  return { parent, options: { name, profile: chosen.profile, modules }, ...(appJsonSource ? { appJsonSource } : {}) };
+  let alConfiguration: ALConfiguration | undefined;
+  if ('createApp' in config && config.createApp) {
+    async function ask(title: string, value: string, check: (v: string) => string | undefined): Promise<string | undefined> {
+      return vscode.window.showInputBox({ title, value, validateInput: check });
+    }
+    const publisher = await ask('AL Publisher', '', v => v.trim() ? undefined : 'Publisher eingeben.');
+    if (publisher === undefined) return undefined;
+    const version = await ask('AL App-Version', '1.0.0.0', v => /^\d+\.\d+\.\d+\.\d+$/.test(v) ? undefined : 'Vier Zahlen, z. B. 1.0.0.0');
+    if (version === undefined) return undefined;
+    const runtime = await ask('AL Runtime (an BC-Version anpassen)', '', v => /^\d+\.\d+$/.test(v) ? undefined : 'Runtime als Major.Minor eingeben.');
+    if (runtime === undefined) return undefined;
+    const from = await ask('AL Objekt-ID von', '70000', v => /^\d+$/.test(v) && Number(v) > 0 ? undefined : 'Positive Objekt-ID eingeben.');
+    if (from === undefined) return undefined;
+    const to = await ask('AL Objekt-ID bis', '70099', v => /^\d+$/.test(v) && Number(v) >= Number(from) ? undefined : 'Ende muss mindestens Start sein.');
+    if (to === undefined) return undefined;
+    alConfiguration = { appName: name, publisher, version, runtime, idFrom: Number(from), idTo: Number(to) };
+    try { validateALConfiguration(alConfiguration); } catch (error) { await vscode.window.showErrorMessage(String(error)); return undefined; }
+  }
+  const launch = await vscode.window.showQuickPick([
+    { label: 'Ohne launch.json', include: false, description: 'Keine Umgebungsdaten erzeugen' },
+    { label: 'Sandbox launch.json als Vorlage', include: true, description: 'Platzhalter statt echter Tenant- oder Zugangsdaten' }
+  ], { title: 'Optionale AL-Debug-Konfiguration' });
+  if (!launch) return undefined;
+  return { parent, options: { name, profile: chosen.profile, modules, ...(alConfiguration ? { alConfiguration } : {}), includeLaunchJson: launch.include }, ...(appJsonSource ? { appJsonSource } : {}) };
 }

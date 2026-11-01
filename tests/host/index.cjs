@@ -3,22 +3,22 @@ const vscode = require('vscode');
 const fs = require('node:fs');
 
 exports.run = async function () {
-  const extension = vscode.extensions.getExtension('local-development.al-project-assistant');
+  const extension = vscode.extensions.getExtension('local-development.al-agentura');
   assert.ok(extension, 'Development extension is discoverable');
   assert.equal(extension.isActive, false, 'Extension activates lazily');
   const contributed = extension.packageJSON.contributes.commands;
-  assert.ok(contributed.some(command => command.command === 'alProjectAssistant.setup' &&
-    command.title === 'AL Project Assistant: Setup Project'));
+  assert.ok(contributed.some(command => command.command === 'alAgentura.createProject' &&
+    command.title === 'AL Agent: Create Project'));
   const messages = [];
   const original = vscode.window.showInformationMessage;
   const originalDialog = vscode.window.showOpenDialog;
   vscode.window.showOpenDialog = async () => undefined;
   vscode.window.showInformationMessage = async message => { messages.push(message); };
   try {
-    await vscode.commands.executeCommand('alProjectAssistant.setup');
+    await vscode.commands.executeCommand('alAgentura.createProject');
     assert.equal(extension.isActive, true, 'Command activates the extension');
-    assert.ok((await vscode.commands.getCommands(true)).includes('alProjectAssistant.setup'));
-    await vscode.commands.executeCommand('alProjectAssistant.setup');
+    assert.ok((await vscode.commands.getCommands(true)).includes('alAgentura.createProject'));
+    await vscode.commands.executeCommand('alAgentura.createProject');
     assert.equal(messages.length, 0);
     vscode.window.showOpenDialog = originalDialog;
     console.log('EXT-001: Extension Host passed (activation, contribution, command, repeat invocation).');

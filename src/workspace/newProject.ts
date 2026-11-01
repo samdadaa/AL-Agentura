@@ -97,7 +97,7 @@ export async function prepareNewProject(parent: vscode.Uri, options: NewProjectO
   const draft = createNewProjectDraft(options, manifest, bundle.gitignore, guide);
   const root = vscode.Uri.joinPath(parent, draft.name);
   const plan: NewProjectPlan = { ...draft, parentUri: parent.toString(), rootUri: root.toString(),
-    workspaceUri: vscode.Uri.joinPath(root, draft.workspaceFile).toString(), hasAppJson: options.appJsonContent !== undefined,
+    workspaceUri: vscode.Uri.joinPath(root, draft.workspaceFile).toString(), hasAppJson: options.appJsonContent !== undefined || options.alConfiguration !== undefined,
     operations: draft.operations.map(operation => ({ ...operation, targetUri: vscode.Uri.joinPath(root, ...operation.relativePath.split('/')).toString() })) };
   await preflightNewProject(plan);
   return plan;

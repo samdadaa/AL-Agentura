@@ -1,4 +1,4 @@
-# AL Project Assistant – Konzept und Entwicklungsroadmap
+# AL Agentura – Konzept und Entwicklungsroadmap
 
 **Stand:** 26. Oktober 2026  
 **Status:** Konzept / Planungsgrundlage – noch keine Implementierung  
@@ -30,7 +30,7 @@ Die Extension nimmt wiederkehrende Projektvorbereitung ab. Sie soll keine KI-Pla
 ### 3.1 Neues AL-Projekt
 
 1. Entwickler erstellt ein Projekt über `AL: Go!` oder öffnet einen leeren Ordner.
-2. Startet `AL Project Assistant: Setup Project`.
+2. Startet `AL Agent: Create Project`.
 3. Wählt **Standard** oder **Modular** und gibt bei Bedarf Projekt-/Modulnamen und Einstellungen an.
 4. Sieht eine Vorschau der anzulegenden Dateien und Änderungen.
 5. Bestätigt; die Extension erstellt die Struktur und Dokumentation.
@@ -205,7 +205,7 @@ Regeln sollen überprüfbar, anpassbar und nicht als universelle Microsoft-Vorga
 
 ### MVP
 
-- Command Palette: `AL Project Assistant: Setup Project`.
+- Command Palette: `AL Agent: Create Project`.
 - Projekterkennung anhand `app.json`.
 - Auswahl `Standard` / `Modular` / `Bestehendes Projekt ergänzen`.
 - Eingabe der Modulnamen bei modularen Projekten.

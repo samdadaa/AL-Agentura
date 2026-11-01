@@ -63,7 +63,7 @@ exports.run = async function (extension) {
       if (id === 'vscode.openFolder') { opens.push(args); return undefined; }
       return original.execute(id, ...args);
     };
-    const result = await original.execute('alProjectAssistant.setup');
+    const result = await original.execute('alAgentura.createProject');
     return { result, parent, root, messages, errors, editors, opens, confirmations };
   }
   try {
@@ -128,9 +128,9 @@ exports.run = async function (extension) {
     let entered;
     const started = new Promise(resolve => { entered = resolve; });
     vscode.window.showOpenDialog = () => { entered(); return new Promise(resolve => { release = resolve; }); };
-    const first = original.execute('alProjectAssistant.setup');
+    const first = original.execute('alAgentura.createProject');
     await started;
-    assert.equal(await original.execute('alProjectAssistant.setup'), undefined);
+    assert.equal(await original.execute('alAgentura.createProject'), undefined);
     release(undefined);
     await first;
     console.log('EXT-005: new-project host suite passed (wizard, copies, cancellations, conflicts, URI providers, partial errors, workspace dispatch).');

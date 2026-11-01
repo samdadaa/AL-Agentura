@@ -39,7 +39,7 @@ export async function createNewProject(plan: NewProjectPlan, confirmed: boolean,
     // Node fs is used ONLY for an exclusive private OS scratch directory (0700).
     // Every target-project operation stays on workspace.fs. Native file -> file
     // copy avoids VS Code's unsafe cross-provider copy fallback.
-    staging = vscode.Uri.file(await mkdtemp(join(tmpdir(), 'al-project-assistant-')));
+    staging = vscode.Uri.file(await mkdtemp(join(tmpdir(), 'al-agentura-')));
     let fileIndex = 0;
     for (const operation of plan.operations) {
       failedPath = operation.relativePath;

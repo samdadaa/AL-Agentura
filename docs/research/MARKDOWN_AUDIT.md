@@ -13,7 +13,7 @@
 7. **Security/Privacy**: Trust Boundaries, keine Secrets, sichere Eingabe-/Pfadvalidierung, klare Qualitätsgrenzen.
 
 ## Bewusste Abgrenzung
-Nicht übernehmen: Workforce-Fachregeln, Shop-Tenant-/Payment-Logik, RoadGuard-Navigation, fremde Objektpräfixe, fremde API-Verträge oder deren Implementierungsbehauptungen. Sie sind Muster für **Dokumentationsqualität**, keine Anforderungen an AL-extension.
+Nicht übernehmen: Workforce-Fachregeln, Shop-Tenant-/Payment-Logik, RoadGuard-Navigation, fremde Objektpräfixe, fremde API-Verträge oder deren Implementierungsbehauptungen. Sie sind Muster für **Dokumentationsqualität**, keine Anforderungen an AL Agentura.
 
 ## Regel für dieses Projekt
 Jede generierte Vorlage muss zwischen **gesicherten Projektfakten**, **empfohlenen Regeln**, **konfigurierten Vorgaben** und **offenen Fragen** unterscheiden. Unbekannte Inhalte nicht mit erfundenen Erklärungen füllen.

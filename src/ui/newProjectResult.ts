@@ -6,9 +6,9 @@ export async function presentNewProjectResult(result: NewProjectResult): Promise
   if (result.status === 'cancelled') return;
   if (result.status !== 'created') {
     await vscode.window.showErrorMessage(
-      result.status === 'partial' ? `AL Project Assistant: Anlage teilweise fehlgeschlagen (${result.createdPaths.length} angelegte Einträge). ` +
+      result.status === 'partial' ? `AL Agentura: Anlage teilweise fehlgeschlagen (${result.createdPaths.length} angelegte Einträge). ` +
         `Bereits vorhandene Dateien wurden nicht zurückgerollt. Gestoppt bei ${result.failedPath}. ${result.message} Ziel: ${result.rootUri}` :
-        `AL Project Assistant: Anlage blockiert; keine Projektdateien erstellt. ${result.message}`
+        `AL Agentura: Anlage blockiert; keine Projektdateien erstellt. ${result.message}`
     );
     return;
   }
@@ -18,7 +18,7 @@ export async function presentNewProjectResult(result: NewProjectResult): Promise
     await vscode.window.showTextDocument(guide, { preview: false });
   } catch { guideShown = false; }
   const choice = await vscode.window.showInformationMessage(
-    `AL Project Assistant: Workspace und Struktur angelegt (${result.createdPaths.length} Einträge). ` +
+    `AL Agentura: Workspace und Struktur angelegt (${result.createdPaths.length} Einträge). ` +
     (result.hasAppJson ? 'app.json übernommen; AL-Konfiguration vor Nutzung prüfen. ' : 'AL-Konfiguration noch ausstehend; noch keine kompilierbare AL-App. ') +
     (!guideShown ? 'GETTING_STARTED.md bitte im Zielordner öffnen. ' : '') +
     (result.stagingCleanupFailed ? 'Temporäre Extension-Dateien konnten nicht vollständig bereinigt werden. ' : '') +

@@ -1,4 +1,4 @@
-# Konzept — AL Project Assistant
+# Konzept — AL Agentura
 ## Ziel
 Eine **offlinefähige, KI-freie** VS-Code-Extension, die mit wenigen Klicks neue AL-Projekte inklusive Workspace und robuster AL-Ordnerstruktur vorbereitet und bestehende AL-Projekte sicher ergänzt.
 

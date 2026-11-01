@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run AL Project Assistant",
+      "name": "Run AL Agentura",
       "type": "extensionHost",
       "request": "launch",
       "args": [

@@ -1,4 +1,5 @@
 import { parseAppJson } from '../analysis/appJson';
+import { ALConfiguration, generateALAppJson, generateLaunchJson, validateExistingALAppJson } from './alConfiguration';
 import { normalizeModules, StructureOptions } from './alStructure';
 import { planALStructure, StructureDraft } from './structurePlan';
 import { TemplateManifest } from './templateModels';
@@ -9,6 +10,8 @@ export interface NewProjectOptions {
   readonly profile: StructureOptions['profile'];
   readonly modules: readonly string[];
   readonly appJsonContent?: string;
+  readonly alConfiguration?: ALConfiguration;
+  readonly includeLaunchJson?: boolean;
 }
 export interface NewProjectDraft extends StructureDraft {
   readonly name: string;
@@ -36,12 +39,22 @@ export function createNewProjectDraft(options: NewProjectOptions, manifest: Temp
   const context = { rootUri: '', state: 'new' as const, appJsonStatus: 'missing' as const,
     existingEntries: [], alFiles: [], objectFolders: [], detectedModules: [], issues: [], scanComplete: true };
   const structure = planALStructure(context, manifest, { profile: options.profile, modules: options.modules }, gitignore);
-  if (options.appJsonContent !== undefined) parseAppJson(options.appJsonContent);
+  if (options.appJsonContent !== undefined && options.alConfiguration !== undefined) throw new NewProjectError('Konfiguration kann nicht gleichzeitig übernommen und generiert werden.');
+  const appJsonContent = options.alConfiguration ? generateALAppJson(options.alConfiguration) : options.appJsonContent;
+  if (appJsonContent !== undefined) {
+    parseAppJson(appJsonContent);
+    // Bestehende Quelle bleibt inhaltstreu: Diagnose separat, nicht automatisch korrigieren.
+    if (options.alConfiguration) {
+      const issues = validateExistingALAppJson(appJsonContent);
+      if (issues.length) throw new NewProjectError('app.json: ' + issues.join(' '));
+    }
+  }
   const workspaceFile = `${options.name}.code-workspace`;
   const files = [
     { path: workspaceFile, content: JSON.stringify({ folders: [{ path: '.' }], extensions: { recommendations: ['ms-dynamics-smb.al'] } }, null, 2) + '\n' },
     { path: 'GETTING_STARTED.md', content: guide },
-    ...(options.appJsonContent !== undefined ? [{ path: 'app.json', content: options.appJsonContent }] : [])
+    ...(appJsonContent !== undefined ? [{ path: 'app.json', content: appJsonContent }] : []),
+    ...(options.includeLaunchJson ? [{ path: '.vscode/launch.json', content: generateLaunchJson() }] : [])
   ];
   return { ...structure, name: options.name, workspaceFile, operations: [...structure.operations, ...files.map(file => ({
     entryId: file.path, relativePath: file.path, kind: 'file' as const, action: 'create' as const,

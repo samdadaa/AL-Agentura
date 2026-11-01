@@ -4,9 +4,9 @@
 EXT-001 ist technisch umgesetzt und zur Prüfung. EXT-005 ergänzt inzwischen den lokalen Neuprojekt-Wizard; die allgemeine Bestandsanwendung fehlt weiterhin. `src/extension.ts` ist der Composition Root; er erzeugt Logger, Setup- und Analyse-Command und hinterlegt alle Disposables in `context.subscriptions`.
 
 ## Dateien und Verträge
-- `src/commands/setupProject.ts`: registriert `alProjectAssistant.setup`; orchestriert seit EXT-005 Wizard, Planung, Zustimmung, Neuprojekt-Writer und Ergebnis. Keine Datei-Schreiblogik im Command.
+- `src/commands/createProject.ts`: registriert `alAgentura.createProject`; orchestriert seit EXT-005 Wizard, Planung, Zustimmung, Neuprojekt-Writer und Ergebnis. Keine Datei-Schreiblogik im Command.
 - `src/commands/runCommand.ts`: führt die Aktion aus, behandelt `vscode.CancellationError` ohne Fehlerbenachrichtigung und meldet unerwartete Fehler mit festem deutschem Text.
-- `src/logging/logger.ts`: `Logger` mit `info`, `error`, `dispose`; VS-Code-OutputChannel **AL Project Assistant**, nur feste Betriebsnachrichten ohne Fehlerobjekte, Pfade oder Workspace-Inhalte.
+- `src/logging/logger.ts`: `Logger` mit `info`, `error`, `dispose`; VS-Code-OutputChannel **AL Agentura**, nur feste Betriebsnachrichten ohne Fehlerobjekte, Pfade oder Workspace-Inhalte.
 
 Die Aktivierung erfolgt beim contributed Command. Der explizite `onCommand`-Eintrag bleibt zulässig, ist seit VS Code 1.74 redundant. Verwendete APIs wurden gegen `@types/vscode` 1.90.0 und die [offizielle API](https://code.visualstudio.com/api/references/vscode-api) geprüft; [Command-Aktivierung](https://code.visualstudio.com/api/get-started/extension-anatomy). Es gibt keine Änderung an der vereinbarten Architektur und damit kein neues ADR.
 

@@ -21,7 +21,7 @@ function harness() {
     },
     window: {
       createOutputChannel(name) {
-        assert.equal(name, 'AL Project Assistant');
+        assert.equal(name, 'AL Agentura');
         return { appendLine: line => logs.push(line), dispose: () => disposed++ };
       },
       async showOpenDialog() { if (failure) throw failure; return undefined; },
@@ -39,7 +39,7 @@ function harness() {
     cache.set(filename, module);
     const localRequire = id => {
       if (id === 'vscode') return vscode;
-      if (['node:fs/promises', 'node:path', 'node:os'].includes(id)) return require(id);
+      if (['node:fs/promises', 'node:path', 'node:os', 'node:crypto'].includes(id)) return require(id);
       assert.ok(id.startsWith('.'), `Unexpected dependency: ${id}`);
       return load(path.resolve(path.dirname(filename), `${id}.js`));
     };
@@ -67,7 +67,7 @@ test('Activation registers the contributed command and releases all resources', 
 
 test('Repeated cancelled setup wizards create no notifications or filesystem dependency', async () => {
   const h = harness();
-  for (let i = 0; i < 2; i++) await h.commands.get('alProjectAssistant.setup')();
+  for (let i = 0; i < 2; i++) await h.commands.get('alAgentura.createProject')();
   assert.deepEqual(h.messages, []);
   assert.deepEqual(h.errors, []);
   assert.match(h.logs.at(-1), /abgebrochen/);
@@ -76,7 +76,7 @@ test('Repeated cancelled setup wizards create no notifications or filesystem dep
 test('Cancellation produces no error or success notification', async () => {
   const h = harness();
   h.fail(new h.CancellationError());
-  await h.commands.get('alProjectAssistant.setup')();
+  await h.commands.get('alAgentura.createProject')();
   assert.deepEqual(h.messages, []);
   assert.deepEqual(h.errors, []);
   assert.match(h.logs.at(-1), /abgebrochen/);
@@ -87,12 +87,12 @@ test('Unexpected errors and non-Error rejections remain contained and do not lea
     const h = harness();
     // null is represented as a rejected object here so the mock also throws it.
     h.fail(failure ?? { detail: 'SECRET /customer/private' });
-    await h.commands.get('alProjectAssistant.setup')();
+    await h.commands.get('alAgentura.createProject')();
     assert.equal(h.errors.length, 1);
     assert.match(h.errors[0], /erneut versuchen/);
     assert.doesNotMatch(JSON.stringify([...h.errors, ...h.logs]), /SECRET|customer/);
     h.fail(undefined);
-    await h.commands.get('alProjectAssistant.setup')();
+    await h.commands.get('alAgentura.createProject')();
     assert.equal(h.messages.length, 0);
   }
 });

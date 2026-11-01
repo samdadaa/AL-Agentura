@@ -17,6 +17,6 @@ Standardlimits: 10.000 Einträge, 32 Verzeichnisebenen, 1 MiB app.json. Scan sor
 `.git`, `node_modules`, `.alpackages`, `.alcache`, `.snapshots` werden erfasst und nicht betreten. Ihr `childrenKnown` bleibt false. Nicht lesbare/unsichere/unbekannte Einträge und Limits machen den gesamten Scan unvollständig; der Strukturplaner lehnt ihn ab. Ein bekannter Symlink wird als Grenze/Diagnose erfasst; kein automatisches Folgen oder Umstrukturieren. Änderungen zwischen Scan und späterem Schreiben muss der spätere SafeWriter erneut prüfen.
 
 ## Benutzung und Tests
-Command `alProjectAssistant.inspect` (**AL Project Assistant: Projekt analysieren**) orchestriert Auswahl, Profile und Inspector, meldet Status/Zahlen/Diagnosen und gibt den Kontext an programmatische Command-Aufrufer zurück. Logs enthalten nur feste Betriebsnachrichten. Kein Schreiben bei Analyse oder Abbruch.
+Command `alAgentura.analyzeExistingProject` (**AL Agent: Analyze Existing Project**) orchestriert Auswahl, Profile und Inspector, meldet Status/Zahlen/Diagnosen und gibt den Kontext an programmatische Command-Aufrufer zurück. Logs enthalten nur feste Betriebsnachrichten. Kein Schreiben bei Analyse oder Abbruch.
 
 Unit-Parserfälle sowie echter Host mit lokalen Fixtures und schreibgeschütztem URI-Provider: [Testnachweis](../quality/EXT-003-004.md). Fachliche Modul-Dokumentation bleibt EXT-008; tieferer Projektcheck EXT-014; AL-Konfigurationsvalidierung EXT-006.

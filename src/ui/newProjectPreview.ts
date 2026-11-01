@@ -3,11 +3,11 @@ import { NewProjectPlan } from '../workspace/newProject';
 
 export function newProjectPreviewText(plan: NewProjectPlan): string {
   return [
-    'AL Project Assistant — Neuprojekt-Vorschau', `Ziel: ${plan.rootUri}`, `Profil: ${plan.profileId}`,
+    'AL Agentura — Neuprojekt-Vorschau', `Ziel: ${plan.rootUri}`, `Profil: ${plan.profileId}`,
     'Nur neuer Zielordner; vorhandene Ziele werden abgewiesen.',
-    plan.hasAppJson ? 'app.json: bewusst ausgewählte Quelle wird inhaltstreu kopiert; keine AL-Konformitätsgarantie.' :
+    plan.hasAppJson ? 'app.json: übernommen oder anhand ausdrücklich eingegebener AL-Parameter generiert; BC-/Runtime-Kompatibilität ist separat zu prüfen.' :
       'app.json fehlt: nur Workspace-/Strukturvorbereitung, noch keine kompilierbare AL-App.',
-    'Kein automatischer Aufruf von AL: Go!, keine launch.json und keine Zugangsdaten.', '',
+    'Kein automatischer Aufruf von AL: Go!, keine Zugangsdaten; optionale launch.json enthält nur Sandbox-Platzhalter.', '',
     ...plan.operations.map(operation => `NEU ${operation.kind === 'directory' ? 'Ordner' : 'Datei'} ${operation.relativePath}`), '',
     'Abbrechen oder Schließen der Bestätigung legt keine Projektdateien an.'
   ].join('\n');

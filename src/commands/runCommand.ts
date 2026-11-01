@@ -12,7 +12,7 @@ export async function runCommand(logger: Logger, action: () => Promise<void>, la
     // Deliberately omit exception text: it may contain paths or credentials.
     logger.error(`${label} konnte nicht ausgeführt werden.`);
     await vscode.window.showErrorMessage(
-      `AL Project Assistant: ${label} konnte nicht ausgeführt werden. ` +
+      `AL Agentura: ${label} konnte nicht ausgeführt werden. ` +
       'Bitte erneut versuchen. Bei Wiederholung den Fehler mit den Schritten zur Reproduktion melden.'
     );
   }
