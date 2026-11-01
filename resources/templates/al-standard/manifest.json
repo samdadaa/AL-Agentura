@@ -1,20 +1,78 @@
 {
+  "schemaVersion": 1,
   "id": "al-standard",
-  "folders": [
-    "Codeunits",
-    "Pages",
-    "PageExtensions",
-    "Tables",
-    "TableExtensions",
-    "Enums",
-    "EnumExtensions",
-    "Reports",
-    "ReportExtensions",
-    "Queries",
-    "XmlPorts",
-    "Interfaces",
-    "Permissions",
-    "Profiles"
-  ],
-  "root": "src"
+  "version": "1.0.0",
+  "variables": [],
+  "entries": [
+    {
+      "id": "codeunits",
+      "kind": "directory",
+      "target": "src/Codeunits"
+    },
+    {
+      "id": "pages",
+      "kind": "directory",
+      "target": "src/Pages"
+    },
+    {
+      "id": "page-extensions",
+      "kind": "directory",
+      "target": "src/PageExtensions"
+    },
+    {
+      "id": "tables",
+      "kind": "directory",
+      "target": "src/Tables"
+    },
+    {
+      "id": "table-extensions",
+      "kind": "directory",
+      "target": "src/TableExtensions"
+    },
+    {
+      "id": "enums",
+      "kind": "directory",
+      "target": "src/Enums"
+    },
+    {
+      "id": "enum-extensions",
+      "kind": "directory",
+      "target": "src/EnumExtensions"
+    },
+    {
+      "id": "reports",
+      "kind": "directory",
+      "target": "src/Reports"
+    },
+    {
+      "id": "report-extensions",
+      "kind": "directory",
+      "target": "src/ReportExtensions"
+    },
+    {
+      "id": "queries",
+      "kind": "directory",
+      "target": "src/Queries"
+    },
+    {
+      "id": "xml-ports",
+      "kind": "directory",
+      "target": "src/XmlPorts"
+    },
+    {
+      "id": "interfaces",
+      "kind": "directory",
+      "target": "src/Interfaces"
+    },
+    {
+      "id": "permissions",
+      "kind": "directory",
+      "target": "src/Permissions"
+    },
+    {
+      "id": "profiles",
+      "kind": "directory",
+      "target": "src/Profiles"
+    }
+  ]
 }

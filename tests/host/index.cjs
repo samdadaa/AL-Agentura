@@ -11,17 +11,25 @@ exports.run = async function () {
     command.title === 'AL Project Assistant: Setup Project'));
   const messages = [];
   const original = vscode.window.showInformationMessage;
+  const originalDialog = vscode.window.showOpenDialog;
+  vscode.window.showOpenDialog = async () => undefined;
   vscode.window.showInformationMessage = async message => { messages.push(message); };
   try {
     await vscode.commands.executeCommand('alProjectAssistant.setup');
     assert.equal(extension.isActive, true, 'Command activates the extension');
     assert.ok((await vscode.commands.getCommands(true)).includes('alProjectAssistant.setup'));
     await vscode.commands.executeCommand('alProjectAssistant.setup');
-    assert.equal(messages.length, 2);
-    assert.ok(messages.every(message => message.includes('noch nicht implementiert')));
+    assert.equal(messages.length, 0);
+    vscode.window.showOpenDialog = originalDialog;
     console.log('EXT-001: Extension Host passed (activation, contribution, command, repeat invocation).');
+    await require('./project.cjs').run(extension);
+    await require('./new-project.cjs').run(extension);
     fs.writeFileSync(process.env.AL_EXTENSION_HOST_REPORT, JSON.stringify({ passed: true, version: vscode.version }));
+  } catch (error) {
+    fs.writeFileSync(process.env.AL_EXTENSION_HOST_REPORT, JSON.stringify({ passed: false, error: error.stack || String(error) }));
+    throw error;
   } finally {
+    vscode.window.showOpenDialog = originalDialog;
     vscode.window.showInformationMessage = original;
   }
 };

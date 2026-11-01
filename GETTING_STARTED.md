@@ -1,9 +1,9 @@
 # Entwicklerhandbuch — AL-extension
 
 ## Projekt öffnen
-Öffne `AL-extension.code-workspace` in VS Code. Lies `README.md` und `KONZEPT.md`. Das Extension-Fundament ist umgesetzt und zur Prüfung, der Generator noch **nicht fertig**; die Aufgaben stehen in `TODO.md`.
+Öffne `AL-extension.code-workspace` in VS Code. Lies `README.md` und `KONZEPT.md`. Fundament, Manifestverträge, Projektanalyse, Strukturplanung und lokale Neuprojekt-Erstellung sind umgesetzt und zur Prüfung; die Bestandsanwendung ist noch **nicht fertig**; die Aufgaben stehen in `TODO.md`.
 
-Für Installation, F5, Tests und lokale Paketierung siehe [Lokale Entwicklung](docs/operations/LOCAL_DEVELOPMENT.md). Tatsächliche Ergebnisse stehen im [EXT-001-Testbericht](docs/quality/EXT-001.md).
+Für Installation, F5, Tests und lokale Paketierung siehe [Lokale Entwicklung](docs/operations/LOCAL_DEVELOPMENT.md). Tatsächliche Ergebnisse stehen in den [Fundamentnachweisen](docs/quality/EXT-001.md), [Manifestnachweisen](docs/quality/EXT-002.md) und [Nachweisen für Analyse/Struktur](docs/quality/EXT-003-004.md). Für den Neuprojekt-Wizard **AL Project Assistant: Setup Project** aufrufen: neues lokales Ziel, Vorschau und Zustimmung erforderlich. Ohne ausgewählte app.json entsteht nur ein vorbereiteter Workspace. [EXT-005-Nachweis](docs/quality/EXT-005.md). Mit **AL Project Assistant: Projekt analysieren** in der Command Palette lässt sich ein Ordner ohne Schreibzugriff prüfen.
 
 ## Wie die Markdown-Dateien zusammenarbeiten
 - `AGENTS.md`: Arbeitsvertrag für den Coding-Agenten, der diese Extension entwickelt.

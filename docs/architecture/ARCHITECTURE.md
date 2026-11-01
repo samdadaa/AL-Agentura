@@ -22,3 +22,12 @@ Neue AL-Projekte werden in **einem neu gewählten Ordner** vorbereitet und als `
 
 ## Entscheidungen
 `docs/architecture/DECISIONS.md` enthält verbindliche Entscheidungen; Änderungen benötigen ein ADR unter `docs/architecture/adr/`.
+
+## Implementierte Verträge (EXT-002, zur Prüfung)
+Die Modelle in `src/core/templateModels.ts` konkretisieren Manifest, Variablen, Einträge, Profile und den künftigen GenerationPlan. Reine Kernvalidierung liegt in `src/core/`; `src/templates/catalog.ts` lädt übergebenen JSON-Text ohne Datei-/VS-Code-Zugriff. Profilkomposition und Versionierung sind in [ADR 0001](adr/0001-template-manifest-contract.md) festgehalten. Der URI-Ressourcenadapter und reine Strukturplaner sind durch EXT-003/004 ergänzt; allgemeiner Renderer, Vorschau und Writer bleiben offen; [Modulvertrag](../modules/Templates.md).
+
+## Workspace-Analyse und Strukturplan (EXT-003/004, zur Prüfung)
+`alProjectAssistant.inspect` verbindet URI-Resolver, Ressourcenloader und lesenden Inspector. `ProjectContext` dokumentiert Metadaten, Eintragsarten, vollständigen/partiellen Scan und bloße Strukturkandidaten. Der reine Strukturplaner verwendet diesen Kontext und deklarative AL-Profile für create/skip/conflict. Der Struktur-Generation-Adapter ergänzt Ziel-URIs; allgemeine Bestandsanwendung fehlt. Lokale Neuanlage siehe EXT-005 unten. [ADR 0002](adr/0002-readonly-inspection-structure-plans.md) trennt diese Arbeit von EXT-009.
+
+## Neuprojekt-Wizard und begrenzter Writer (EXT-005, zur Prüfung)
+Setup orchestriert `ui/newProjectWizard` → `workspace/newProject`/Core-Entwurf → Textvorschau und modale Zustimmung → `generation/createNewProject` → Einstieg/Ergebnis → optionales Workspace-Öffnen. Ausschließlich noch fehlende lokale file-Ziele; keine Bestandsanwendung. Inhalte werden über einen eigenen OS-Scratch und native Provider-Copy ohne Überschreiben angelegt. [ADR 0003](adr/0003-new-project-creation.md) dokumentiert die notwendige Präzisierung zu ADR 0002 und den abgewiesenen providerübergreifenden Copy-Fallback.

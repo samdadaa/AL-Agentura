@@ -1,0 +1,28 @@
+# AL build output and downloaded symbols
+*.app
+.alpackages/
+.alcache/
+.vscode/.alcache/
+
+# Debugger snapshots and local logs
+.snapshots/
+*.log
+
+# Personal configuration: shared .vscode files remain versionable
+.vscode/*.local.json
+
+# Local credentials, signing keys and licenses
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.pem
+*.key
+*.snk
+*.flf
+*.bclicense
+
+# OS metadata
+.DS_Store
+Thumbs.db

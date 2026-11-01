@@ -1,5 +1,98 @@
 {
+  "schemaVersion": 1,
   "id": "al-modular",
-  "root": "src/{module}",
-  "inherit": "al-standard"
+  "version": "1.0.0",
+  "variables": [
+    {
+      "name": "MODULES",
+      "type": "pathSegments",
+      "required": true
+    }
+  ],
+  "entries": [
+    {
+      "id": "codeunits",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Codeunits",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "pages",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Pages",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "page-extensions",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/PageExtensions",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "tables",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Tables",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "table-extensions",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/TableExtensions",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "enums",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Enums",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "enum-extensions",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/EnumExtensions",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "reports",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Reports",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "report-extensions",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/ReportExtensions",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "queries",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Queries",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "xml-ports",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/XmlPorts",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "interfaces",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Interfaces",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "permissions",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Permissions",
+      "repeatFor": "MODULES"
+    },
+    {
+      "id": "profiles",
+      "kind": "directory",
+      "target": "src/{{MODULES}}/Profiles",
+      "repeatFor": "MODULES"
+    }
+  ]
 }

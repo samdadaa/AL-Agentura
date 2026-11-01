@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "id": "standard",
+      "name": "Standard",
+      "manifestIds": [
+        "al-standard"
+      ]
+    },
+    {
+      "id": "modular",
+      "name": "Modular",
+      "manifestIds": [
+        "al-modular"
+      ]
+    }
+  ]
+}

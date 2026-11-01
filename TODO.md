@@ -1,10 +1,11 @@
 # Master TODO — AL-extension
 
-**Stand:** 01.11.2026 · **Umsetzung:** EXT-001 technisch umgesetzt und zur Prüfung; Generatorfunktionen **nicht implementiert**. Die folgenden Tickets sind spezifizierte Arbeitsaufträge, keine abgeschlossenen Features.
+**Stand:** 01.11.2026 · **Umsetzung:** EXT-001 bis EXT-005 technisch umgesetzt und zur Prüfung; Projektanalyse, Strukturpläne und bestätigte lokale Neuanlage vorhanden. Eigene AL-Konfigurationsgenerierung und allgemeine Bestandsanwendung bleiben offen. Die folgenden Tickets sind spezifizierte Arbeitsaufträge, keine abgeschlossenen Features.
 
 ## Verbindliche Arbeitsregeln
 - Vor Ticketbeginn `AGENTS.md`, `KONZEPT.md`, relevante Module, Architektur und Teststrategie lesen.
-- **Ein Ticket pro Agentenauftrag**; keine eigenständige Umsetzung der gesamten Roadmap.
+- **Ein Ticket pro Agentenauftrag**, außer bei ausdrücklicher gemeinsamer Auswahl durch den Nutzer; keine eigenständige Umsetzung der gesamten Roadmap.
+- Nach jedem umgesetzten Einzelpunkt sofort `TODO.md` aktualisieren; Umsetzung, Tests und Abnahme getrennt dokumentieren.
 - Status: `Offen` → `In Arbeit` → `Zur Prüfung` → `Erledigt`; `Blockiert` bei offenen Voraussetzungen.
 - `Zur Prüfung` heißt Code umgesetzt und dokumentiert, **nicht** automatisch getestet oder vom Nutzer abgenommen.
 - `Erledigt` nur nach Nutzerabnahme. Teststatus gesondert dokumentieren.
@@ -12,22 +13,22 @@
 - Vorhandene Daten, AL-Dateien und MD-Dateien nicht stillschweigend verändern.
 
 ## Paketübersicht
-| Ticket | Thema | Prio | Abhängigkeiten |
-|---|---|---|---|
-| EXT-001 | Extension-Fundament und Entwicklungs-Workspace | P0 | — |
-| EXT-002 | Typisiertes Manifest, Profile und Template-Verträge | P0 | EXT-001 |
-| EXT-003 | Workspace-Resolver und AL-Projekterkennung | P0 | EXT-001 |
-| EXT-004 | Standard-/Modular-AL-Ordnerstruktur und Git-Regeln | P0 | EXT-002, EXT-003 |
-| EXT-005 | Neues AL-Projekt inklusive VS-Code-Workspace erstellen | P0 | EXT-003, EXT-004 |
-| EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | P0 | EXT-003, EXT-005 |
-| EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | P0 | EXT-002, EXT-004 |
-| EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | P1 | EXT-003, EXT-007 |
-| EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | P0 | EXT-002, EXT-003 |
-| EXT-010 | Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren | P0 | EXT-003, EXT-007, EXT-009 |
-| EXT-011 | Automatisierte Tests, Security- und Fehlerfall-Matrix | P0 | EXT-004, EXT-006, EXT-009, EXT-010 |
-| EXT-012 | VSIX-Paketierung, lokale Installation und Dokumentation | P1 | EXT-011 |
-| EXT-013 | Eigene Markdown-Vorlagen importieren und lokal wiederverwenden | P2 | EXT-002, EXT-009 |
-| EXT-014 | AL-Projektcheck und neue Module als optionale Komfortfunktionen | P2 | EXT-003, EXT-008, EXT-010 |
+| Ticket | Thema | Status | Prio | Abhängigkeiten |
+|---|---|---|---|---|
+| EXT-001 | Extension-Fundament und Entwicklungs-Workspace | Zur Prüfung | P0 | — |
+| EXT-002 | Typisiertes Manifest, Profile und Template-Verträge | Zur Prüfung | P0 | EXT-001 |
+| EXT-003 | Workspace-Resolver und AL-Projekterkennung | Zur Prüfung | P0 | EXT-001 |
+| EXT-004 | Standard-/Modular-AL-Ordnerstruktur und Git-Regeln | Zur Prüfung | P0 | EXT-002, EXT-003 |
+| EXT-005 | Neues AL-Projekt inklusive VS-Code-Workspace erstellen | Zur Prüfung | P0 | EXT-003, EXT-004 |
+| EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | Offen | P0 | EXT-003, EXT-005 |
+| EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | Offen | P0 | EXT-002, EXT-004 |
+| EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | Offen | P1 | EXT-003, EXT-007 |
+| EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | Offen | P0 | EXT-002, EXT-003 |
+| EXT-010 | Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren | Offen | P0 | EXT-003, EXT-007, EXT-009 |
+| EXT-011 | Automatisierte Tests, Security- und Fehlerfall-Matrix | Offen | P0 | EXT-004, EXT-006, EXT-009, EXT-010 |
+| EXT-012 | VSIX-Paketierung, lokale Installation und Dokumentation | Offen | P1 | EXT-011 |
+| EXT-013 | Eigene Markdown-Vorlagen importieren und lokal wiederverwenden | Offen | P2 | EXT-002, EXT-009 |
+| EXT-014 | AL-Projektcheck und neue Module als optionale Komfortfunktionen | Offen | P2 | EXT-003, EXT-008, EXT-010 |
 
 ---
 
@@ -46,11 +47,11 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 - [x] Extension-Aktivierung, Commands und Logging in kleine Dateien aufteilen; `extension.ts` als Composition Root belassen.
 - [x] Fehlermeldungen und Abbruchverhalten für Commands definieren.
 - [x] Build, Testskript und lokale VSIX-Paketierung dokumentieren.
-- [ ] F5-Host und Command-Palette manuell prüfen.
+- [x] F5-Host und Command-Palette manuell prüfen.
 
 ### Akzeptanzkriterien
 - [x] `npm run compile` und `npm test` funktionieren in sauber installierter Umgebung.
-- [ ] F5 startet Extension Development Host und Befehl ist sichtbar.
+- [x] F5 startet Extension Development Host und Befehl ist sichtbar.
 - [x] Noch nicht implementierte Funktionen werden als solche angezeigt; keine Erfolgsmeldung.
 
 ### Tests und Nachweise
@@ -61,7 +62,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ### Umsetzungs- und Testnachweis (01.11.2026)
 Siehe [EXT-001-Testbericht](docs/quality/EXT-001.md): `npm ci`, Compile, 5 Node-Tests, echter isolierter VS-Code-Host und lokale VSIX erfolgreich. Die Host-Test-Checkbox belegt den automatisierten Lauf; **manuelle F5-/Palette-Prüfung bleibt offen**, ebenso Install-from-VSIX und Benutzerabnahme. Geprüfte Launch-/Task-Konfiguration war bereits korrekt. Keine Generatorfunktionen oder weiteren Tickets bearbeitet.
@@ -70,7 +71,7 @@ Siehe [EXT-001-Testbericht](docs/quality/EXT-001.md): `npm ci`, Compile, 5 Node-
 
 ## EXT-002 — Typisiertes Manifest, Profile und Template-Verträge
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-001
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-001
 
 ### Beschreibung und Hintergrund
 Das Projekt soll nicht aus verstreuten Hardcode-Ordnerlisten bestehen. Eine deklarative, versionierte Beschreibung definiert, welche Ordner und Markdown-Dateien ein AL-Profil erzeugt. Spätere eigene Vorlagen müssen ohne Architekturbruch möglich sein.
@@ -79,32 +80,35 @@ Das Projekt soll nicht aus verstreuten Hardcode-Ordnerlisten bestehen. Eine dekl
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Typen für `TemplateManifest`, `TemplateEntry`, `ProjectProfile`, `TemplateVariable`, `GenerationPlan` definieren.
-- [ ] Manifestversion, IDs, relative Zielpfade, Dateitypen, optionale Elemente und Bedingungen spezifizieren.
-- [ ] Standard-/Modular-Profile als Daten modellieren; Vererbung oder Komposition eindeutig festlegen.
-- [ ] Eingaben und Platzhalter gegen ungültige Zeichen, unbekannte Tokens, Duplikate und Traversal validieren.
-- [ ] Versionsmigration und klare Fehlermeldungen bei inkompatiblen Manifesten planen.
+- [x] Typen für `TemplateManifest`, `TemplateEntry`, `ProjectProfile`, `TemplateVariable`, `GenerationPlan` definieren.
+- [x] Manifestversion, IDs, relative Zielpfade, Dateitypen, optionale Elemente und Bedingungen spezifizieren.
+- [x] Standard-/Modular-Profile als Daten modellieren; Vererbung oder Komposition eindeutig festlegen.
+- [x] Eingaben und Platzhalter gegen ungültige Zeichen, unbekannte Tokens, Duplikate und Traversal validieren.
+- [x] Versionsmigration und klare Fehlermeldungen bei inkompatiblen Manifesten planen.
 
 ### Akzeptanzkriterien
-- [ ] Manifest wird deterministisch geladen und validiert.
-- [ ] Ungültige Pfade/IDs/Variablen werden abgelehnt, bevor geschrieben wird.
-- [ ] Tests belegen Standard- und Modular-Profil.
+- [x] Manifest wird deterministisch geladen und validiert.
+- [x] Ungültige Pfade/IDs/Variablen werden abgelehnt, bevor geschrieben wird.
+- [x] Tests belegen Standard- und Modular-Profil.
 
 ### Tests und Nachweise
-- [ ] Unit: valid/invalid manifest: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Duplikate: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Traversal: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Unit: valid/invalid manifest: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Duplikate: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Traversal: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+### Umsetzungs- und Testnachweis (01.11.2026)
+Typisierte Modelle, Schema-1-Loader, Manifest-/Profilvalidierung und deklarative Standard-/Modular-Profile implementiert. Nachweis: [EXT-002](docs/quality/EXT-002.md). Folgeprüfung mit EXT-003/004: Compile, 35 Node-Tests einschließlich der 19 Manifesttests, echter Extension-Host und VSIX-Inhalt erfolgreich. Benutzerabnahme offen.
 
 ---
 
 ## EXT-003 — Workspace-Resolver und AL-Projekterkennung
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-001
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-001
 
 ### Beschreibung und Hintergrund
 Die Extension muss unterscheiden, ob VS Code ohne Ordner, mit einem leeren Ordner, einem bestehenden AL-Projekt oder mehreren Roots geöffnet ist. Bei vorhandenen Projekten soll sie Fakten erkennen, nicht raten.
@@ -113,33 +117,36 @@ Die Extension muss unterscheiden, ob VS Code ohne Ordner, mit einem leeren Ordne
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Workspace-Folder über VS-Code-API lesen; bei Multi-Root Ziel auswählen.
-- [ ] Ohne Workspace Zielordner über Dialog auswählen; URI/Remote-Kontext beachten.
-- [ ] `app.json` sicher lesen, JSON-Fehler verständlich anzeigen, Name/Publisher/ID-Ranges/Runtime/Dependencies extrahieren.
-- [ ] AL-Dateien und Objektordner erkennen; Projektzustand neu/bestehend/unvollständig bestimmen.
-- [ ] Projektkontext als typisiertes Objekt an weitere Module liefern.
-- [ ] Kein automatisch semantisches Interpretieren der Geschäftslogik.
+- [x] Workspace-Folder über VS-Code-API lesen; bei Multi-Root Ziel auswählen.
+- [x] Ohne Workspace Zielordner über Dialog auswählen; URI/Remote-Kontext beachten.
+- [x] `app.json` sicher lesen, JSON-Fehler verständlich anzeigen, Name/Publisher/ID-Ranges/Runtime/Dependencies extrahieren.
+- [x] AL-Dateien und Objektordner erkennen; Projektzustand neu/bestehend/unvollständig bestimmen.
+- [x] Projektkontext als typisiertes Objekt an weitere Module liefern.
+- [x] Kein automatisch semantisches Interpretieren der Geschäftslogik.
 
 ### Akzeptanzkriterien
-- [ ] Leerer, bestehender, ungültiger und Multi-Root-Fall unterscheidbar.
-- [ ] Keine falsche Behauptung über Module oder Fachlogik.
-- [ ] Kein Schreibzugriff während Analyse.
+- [x] Leerer, bestehender, ungültiger und Multi-Root-Fall unterscheidbar.
+- [x] Keine falsche Behauptung über Module oder Fachlogik.
+- [x] Kein Schreibzugriff während Analyse.
 
 ### Tests und Nachweise
-- [ ] Integration: 4 Workspace-Arten: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] ungültige JSON: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Remote URI: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Integration: 4 Workspace-Arten: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] ungültige JSON: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Remote URI: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+### Umsetzungs- und Testnachweis (01.11.2026)
+Workspace-Resolver, lesende app.json-/AL-Projekterkennung, typisierter Kontext und Command **AL Project Assistant: Projekt analysieren** implementiert. Lokale Bestände, No-root-/Single-/Multi-root-Auswahl mit ersetzten Pickern, Abbruch, JSON-Fehler und schreibgeschützter URI-Provider geprüft. Kein echter SSH-Server oder manuell bediente Picker behauptet. [Dateien, Ergebnisse und Grenzen](docs/quality/EXT-003-004.md). Benutzerabnahme offen.
 
 ---
 
 ## EXT-004 — Standard-/Modular-AL-Ordnerstruktur und Git-Regeln
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-003
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-003
 
 ### Beschreibung und Hintergrund
 Die Extension soll die manuelle Anlage typischer AL-Objektordner vermeiden. Für kleine Apps ist ein zentraler `src`-Baum sinnvoll, für größere Apps eine Modulstruktur mit eigenen Objektordnern. Leere Git-Ordner brauchen gezielte Platzhalter.
@@ -148,32 +155,35 @@ Die Extension soll die manuelle Anlage typischer AL-Objektordner vermeiden. Für
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Konfigurierbare AL-Objekttypen inkl. Codeunits, Pages, PageExtensions, Tables, TableExtensions, Enums, EnumExtensions, Reports, ReportExtensions, Queries, XmlPorts, Interfaces, Permissions, Profiles definieren.
-- [ ] Modular-Profil erzeugt `src/<Modul>/<Objekttyp>`; Modulnamen validieren und deduplizieren.
-- [ ] `.gitkeep` nur in bewusst leeren Ordnern, nicht unnötig neben echten Dateien.
-- [ ] `.gitignore` für `.app`, Symbolpakete, Cache, persönliche Einstellungen und sensible lokale Artefakte projektgerecht definieren; `.vscode` nicht pauschal ignorieren.
-- [ ] Bei bestehenden Projekten nur fehlende Ordner anbieten; keine AL-Dateien verschieben.
+- [x] Konfigurierbare AL-Objekttypen inkl. Codeunits, Pages, PageExtensions, Tables, TableExtensions, Enums, EnumExtensions, Reports, ReportExtensions, Queries, XmlPorts, Interfaces, Permissions, Profiles definieren.
+- [x] Modular-Profil erzeugt `src/<Modul>/<Objekttyp>`; Modulnamen validieren und deduplizieren.
+- [x] `.gitkeep` nur in bewusst leeren Ordnern, nicht unnötig neben echten Dateien.
+- [x] `.gitignore` für `.app`, Symbolpakete, Cache, persönliche Einstellungen und sensible lokale Artefakte projektgerecht definieren; `.vscode` nicht pauschal ignorieren.
+- [x] Bei bestehenden Projekten nur fehlende Ordner anbieten; keine AL-Dateien verschieben.
 
 ### Akzeptanzkriterien
-- [ ] Standard- und Modular-Struktur entsprechen Profil.
-- [ ] Wiederholung erzeugt keine Duplikate.
-- [ ] Vorhandene Dateien und Git-Regeln werden nicht still überschrieben.
+- [x] Standard- und Modular-Struktur entsprechen Profil.
+- [x] Wiederholung erzeugt keine Duplikate.
+- [x] Vorhandene Dateien und Git-Regeln werden nicht still überschrieben.
 
 ### Tests und Nachweise
-- [ ] Unit Plan: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Integration idempotent: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Gitignore-Snapshot: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Unit Plan: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Integration idempotent: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Gitignore-Snapshot: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+### Umsetzungs- und Testnachweis (01.11.2026)
+Standard-/Modular-Strukturpläne mit Objekttypauswahl, validierten/deduplizierten Modulen, gezielten .gitkeep-Dateien und Gitignore-Empfehlung implementiert. Unit-Pläne, Gitignore-Snapshot und echte Host-Idempotenz für Standard und Modular bestanden; Bestandsdateien bleiben unverändert. Produktive Vorschau/Zustimmung/Dateianwendung folgt mit EXT-009. [Dateien, Ergebnisse und Grenzen](docs/quality/EXT-003-004.md). Benutzerabnahme offen.
 
 ---
 
 ## EXT-005 — Neues AL-Projekt inklusive VS-Code-Workspace erstellen
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-004
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-004
 
 ### Beschreibung und Hintergrund
 Ein Entwickler soll die Extension auch ohne offenen Workspace nutzen können: Projektname und Zielverzeichnis auswählen, wenige AL-spezifische Angaben machen und direkt einen geöffneten Workspace erhalten. Der Assistent ersetzt dabei nicht ungeprüft die offizielle AL-Extension.
@@ -182,28 +192,31 @@ Ein Entwickler soll die Extension auch ohne offenen Workspace nutzen können: Pr
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Neuprojekt-Wizard mit Zielverzeichnis, Projektname, Profil und optional Modulen definieren.
-- [ ] Zielordner nur mit Zustimmung erstellen; Namens- und Konfliktprüfung.
-- [ ] `.code-workspace` mit relativem Projektpfad erstellen und über VS-Code-API öffnen.
-- [ ] Interaktion mit `AL: Go!` klären: vorhandenes `app.json` übernehmen oder eigene minimal gültige Konfiguration erzeugen, nicht beide unkoordiniert.
-- [ ] Fehler-/Abbruchfälle so behandeln, dass keine fremden Dateien verändert werden.
-- [ ] Einstiegsdokumentation und Ergebnisübersicht nach Erstellung anzeigen.
+- [x] Neuprojekt-Wizard mit Zielverzeichnis, Projektname, Profil und optional Modulen definieren.
+- [x] Zielordner nur mit Zustimmung erstellen; Namens- und Konfliktprüfung.
+- [x] `.code-workspace` mit relativem Projektpfad erstellen und über VS-Code-API öffnen.
+- [x] Interaktion mit `AL: Go!` klären: vorhandenes `app.json` übernehmen oder eigene minimal gültige Konfiguration erzeugen, nicht beide unkoordiniert.
+- [x] Fehler-/Abbruchfälle so behandeln, dass keine fremden Dateien verändert werden.
+- [x] Einstiegsdokumentation und Ergebnisübersicht nach Erstellung anzeigen.
 
 ### Akzeptanzkriterien
-- [ ] Ohne geöffneten Ordner kann ein neuer Workspace vorbereitet werden.
-- [ ] Workspace-Datei verweist auf korrektes Projektverzeichnis.
-- [ ] Kein Überschreiben eines vorhandenen Projekts.
+- [x] Ohne geöffneten Ordner kann ein neuer Workspace vorbereitet werden.
+- [x] Workspace-Datei verweist auf korrektes Projektverzeichnis.
+- [x] Kein Überschreiben eines vorhandenen Projekts.
 
 ### Tests und Nachweise
-- [ ] ohne Workspace: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] vorhandener Zielordner: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Abbruch: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Workspace öffnen: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] ohne Workspace: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] vorhandener Zielordner: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Abbruch: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Workspace öffnen: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+### Umsetzungs- und Testnachweis (01.11.2026)
+Neuprojekt-Wizard mit vollständiger Vorschau/Zustimmung, tatsächlicher lokaler Anlage, relativem Workspace, Einstieg und optional inhaltstreuer app.json-Übernahme implementiert. 42 Node-Tests, erweiterter echter Host und VSIX-Inhaltsprüfung erfolgreich. Alle sieben Abbruchstellen, Ziel-/Namenskonflikte, nachträgliche Belegung, reale Symlinks, Quelltreue und Teilfehler geprüft. Workspace-Öffnen als API-Dispatch geprüft; sichtbare Fenster/Picker nicht manuell bedient. Neuanlage nur native lokale file-Ziele: der anfänglich fehlgeschlagene Copy-Fallback-Race-Test führte zur expliziten Provider-Sperre. Ohne app.json-Quelle bleibt die AL-Konfiguration ausstehend; keine erfundenen Versions-/Serverdaten. [Dateien, genaue Ergebnisse und offene Prüfungen](docs/quality/EXT-005.md), [ADR 0003](docs/architecture/adr/0003-new-project-creation.md). Benutzerabnahme offen.
 
 ---
 

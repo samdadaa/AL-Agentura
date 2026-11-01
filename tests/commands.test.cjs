@@ -24,6 +24,7 @@ function harness() {
         assert.equal(name, 'AL Project Assistant');
         return { appendLine: line => logs.push(line), dispose: () => disposed++ };
       },
+      async showOpenDialog() { if (failure) throw failure; return undefined; },
       async showInformationMessage(message) {
         if (failure) throw failure;
         messages.push(message);
@@ -38,6 +39,7 @@ function harness() {
     cache.set(filename, module);
     const localRequire = id => {
       if (id === 'vscode') return vscode;
+      if (['node:fs/promises', 'node:path', 'node:os'].includes(id)) return require(id);
       assert.ok(id.startsWith('.'), `Unexpected dependency: ${id}`);
       return load(path.resolve(path.dirname(filename), `${id}.js`));
     };
@@ -57,21 +59,18 @@ test('Activation registers the contributed command and releases all resources', 
   const h = harness();
   const manifest = require('../package.json');
   assert.deepEqual([...h.commands.keys()], manifest.contributes.commands.map(c => c.command));
-  assert.equal(h.context.subscriptions.length, 2);
+  assert.equal(h.context.subscriptions.length, 3);
   h.context.subscriptions.forEach(d => d.dispose());
   assert.equal(h.commands.size, 0);
   assert.equal(h.disposed(), 1);
 });
 
-test('Repeated setup calls explicitly report unavailable generator without filesystem APIs', async () => {
+test('Repeated cancelled setup wizards create no notifications or filesystem dependency', async () => {
   const h = harness();
   for (let i = 0; i < 2; i++) await h.commands.get('alProjectAssistant.setup')();
-  assert.equal(h.messages.length, 2);
-  for (const message of h.messages) {
-    assert.match(message, /noch nicht implementiert/);
-    assert.match(message, /keine Dateien geändert/);
-  }
+  assert.deepEqual(h.messages, []);
   assert.deepEqual(h.errors, []);
+  assert.match(h.logs.at(-1), /abgebrochen/);
 });
 
 test('Cancellation produces no error or success notification', async () => {
@@ -94,6 +93,6 @@ test('Unexpected errors and non-Error rejections remain contained and do not lea
     assert.doesNotMatch(JSON.stringify([...h.errors, ...h.logs]), /SECRET|customer/);
     h.fail(undefined);
     await h.commands.get('alProjectAssistant.setup')();
-    assert.equal(h.messages.length, 1);
+    assert.equal(h.messages.length, 0);
   }
 });

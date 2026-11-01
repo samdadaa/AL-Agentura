@@ -21,6 +21,10 @@
       {
         "command": "alProjectAssistant.setup",
         "title": "AL Project Assistant: Setup Project"
+      },
+      {
+        "command": "alProjectAssistant.inspect",
+        "title": "AL Project Assistant: Projekt analysieren"
       }
     ]
   },

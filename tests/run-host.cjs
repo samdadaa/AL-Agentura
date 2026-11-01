@@ -16,8 +16,10 @@ try {
     `--extensionTestsPath=${path.join(__dirname, 'host/index.cjs')}`
   ], { stdio: 'inherit', timeout: 120000, env: { ...process.env, AL_EXTENSION_HOST_REPORT: report } });
   if (result.error) console.error(`Extension-Host konnte nicht gestartet werden: ${result.error.message}`);
-  const passed = fs.existsSync(report) && JSON.parse(fs.readFileSync(report, 'utf8')).passed === true;
-  console.log(passed ? 'EXT-001: Extension-Host-Prüfungen bestanden.' : 'EXT-001: Kein erfolgreicher Host-Nachweis vorhanden.');
+  const evidence = fs.existsSync(report) ? JSON.parse(fs.readFileSync(report, 'utf8')) : {};
+  const passed = evidence.passed === true;
+  if (evidence.error) console.error(evidence.error);
+  console.log(passed ? 'Extension-Host-Prüfungen bestanden (Fundament, EXT-003, EXT-004, EXT-005).' : 'EXT-001: Kein erfolgreicher Host-Nachweis vorhanden.');
   process.exitCode = result.status === 0 && passed ? 0 : 1;
 } finally {
   fs.rmSync(temporary, { recursive: true, force: true });

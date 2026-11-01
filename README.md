@@ -3,17 +3,17 @@
 VS-Code-Extension für Business-Central-/AL-Entwickler: **neue AL-Projekte mit Workspace, AL-Ordnerstruktur, Git und Agenten-Markdown vorbereiten** sowie **bestehende Projekte sicher ergänzen**.
 
 ## Aktueller Stand (01.11.2026)
-**Extension-Fundament umgesetzt, zur Prüfung; kein fertiger Generator.** Der Setup-Platzhalter ist mit Logging, Fehler-/Abbruchbehandlung und automatisierten Tests registriert. Die ausführlichen 14 Tickets stehen in `TODO.md`; der ursprüngliche Gesprächsplan in `docs/ROADMAP_ORIGINAL.md`.
+**EXT-001 bis EXT-005 technisch umgesetzt, zur Prüfung.** Setup bietet jetzt einen Neuprojekt-Wizard mit Vorschau/Zustimmung, AL-Struktur, Git-Regeln, relativem Workspace und Einstieg. Optional wird eine ausgewählte `app.json` inhaltstreu übernommen; ohne Quelle bleibt die AL-Konfiguration ausstehend. Neuanlage derzeit nur in neuen lokalen `file`-Zielen. Bestehende Projekte werden damit nicht ergänzt. Projektanalyse und reine Strukturplanung unterstützen weiterhin URI-Provider. Eigene AL-Konfigurationsgenerierung, vollständige Agenten-Dokumentation und allgemeine Bestandsanwendung stehen aus. Die 14 Tickets stehen in `TODO.md`.
 
 ## Einstieg
 1. `AL-extension.code-workspace` in VS Code öffnen.
 2. Node.js ab Version 22 und npm verwenden; `npm ci` installiert die festgeschriebenen Entwicklungsabhängigkeiten.
 3. `npm run compile` und `npm test`.
-4. F5 für Extension Development Host. `AL Project Assistant: Setup Project` zeigt derzeit nur einen Hinweis.
+4. F5 für Extension Development Host. `AL Project Assistant: Projekt analysieren` wählt den Root und meldet erkannte Struktur/Metadaten oder Lücken, ohne Dateien zu ändern. `AL Project Assistant: Setup Project` führt durch die Neuanlage. Vorschau prüfen und nur bei passendem Ziel bestätigen.
 5. `npm run test:host` prüft Aktivierung und Command im installierten VS Code (`code` im PATH).
 6. `npm run package` baut lokal eine VSIX; keine Veröffentlichung. Details und manuelle Prüfschritte: `docs/operations/LOCAL_DEVELOPMENT.md`.
 
-Nachweise und offene Abnahme zu **EXT-001**: `docs/quality/EXT-001.md`.
+Nachweise und offene Abnahme: `docs/quality/EXT-001.md`, `docs/quality/EXT-002.md` und `docs/quality/EXT-003-004.md` und `docs/quality/EXT-005.md`. Manifestformat und Entwicklerbeispiel: `docs/modules/Templates.md` und `docs/operations/LOCAL_DEVELOPMENT.md`.
 
 ## Dokumentation
 - `AGENTS.md`: verbindliche Regeln für Coding-Agenten, die **diese Extension** entwickeln.

@@ -8,7 +8,7 @@ AL-extension ist eine lokale VS-Code-Extension für **Microsoft Dynamics 365 Bus
 ## 2. Pflichtlektüre und Reihenfolge
 1. `README.md` für tatsächlichen Projektstand und Befehle.
 2. `KONZEPT.md` für vereinbarte Anforderungen und Nicht-Ziele.
-3. `TODO.md` für genau **ein** ausgewähltes Ticket, seine Voraussetzungen und Akzeptanzkriterien.
+3. `TODO.md` für die ausdrücklich ausgewählten Tickets, ihre Voraussetzungen und Akzeptanzkriterien; standardmäßig genau **ein** Ticket, mehrere nur auf ausdrückliche gemeinsame Auswahl.
 4. `docs/architecture/ARCHITECTURE.md`, `docs/architecture/DECISIONS.md` und die relevante Moduldatei unter `docs/modules/`.
 5. `docs/engineering/CONVENTIONS.md`, `docs/quality/TEST_STRATEGY.md`, `docs/security/SECURITY.md` und `docs/quality/DEFINITION_OF_DONE.md`.
 6. Vorhandenen Code, Tests, lokale Änderungen und Dateikonflikte **wirklich** untersuchen.
@@ -55,6 +55,7 @@ AL-extension ist eine lokale VS-Code-Extension für **Microsoft Dynamics 365 Bus
 - `npm run compile`, `npm test` und relevante VS-Code-Host-Tests ausführen, sofern verfügbar. Nicht ausgeführte Prüfungen ausdrücklich nennen.
 - Ein Häkchen in einer TODO ist **kein** Beleg für bestandene Tests oder Freigabe.
 - Status `Zur Prüfung` nach dokumentierter technischer Umsetzung; `Erledigt` erst nach Benutzerabnahme.
+- **Nach jedem einzelnen umgesetzten TODO-Punkt sofort `TODO.md` aktualisieren**: Aufgabenstand, konkrete Nachweise und offene Prüfungen festhalten; nicht erst gesammelt am Ticket- oder Auftragsende. Implementierung, Tests und Benutzerabnahme getrennt kennzeichnen.
 - `TODO.md`, Moduldatei, ADR und Nutzeranleitung bei relevanten Änderungen aktualisieren.
 - Abschlussbericht: Was geändert, warum, welche Dateien, welche Tests mit Ergebnis, was offen, wie manuell prüfen.
 
