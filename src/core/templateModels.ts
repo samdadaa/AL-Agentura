@@ -45,7 +45,7 @@ export interface ProfileCatalog {
 export type TemplateValue = string | boolean | readonly string[];
 export type TemplateInputs = Readonly<Record<string, TemplateValue>>;
 
-/** Contract only: URI resolution, planning, preview and writing belong to later tickets. */
+/** URI-backed plan shared by confirmed new-project and existing-project generation. */
 export interface GenerationPlan {
   readonly rootUri: string;
   readonly profileId: string;

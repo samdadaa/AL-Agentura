@@ -23,6 +23,7 @@ exports.run = async function () {
     vscode.window.showOpenDialog = originalDialog;
     console.log('EXT-001: Extension Host passed (activation, contribution, command, repeat invocation).');
     await require('./project.cjs').run(extension);
+    await require('./existing-project.cjs').run(extension);
     await require('./new-project.cjs').run(extension);
     await require('./microsoft-project.cjs').run(extension);
     fs.writeFileSync(process.env.AL_EXTENSION_HOST_REPORT, JSON.stringify({ passed: true, version: vscode.version }));

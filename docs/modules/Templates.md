@@ -47,3 +47,7 @@ Legacy-Manifeste ohne `schemaVersion` und andere Schema-Versionen werden ausdrü
 
 ## Tests und weitere Arbeit
 [EXT-002-Testnachweis](../quality/EXT-002.md). Tests prüfen auch Literalinhalt, Defaults, Wiederholung, Negativfälle, Komposition und mehrfaches deterministisches Laden. Ressourcenadapter und Strukturplaner wurden mit EXT-003/004 ergänzt; vollständiger Renderer, Vorschau und Writer bleiben den jeweiligen Folgetickets vorbehalten.
+
+
+## Bestandsdokumentation 1.0.0 (EXT-008 bis EXT-010)
+`resources/templates/existing-project/version.json` legt Schema 1 / Version 1.0.0 fest. Sieben deklarative Markdown-Vorlagen (Index, Modul, Erkennungsbericht, Lücken, Initialisierung, Projektfakten, Einstiegszusatz) werden durch `templates/bundled.ts` über Extension-URIs geladen. `core/existingDocumentationTemplates.ts` verlangt vollständige Dateien und exakt definierte Tokenverträge, lehnt unbekannte Versionen/Platzhalter ab und ersetzt Werte einmalig literal. Keine rekursive Expansion, Auswertung oder fremden Daten als Code. Die neun bisherigen Agenten-Vorlagen bleiben unverändert und werden im Bestandsplan nur um tatsächliche Belege ergänzt; bereits bestehende Zieldateien sind immer Skip.

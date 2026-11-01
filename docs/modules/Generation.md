@@ -1,7 +1,7 @@
 # Modul Generation
 
 ## Status und Verantwortung
-EXT-004: Standard-/Modular-Strukturplanung implementiert, zur Prüfung. Allgemeine Vorschau, Bestätigung, SafeWriter und Anwendung auf Bestandsprojekte bleiben EXT-009/010. Allgemeine Bestands-Schreiblogik fehlt weiterhin; EXT-005 ergänzt die unten beschriebene begrenzte Neuprojekt-Anlage.
+EXT-001 bis EXT-007 sind abgenommen. EXT-008 bis EXT-010 ergänzen die bestätigte Bestands-Pipeline und sind zur Prüfung. Die älteren Abschnitte unten beschreiben die historischen Grenzen vor dieser Umsetzung. Aktueller Vertrag: [ADR 0005](../architecture/adr/0005-existing-project-generation.md).
 
 ## Dateien und Schnittstellen
 - `src/core/alStructure.ts`: `StructureOptions`, Objekttypen aus validierten Manifesten, portable Modulnamen und case-insensitive Deduplizierung (erste Schreibweise bleibt erhalten).
@@ -37,3 +37,11 @@ Ergebnis: created/cancelled/blocked/partial mit angelegten Pfaden, gestopptem Zi
 
 ### Fehlerkorrektur am Speicher-Claim
 Die exklusive Sperre unterstützt auch `vscode-userdata:` als lokalen Desktop-Profilalias. Der echte Aktivierungskontext wird im Host-Regressionstest verwendet; ein reiner temporärer `file:`-Test genügt dafür nicht. Nichtlokale Schemes/Authorities bleiben abgewiesen. Speicherfehler werden ohne native Pfade oder fremde Fehlertexte gemeldet.
+
+
+## Bestands-Pipeline (EXT-008 bis EXT-010)
+`core/existingProject.ts` plant deterministisch Create/Skip/Conflict aus Kontext, Strukturwahl und versionierten Vorlagen. Elternverzeichnisse sind explizite Operationen; vorhandene Inhalte werden nicht gemischt. `generation/existingProjectPlan.ts` bindet relative Ziele an Root-URIs. `ui/existingProjectPreview.ts` zeigt Kategorien, Gründe, Ziel-URIs, neue Inhalte und offene Prüfpunkte.
+
+`generation/applyExistingProject.ts` schreibt ausschließlich nach Zustimmung, erfolgreicher lokaler Preflight und vollständigem frischem Planvergleich. Stale/Conflicts stoppen vor Writes; pro Operation folgen erneute Eltern-/Existenzprüfung, native Copy ohne Überschreiben und Inhaltsprüfung. Scratch außerhalb des Projekts, kein Rollback; Status applied/cancelled/blocked/stale/partial mit Create-/Skip-Pfaden, Fehlerpfad und Bereinigungsfehlern. Command und Writer blockieren parallele Aufrufe. Remote-/Virtual-Anwendung bleibt vor Writes gesperrt (ADR 0003); Planung bleibt URI-basiert.
+
+`Setup Current Project` enthält keine Dateischreiblogik mehr. Standardauswahl bewahrt die bestehende AL-Struktur. [Prüfbericht](../quality/EXT-008-010.md).

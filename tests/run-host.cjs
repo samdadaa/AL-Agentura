@@ -13,7 +13,7 @@ try {
     '--user-data-dir', path.join(temporary, 'user'),
     '--extensions-dir', path.join(temporary, 'extensions'),
     `--extensionDevelopmentPath=${root}`,
-    `--extensionTestsPath=${path.join(__dirname, process.env.AL_EXTENSION_HOST_SUITE === 'microsoft' ? 'host/microsoft-index.cjs' : 'host/index.cjs')}`
+    `--extensionTestsPath=${path.join(__dirname, process.env.AL_EXTENSION_HOST_SUITE === 'microsoft' ? 'host/microsoft-index.cjs' : process.env.AL_EXTENSION_HOST_SUITE === 'existing' ? 'host/existing-index.cjs' : 'host/index.cjs')}`
   ], { stdio: 'inherit', timeout: 120000, env: { ...process.env, AL_EXTENSION_HOST_REPORT: report } });
   if (result.error) console.error(`Extension-Host konnte nicht gestartet werden: ${result.error.message}`);
   const evidence = fs.existsSync(report) ? JSON.parse(fs.readFileSync(report, 'utf8')) : {};

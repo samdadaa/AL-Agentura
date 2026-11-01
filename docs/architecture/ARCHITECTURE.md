@@ -35,3 +35,7 @@ Setup orchestriert `ui/newProjectWizard` → `workspace/newProject`/Core-Entwurf
 
 ## Automatischer Microsoft-Abschluss
 Der explizit gewählte Microsoft-Erstellungsmodus nutzt einen begrenzten additiven Writer aus `generation/completeMicrosoftProject.ts` und öffnet automatisch den erzeugten relativen Workspace. Er ersetzt keine Bestandsdateien; die allgemeine Bestandsvorschau bleibt getrennt. [ADR 0004](adr/0004-automatic-microsoft-completion.md) dokumentiert Nutzerautorisierung, Ereignisse, persistente Claims und Teilfehlerverhalten.
+
+
+## Bestandsdokumentation und SafeWriter (EXT-008 bis EXT-010)
+Die oben als künftig beschriebene Bestandsanwendung ist jetzt umgesetzt: Modulbelege und Dokumentrenderer → reiner Ergänzungsplan → URI-Adapter → Inhaltsvorschau/Zustimmung → frischer Planvergleich → lokaler additiver Writer → Ergebnis. Konkrete Schnittstellen, Dateischutz und Providergrenze stehen in [ADR 0005](adr/0005-existing-project-generation.md) und [Generation](../modules/Generation.md). Keine automatische Bestandsanwendung beim Start; Microsofts ausdrücklich gewählte Neuanlage bleibt separat.

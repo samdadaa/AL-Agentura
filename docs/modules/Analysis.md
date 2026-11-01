@@ -20,3 +20,7 @@ Standardlimits: 10.000 Einträge, 32 Verzeichnisebenen, 1 MiB app.json. Scan sor
 Command `alAgentura.analyzeExistingProject` (**AL Agent: Analyze Existing Project**) orchestriert Auswahl, Profile und Inspector, meldet Status/Zahlen/Diagnosen und gibt den Kontext an programmatische Command-Aufrufer zurück. Logs enthalten nur feste Betriebsnachrichten. Kein Schreiben bei Analyse oder Abbruch.
 
 Unit-Parserfälle sowie echter Host mit lokalen Fixtures und schreibgeschütztem URI-Provider: [Testnachweis](../quality/EXT-003-004.md). Fachliche Modul-Dokumentation bleibt EXT-008; tieferer Projektcheck EXT-014; AL-Konfigurationsvalidierung EXT-006.
+
+
+## Modulbelege für Bestandsprojekte (EXT-008, zur Prüfung)
+`core/moduleDocumentation.ts` aggregiert die erfassten Objektordner und AL-Dateipfade zu Kandidaten mit Quelle `directory-structure` / `al-file-paths`. Container `src`/`app` und reine Objektordner werden nicht als fachliche Module erfunden. Dateien werden dem nächsten erkannten Modulpfad zugeordnet, damit verschachtelte Kandidaten keine doppelte Objektzuordnung behaupten. Nur ausgewählte Kandidaten erhalten Gerüste; Index, Erkennungsbericht und Lückenliste enthalten offene Fachfragen. Kein Lesen/Ausführen von AL-Code, keine behauptete Geschäftssemantik. Die ursprünglichen Inspector-Modelle bleiben kompatibel. [ADR 0005](../architecture/adr/0005-existing-project-generation.md).

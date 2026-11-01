@@ -1,112 +1,72 @@
 import * as vscode from 'vscode';
 import { inspectProject } from '../analysis/inspectProject';
-import { renderAgentDocs } from '../core/agentDocs';
 import { objectTypesFromManifest } from '../core/alStructure';
-import { pathKey } from '../core/templateValidation';
-import { planALStructure } from '../core/structurePlan';
+import { ExistingProjectOptions } from '../core/existingProject';
+import { detectModuleCandidates } from '../core/moduleDocumentation';
+import { parseModuleList } from '../core/newProject';
+import { TemplateValidationError } from '../core/templateValidation';
+import { applyExistingProject, ExistingProjectResult } from '../generation/applyExistingProject';
+import { prepareExistingProject } from '../generation/existingProjectPlan';
 import { Logger } from '../logging/logger';
 import { loadBundledTemplates } from '../templates/bundled';
+import { confirmExistingProject, presentExistingProjectResult } from '../ui/existingProjectPreview';
 import { resolveWorkspaceRoot } from '../workspace/resolveWorkspace';
-import { assertDirectoryChain, assertMissingChild } from '../workspace/newProject';
 import { runCommand } from './runCommand';
 
 export const SETUP_CURRENT_PROJECT_COMMAND = 'alAgentura.setupCurrentProject';
 export type AgenturaProfile = 'standard' | 'modular' | 'bc-agent';
 export interface SetupRequest { readonly rootUri?: string; readonly profile?: AgenturaProfile; }
 
-
 export function registerSetupCurrentProjectCommand(extensionUri: vscode.Uri, logger: Logger): vscode.Disposable {
-  return vscode.commands.registerCommand(SETUP_CURRENT_PROJECT_COMMAND, async (request?: SetupRequest) => {
-    await runCommand(logger, async () => {
-      const root = request?.rootUri ? vscode.Uri.parse(request.rootUri, true) : await resolveWorkspaceRoot();
-      if (!root) return;
-      if (root.scheme !== 'file' || root.authority || vscode.workspace.fs.isWritableFileSystem(root.scheme) === false) {
-        await vscode.window.showWarningMessage('AL Agentura: Sichere Ergänzung ist momentan nur in lokalen, beschreibbaren Ordnern möglich.');
-        return;
-      }
-      const bundle = await loadBundledTemplates(extensionUri);
-      const profile = request?.profile ? { id: request.profile } : await vscode.window.showQuickPick([
-        { label: 'Standard', id: 'standard' as const },
-        { label: 'Modular', id: 'modular' as const },
-        { label: 'BC AI Agent', id: 'bc-agent' as const, description: 'Microsofts Agent-Vorlage bewahren; nur Agentura-Dokumentation ergänzen' }
-      ], { title: 'AL Agent: Struktur im geöffneten Projekt ergänzen' });
-      if (!profile) return;
-      const manifest = bundle.manifests.find(item => item.id === `al-${profile.id === 'bc-agent' ? 'standard' : profile.id}`);
-      if (!manifest) throw new Error('Profilmanifest fehlt.');
-      const context = await inspectProject(root, { objectTypes: objectTypesFromManifest(manifest) });
-      if (!context.scanComplete) {
-        await vscode.window.showWarningMessage('AL Agentura: Projektanalyse unvollständig. Aus Sicherheitsgründen keine Dateien angelegt.');
-        return;
-      }
-      let modules: readonly string[] = [];
-      if (profile.id === 'modular') {
-        // Only explicitly entered, validated modules; no speculative module names.
-        const input = await vscode.window.showInputBox({ prompt: 'Module kommagetrennt angeben (z. B. Sales, Finance)', title: 'Modulare Projektstruktur' });
-        if (input === undefined) return;
-        const { parseModuleList } = await import('../core/newProject');
-        modules = parseModuleList(input);
-      }
-      const structure = profile.id === 'bc-agent'
-        ? { operations: [] as ReturnType<typeof planALStructure>['operations'] }
-        : planALStructure(context, manifest, { profile: profile.id, modules }, bundle.gitignore);
-      const name = context.appJson?.name ?? root.path.split('/').filter(Boolean).at(-1) ?? 'AL-Projekt';
-      const docs = renderAgentDocs(bundle.agentDocs, name);
-      const operations = [...structure.operations, ...docs.map(doc => {
-        const found = context.existingEntries.find(item => pathKey(item.relativePath) === pathKey(doc.path));
-        return { relativePath: doc.path, kind: 'file' as const, action: found ? 'skip' as const : 'create' as const,
-          content: doc.content, reason: found ? 'Existiert; bleibt unverändert' : 'Fehlende Agenten-Dokumentation' };
-      })];
-      const conflicts = operations.filter(item => item.action === 'conflict');
-      // Case-insensitive conflicts among docs are always unsafe, too.
-      const docConflicts = docs.filter(doc => context.existingEntries.some(entry =>
-        pathKey(entry.relativePath) === pathKey(doc.path) && entry.relativePath !== doc.path));
-      if (conflicts.length || docConflicts.length) {
-        await vscode.window.showWarningMessage('AL Agentura: Dateikonflikte erkannt; keine Änderungen. Bitte Projektstruktur prüfen.');
-        return;
-      }
-      const create = operations.filter(item => item.action === 'create');
-      const preview = await vscode.workspace.openTextDocument({ language: 'plaintext', content:
-        `AL Agentura – Ergänzung ohne Überschreiben\nZiel: ${root.toString()}\n\n` +
-        operations.map(item => `${item.action === 'create' ? 'NEU' : 'BLEIBT'} ${item.relativePath}`).join('\n') });
-      await vscode.window.showTextDocument(preview, { preview: true });
-      const choice = await vscode.window.showWarningMessage(`${create.length} fehlende Einträge anlegen? Bestehende Dateien bleiben unverändert.`,
-        { modal: true }, 'Fehlende Dateien anlegen');
-      if (choice !== 'Fehlende Dateien anlegen') return;
-      await assertDirectoryChain(root);
-      let made = 0;
-      for (const item of create) {
-        const dest = vscode.Uri.joinPath(root, ...item.relativePath.split('/'));
-        const parent = vscode.Uri.joinPath(dest, '..');
-        // Explicitly add new parents for nested documentation; no overwrites.
-        const parts = item.relativePath.split('/').slice(0, -1);
-        let ancestor = root;
-        for (const segment of parts) {
-          const next = vscode.Uri.joinPath(ancestor, segment);
-          try { await vscode.workspace.fs.stat(next); }
-          catch (error) {
-            if (!(error instanceof vscode.FileSystemError) || error.code !== 'FileNotFound') throw error;
-            await assertMissingChild(ancestor, segment);
-            await vscode.workspace.fs.createDirectory(next);
-          }
-          await assertDirectoryChain(next);
-          ancestor = next;
+  let running = false;
+  return vscode.commands.registerCommand(SETUP_CURRENT_PROJECT_COMMAND, async (request?: SetupRequest): Promise<ExistingProjectResult | undefined> => {
+    if (running) { void vscode.window.showInformationMessage('AL Agentura: Eine Bestandsvorschau ist bereits geöffnet.'); return; }
+    running = true;
+    let result: ExistingProjectResult | undefined;
+    try {
+      await runCommand(logger, async () => {
+        const root = request?.rootUri ? vscode.Uri.parse(request.rootUri, true) : await resolveWorkspaceRoot();
+        if (!root) return;
+        const bundle = await loadBundledTemplates(extensionUri);
+        const manifest = bundle.manifests.find(item => item.id === 'al-standard');
+        if (!manifest) throw new Error('Standardmanifest fehlt.');
+        const context = await inspectProject(root, { objectTypes: objectTypesFromManifest(manifest) });
+        if (!context.scanComplete || ['invalid', 'unknown'].includes(context.appJsonStatus)) {
+          void vscode.window.showWarningMessage('AL Agentura: Analyse unvollständig oder app.json ungültig. Keine Dateien angelegt; Projekt zuerst prüfen.');
+          return;
         }
-        await assertDirectoryChain(parent);
-        await assertMissingChild(parent, item.relativePath.split('/').at(-1)!);
-        if (item.kind === 'directory') await vscode.workspace.fs.createDirectory(dest);
-        else {
-          const data = new TextEncoder().encode(item.content ?? '');
-          // VS Code API does not offer an exclusive write; use copy(overwrite:false).
-          const stage = vscode.Uri.joinPath(root, `.al-agentura-stage-${Date.now()}-${made}`);
-          try {
-            await assertMissingChild(root, stage.path.split('/').at(-1)!);
-            await vscode.workspace.fs.writeFile(stage, data);
-            await vscode.workspace.fs.copy(stage, dest, { overwrite: false });
-          } finally { try { await vscode.workspace.fs.delete(stage); } catch { /* report remaining stage in status */ } }
+        const mode = request?.profile ? { id: request.profile } : await vscode.window.showQuickPick([
+          { label: 'Bestehende Struktur bewahren', id: 'preserve' as const, description: 'Nur fehlende Dokumentation und Gitignore; AL-Ordner unverändert' },
+          { label: 'Standard', id: 'standard' as const, description: 'Standard-src-Ordner zusätzlich ergänzen' },
+          { label: 'Modular', id: 'modular' as const, description: 'Explizit eingegebene src-Module zusätzlich ergänzen' },
+          { label: 'BC AI Agent', id: 'bc-agent' as const, description: 'Nur fehlende Agentura-Dokumentation' }
+        ], { title: 'AL Agent: Bestandsprojekt ergänzen' });
+        if (!mode) return;
+        let modules: readonly string[] = [];
+        if (mode.id === 'modular') {
+          const input = await vscode.window.showInputBox({ title: 'Zusätzliche Modulordner', prompt: 'Module kommagetrennt; leer = keine neuen AL-Ordner',
+            validateInput: value => { try { parseModuleList(value); return undefined; } catch { return 'Gültige Modulnamen kommagetrennt angeben.'; } } });
+          if (input === undefined) return;
+          modules = parseModuleList(input);
         }
-        made++;
-      }
-      await vscode.window.showInformationMessage(`AL Agentura: ${made} fehlende Einträge ergänzt. Bestehende Dateien blieben unverändert.`);
-    }, 'Projektstruktur ergänzen');
+        const candidates = detectModuleCandidates(context);
+        const selected = candidates.length ? await vscode.window.showQuickPick(candidates.map(module => ({ label: module.name,
+          description: module.relativePath, detail: `${module.alFiles.length} AL-Dateien; ${module.sources.join(', ')}`, module })),
+          { title: 'Modulgerüste auswählen', placeHolder: 'Nur geprüfte Kandidaten auswählen; leere Auswahl erzeugt nur den Index', canPickMany: true }) : [];
+        if (!selected) return;
+        const options: ExistingProjectOptions = { structure: mode.id, modules, selectedModules: selected.map(item => item.module.relativePath) };
+        try {
+          const refresh = () => prepareExistingProject(root, options, bundle);
+          const plan = await refresh();
+          const approved = await confirmExistingProject(plan);
+          result = await applyExistingProject(plan, approved, refresh);
+          await presentExistingProjectResult(result);
+        } catch (error: unknown) {
+          if (!(error instanceof TemplateValidationError)) throw error;
+          void vscode.window.showWarningMessage(`AL Agentura: Keine Dateien angelegt. ${error.message}`);
+        }
+      }, 'Bestandsprojekt ergänzen');
+      return result;
+    } finally { running = false; }
   });
 }

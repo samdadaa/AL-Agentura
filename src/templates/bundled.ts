@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { EXISTING_DOCUMENT_TOKENS, ExistingDocumentationTemplates, loadExistingDocumentationTemplates } from '../core/existingDocumentationTemplates';
 import { ProfileCatalog, TemplateManifest } from '../core/templateModels';
 import { resolveProfile } from '../core/profileValidation';
 import { loadManifest, loadProfileCatalog } from './catalog';
@@ -7,6 +8,7 @@ export interface BundledTemplates {
   readonly catalog: ProfileCatalog;
   readonly manifests: readonly TemplateManifest[];
   readonly gitignore: string;
+  readonly existingDocs: ExistingDocumentationTemplates;
   readonly agentDocs: Readonly<Record<string, string>>;
 }
 
@@ -37,5 +39,8 @@ export async function loadBundledTemplates(extensionUri: vscode.Uri): Promise<Bu
     }
     agentDocs[path] = content;
   }
-  return { catalog, manifests, gitignore: await read('al.gitignore'), agentDocs };
+  const existingContents: Record<string, string> = {};
+  for (const id of Object.keys(EXISTING_DOCUMENT_TOKENS)) existingContents[id] = await read('existing-project', `${id}.md`);
+  const existingDocs = loadExistingDocumentationTemplates(await read('existing-project', 'version.json'), existingContents);
+  return { catalog, manifests, gitignore: await read('al.gitignore'), agentDocs, existingDocs };
 }
