@@ -1,6 +1,6 @@
 # Master TODO — AL-extension
 
-**Stand:** 01.11.2026 · **Umsetzung:** Scaffold vorhanden, Generatorfunktionen **nicht implementiert**. Die folgenden Tickets sind spezifizierte Arbeitsaufträge, keine abgeschlossenen Features.
+**Stand:** 01.11.2026 · **Umsetzung:** EXT-001 technisch umgesetzt und zur Prüfung; Generatorfunktionen **nicht implementiert**. Die folgenden Tickets sind spezifizierte Arbeitsaufträge, keine abgeschlossenen Features.
 
 ## Verbindliche Arbeitsregeln
 - Vor Ticketbeginn `AGENTS.md`, `KONZEPT.md`, relevante Module, Architektur und Teststrategie lesen.
@@ -33,7 +33,7 @@
 
 ## EXT-001 — Extension-Fundament und Entwicklungs-Workspace
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** Keine
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** Keine
 
 ### Beschreibung und Hintergrund
 Die Erweiterung braucht eine reproduzierbare TypeScript-/VS-Code-Basis, bevor fachliche Generatorfunktionen implementiert werden. Das bisherige Scaffold registriert nur einen Platzhalterbefehl. Ziel ist ein stabiler lokaler Entwicklungs- und Testzyklus, nicht bereits ein fertiger Projektgenerator.
@@ -42,26 +42,29 @@ Die Erweiterung braucht eine reproduzierbare TypeScript-/VS-Code-Basis, bevor fa
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Bestehende package.json, tsconfig und VS-Code-Launch-/Task-Konfiguration prüfen und korrigieren.
-- [ ] Extension-Aktivierung, Commands und Logging in kleine Dateien aufteilen; `extension.ts` als Composition Root belassen.
-- [ ] Fehlermeldungen und Abbruchverhalten für Commands definieren.
-- [ ] Build, Testskript und lokale VSIX-Paketierung dokumentieren.
+- [x] Bestehende package.json, tsconfig und VS-Code-Launch-/Task-Konfiguration prüfen und korrigieren.
+- [x] Extension-Aktivierung, Commands und Logging in kleine Dateien aufteilen; `extension.ts` als Composition Root belassen.
+- [x] Fehlermeldungen und Abbruchverhalten für Commands definieren.
+- [x] Build, Testskript und lokale VSIX-Paketierung dokumentieren.
 - [ ] F5-Host und Command-Palette manuell prüfen.
 
 ### Akzeptanzkriterien
-- [ ] `npm run compile` und `npm test` funktionieren in sauber installierter Umgebung.
+- [x] `npm run compile` und `npm test` funktionieren in sauber installierter Umgebung.
 - [ ] F5 startet Extension Development Host und Befehl ist sichtbar.
-- [ ] Noch nicht implementierte Funktionen werden als solche angezeigt; keine Erfolgsmeldung.
+- [x] Noch nicht implementierte Funktionen werden als solche angezeigt; keine Erfolgsmeldung.
 
 ### Tests und Nachweise
-- [ ] Build: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Extension Host: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] lokale VSIX später: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Build: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Extension Host: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] lokale VSIX später: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+
+### Umsetzungs- und Testnachweis (01.11.2026)
+Siehe [EXT-001-Testbericht](docs/quality/EXT-001.md): `npm ci`, Compile, 5 Node-Tests, echter isolierter VS-Code-Host und lokale VSIX erfolgreich. Die Host-Test-Checkbox belegt den automatisierten Lauf; **manuelle F5-/Palette-Prüfung bleibt offen**, ebenso Install-from-VSIX und Benutzerabnahme. Geprüfte Launch-/Task-Konfiguration war bereits korrekt. Keine Generatorfunktionen oder weiteren Tickets bearbeitet.
 
 ---
 

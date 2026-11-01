@@ -1,7 +1,10 @@
 import * as vscode from 'vscode';
+import { registerSetupCommand } from './commands/setupProject';
+import { createLogger } from './logging/logger';
+
 export function activate(context: vscode.ExtensionContext): void {
-  context.subscriptions.push(vscode.commands.registerCommand('alProjectAssistant.setup', async () => {
-    await vscode.window.showInformationMessage('AL Project Assistant: Projektgenerator noch nicht implementiert. Siehe TODO.md.');
-  }));
+  const logger = createLogger();
+  context.subscriptions.push(logger);
+  context.subscriptions.push(registerSetupCommand(logger));
+  logger.info('Erweiterung aktiviert.');
 }
-export function deactivate(): void {}

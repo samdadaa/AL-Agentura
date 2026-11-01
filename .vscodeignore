@@ -4,3 +4,17 @@ tests/**
 docs/**
 *.code-workspace
 *.vsix
+test/**
+.vscode/**
+.vscode-test/**
+.git/**
+**/.DS_Store
+**/.gitkeep
+out/**/*.map
+tsconfig.json
+package-lock.json
+templates/**
+AGENTS.md
+TODO.md
+KONZEPT.md
+GETTING_STARTED.md

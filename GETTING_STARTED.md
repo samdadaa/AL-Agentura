@@ -1,7 +1,9 @@
 # Entwicklerhandbuch — AL-extension
 
 ## Projekt öffnen
-Öffne `AL-extension.code-workspace` in VS Code. Lies `README.md` und `KONZEPT.md`. Die Extension ist noch **nicht fertig**; die Aufgaben stehen in `TODO.md`.
+Öffne `AL-extension.code-workspace` in VS Code. Lies `README.md` und `KONZEPT.md`. Das Extension-Fundament ist umgesetzt und zur Prüfung, der Generator noch **nicht fertig**; die Aufgaben stehen in `TODO.md`.
+
+Für Installation, F5, Tests und lokale Paketierung siehe [Lokale Entwicklung](docs/operations/LOCAL_DEVELOPMENT.md). Tatsächliche Ergebnisse stehen im [EXT-001-Testbericht](docs/quality/EXT-001.md).
 
 ## Wie die Markdown-Dateien zusammenarbeiten
 - `AGENTS.md`: Arbeitsvertrag für den Coding-Agenten, der diese Extension entwickelt.

@@ -6,7 +6,8 @@
   "private": true,
   "publisher": "local-development",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.90.0",
+    "node": ">=22"
   },
   "categories": [
     "Other"
@@ -26,12 +27,14 @@
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "node --test tests/*.test.cjs",
-    "package": "vsce package"
+    "test": "npm run compile && node --test tests/*.test.cjs",
+    "package": "vsce package --allow-missing-repository",
+    "test:host": "npm run compile && node tests/run-host.cjs",
+    "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@types/vscode": "^1.90.0",
+    "@types/vscode": "1.90.0",
     "typescript": "^5.6.0",
     "@vscode/vsce": "^3.0.0"
   }
