@@ -13,13 +13,13 @@ try {
     '--user-data-dir', path.join(temporary, 'user'),
     '--extensions-dir', path.join(temporary, 'extensions'),
     `--extensionDevelopmentPath=${root}`,
-    `--extensionTestsPath=${path.join(__dirname, 'host/index.cjs')}`
+    `--extensionTestsPath=${path.join(__dirname, process.env.AL_EXTENSION_HOST_SUITE === 'microsoft' ? 'host/microsoft-index.cjs' : 'host/index.cjs')}`
   ], { stdio: 'inherit', timeout: 120000, env: { ...process.env, AL_EXTENSION_HOST_REPORT: report } });
   if (result.error) console.error(`Extension-Host konnte nicht gestartet werden: ${result.error.message}`);
   const evidence = fs.existsSync(report) ? JSON.parse(fs.readFileSync(report, 'utf8')) : {};
   const passed = evidence.passed === true;
   if (evidence.error) console.error(evidence.error);
-  console.log(passed ? 'Extension-Host-Prüfungen bestanden (Fundament, EXT-003, EXT-004, EXT-005).' : 'EXT-001: Kein erfolgreicher Host-Nachweis vorhanden.');
+  console.log(passed ? 'Extension-Host-Prüfungen bestanden.' : 'EXT-001: Kein erfolgreicher Host-Nachweis vorhanden.');
   process.exitCode = result.status === 0 && passed ? 0 : 1;
 } finally {
   fs.rmSync(temporary, { recursive: true, force: true });

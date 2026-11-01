@@ -31,3 +31,7 @@ Die Modelle in `src/core/templateModels.ts` konkretisieren Manifest, Variablen, 
 
 ## Neuprojekt-Wizard und begrenzter Writer (EXT-005, zur Prüfung)
 Setup orchestriert `ui/newProjectWizard` → `workspace/newProject`/Core-Entwurf → Textvorschau und modale Zustimmung → `generation/createNewProject` → Einstieg/Ergebnis → optionales Workspace-Öffnen. Ausschließlich noch fehlende lokale file-Ziele; keine Bestandsanwendung. Inhalte werden über einen eigenen OS-Scratch und native Provider-Copy ohne Überschreiben angelegt. [ADR 0003](adr/0003-new-project-creation.md) dokumentiert die notwendige Präzisierung zu ADR 0002 und den abgewiesenen providerübergreifenden Copy-Fallback.
+
+
+## Automatischer Microsoft-Abschluss
+Der explizit gewählte Microsoft-Erstellungsmodus nutzt einen begrenzten additiven Writer aus `generation/completeMicrosoftProject.ts` und öffnet automatisch den erzeugten relativen Workspace. Er ersetzt keine Bestandsdateien; die allgemeine Bestandsvorschau bleibt getrennt. [ADR 0004](adr/0004-automatic-microsoft-completion.md) dokumentiert Nutzerautorisierung, Ereignisse, persistente Claims und Teilfehlerverhalten.

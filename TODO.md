@@ -556,8 +556,28 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ## Microsoft-Projektintegration – Teststand (01.11.2026)
 - Ein gemeinsamer Einstiegspunkt `AL Agent: Create Project` bietet mit installierter AL Language **Standard**, **Modular**, **BC AI Agent** sowie den bisherigen unabhängigen Generator an.
 - Microsoft-Befehl wird zur Laufzeit aus dem Manifest der installierten Erweiterung ermittelt, nicht hart codiert.
-- Nach einem neuen Workspace mit `app.json` kann Agentura nach ausdrücklicher Zustimmung und bestehender Vorschau die fehlende Projektstruktur ergänzen; BC AI Agent ergänzt ausschließlich Agentura-MD-Dokumentation.
+- Nach Microsofts Projekterstellung ergänzt Agentura automatisch fehlende Struktur und MDs sowie einen relativen Workspace und öffnet diesen ohne weitere Rückfrage. BC AI Agent erhält MDs und Workspace unter Beibehaltung seiner Struktur.
 - Ohne AL Language wird nur ein Gerüst angelegt; keine `app.json`, `launch.json` oder `.alpackages` generiert.
-- Technisch getestet: 51 transpiliert ausgeführte Node-Tests. Vollständiger VS Code Host E2E / regulärer TypeScript-Build müssen lokal geprüft werden (fehlende npm-Abhängigkeiten in dieser Ausführungsumgebung).
+- Aktueller Korrekturstand: regulärer Compile und 63 Node-Tests erfolgreich; gezielter echter Microsoft-Abschluss-Host erfolgreich. Vollständiger Host scheitert im unveränderten unabhängigen Generator (fehlender docs-Elternordner).
 - **Noch zu testen:** Reale Microsoft-Command-IDs pro AL-Version, neue Host-Fenster mit geteiltem `globalState`, ggf. Verzögerung beim Erzeugen von `app.json`, Nutzerabbruch, tatsächliche Agent-Vorlage.
 - Details und Testschritte: `docs/quality/MICROSOFT-AL-WORKFLOW.md`.
+
+
+## Create-Project-Korrektur und Logo — ausdrücklicher Nutzerauftrag (01.11.2026)
+**Status:** Zur Prüfung · Nur Microsoft-Create-Project-Ablauf und Paketlogo; keine weiteren Tickets, keine Git-Aktionen.
+- [x] Automatische Ergänzung ohne nachträgliche Dialoge implementiert; Module vor Microsoft erfasst. Neuer begrenzter Writer mit Skip, nativer Copy ohne Überschreiben und transparenter Teilfehlermeldung.
+- [x] Relative `.code-workspace` im Microsoft-Projekt erzeugen und automatisch im selben Fenster öffnen; vorhandene Workspace-Datei bewahren und Projektbezug prüfen.
+- [x] Gemeinsame Ereignissperre und exklusive persistente Claim-Datei im Extension-Speicher gegen doppelte Ausführung implementiert; App-JSON-Änderungen und Polling berücksichtigen verzögerte Erstellung.
+- [x] Vorhandenes `assets/Logo.png` als Extension-Icon im Manifest verknüpft.
+- [x] Compile, 63 Node-Tests, gezielten echten Host und VSIX-Logo erfolgreich geprüft; vollständigen Host ausgeführt und bestehenden Fehler im unabhängigen Generator dokumentiert. Microsoft-Assistent und sichtbare Installation noch manuell zu prüfen.
+- [ ] Benutzerabnahme (noch offen).
+
+Implementierungsnachweis: `src/commands/microsoftProjectFlow.ts`, `src/generation/completeMicrosoftProject.ts`, `package.json`. Ergebnisse und offene Prüfungen: `docs/quality/MICROSOFT-AL-WORKFLOW.md`; Architekturentscheidung: ADR 0004. Technische Umsetzung und Tests sind keine Benutzerfreigabe.
+
+
+### Nachbesserung nach fehlgeschlagenem Standard-Durchlauf
+**Status:** Zur Prüfung · Benutzerfehler reproduziert, keine Git-Aktionen.
+- [x] Echter Aktivierungskontext im isolierten Host geprüft: `globalStorageUri.scheme === 'vscode-userdata'`. Vorheriger Code verweigerte diese lokale Speicher-URI vor jedem Projektzugriff; Regressionstest scheiterte nachweislich mit „Ungültiger Fortsetzungsspeicher“.
+- [x] Lokalen `vscode-userdata`-Speicher für die exklusive Sperre unterstützen; fremde Schemes/Authorities bleiben ausgeschlossen. Speicherfehler enthalten kontrollierte Ursachen, die Fortsetzungsfehlermeldung nennt den betroffenen Schritt.
+- [x] Compile und 64 Node-Tests erfolgreich; gezielter echter Host inklusive realem `vscode-userdata`-Kontext, doppelter Sperre, unzulässigen Speicher-URIs und blockierten Speicherverzeichnissen erfolgreich. VSIX neu gebaut und Inhalt geprüft.
+- [ ] Benutzerprüfung mit Microsoft Standard AL; keine Abnahme behauptet.

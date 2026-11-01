@@ -16,3 +16,4 @@
 | D-013 | Versioniertes Manifest-Schema 1, explizite geordnete Profilkomposition ohne Overrides | Validierbare Daten; siehe [ADR 0001](adr/0001-template-manifest-contract.md), EXT-002 zur Prüfung |
 | D-014 | Projektanalyse nur lesend, EXT-004 liefert Strukturpläne; allgemeine Anwendung über EXT-009 | Scanlücken und Bestand schützen; [ADR 0002](adr/0002-readonly-inspection-structure-plans.md), zur Prüfung |
 | D-015 | EXT-005: bestätigte Neuanlage nur in fehlenden lokalen file-Zielen, keine Bestandsanwendung | Race im providerübergreifenden Copy-Fallback vermeiden; [ADR 0003](adr/0003-new-project-creation.md), zur Prüfung |
+| D-016 | Explizit gewählter Microsoft-Erstellungsmodus schließt Ergänzung und Workspace-Öffnung automatisch ein; D-010 gilt dort ohne weitere Bestätigung | Nutzerauftrag, unveränderter Dateischutz und fensterübergreifender Verbrauchsnachweis; [ADR 0004](adr/0004-automatic-microsoft-completion.md), zur Prüfung |

@@ -11,7 +11,7 @@ VS-Code-Extension für Business-Central-/AL-Entwickler: **neue AL-Projekte mit W
 1. `al-agentura.code-workspace` in VS Code öffnen.
 2. Node.js ab Version 22 und npm verwenden; `npm ci` installiert die festgeschriebenen Entwicklungsabhängigkeiten.
 3. `npm run compile` und `npm test`.
-4. F5 für Extension Development Host. `AL Agent: Analyze Existing Project` wählt den Root und meldet erkannte Struktur/Metadaten oder Lücken, ohne Dateien zu ändern. `AL Agent: Create Project` führt durch die Neuanlage. Vorschau prüfen und nur bei passendem Ziel bestätigen.
+4. F5 für Extension Development Host. `AL Agent: Analyze Existing Project` wählt den Root und meldet erkannte Struktur/Metadaten oder Lücken, ohne Dateien zu ändern. `AL Agent: Create Project` führt durch die Neuanlage. Im Microsoft-Modus werden nach dessen Eingaben Struktur, Agenten-MDs und Workspace automatisch ergänzt und geöffnet. Der eigenständige Generator behält Vorschau und Zustimmung.
 5. `npm run test:host` prüft Aktivierung und Command im installierten VS Code (`code` im PATH).
 6. `npm run package` baut lokal eine VSIX; keine Veröffentlichung. Details und manuelle Prüfschritte: `docs/operations/LOCAL_DEVELOPMENT.md`.
 
@@ -28,6 +28,11 @@ Nachweise und offene Abnahme: `docs/quality/EXT-001.md`, `docs/quality/EXT-002.m
 - `docs/modules/`: Verantwortlichkeiten und künftige Modul-Schnittstellen.
 - `docs/research/`: ausgewertete Muster der hochgeladenen Markdown-Sammlung.
 - `resources/templates/`: zukünftige **generierte** AL-Projektdateien.
+
+## Microsoft-Projekterstellung und Logo
+Mit installierter AL Language: `AL Agent: Create Project` → Standard AL, Modular AL oder BC AI Agent → notwendige Eingaben bei Microsoft abschließen. Module werden vorher erfasst. Anschließend ergänzt Agentura automatisch fehlende Dateien und öffnet `<Ordnername>.code-workspace`, ohne weitere Rückfrage. Vorhandene Dateien bleiben erhalten; BC AI Agent erhält Agentura-MDs und Workspace unter Beibehaltung von Microsofts Struktur. Die lokale Fortsetzung unterstützt auch VS Codes `vscode-userdata`-Profilspeicher. Grenzen, Testnachweise und manuelle Prüfschritte: [Microsoft-Workflow](docs/quality/MICROSOFT-AL-WORKFLOW.md).
+
+`assets/Logo.png` ist als Extension-Icon eingebunden und wird im VSIX für Installation und Marketplace mitgeliefert. Es wurde nichts veröffentlicht.
 
 ## Architekturgrundsatz
 Die Extension selbst benötigt keine KI. Sie erstellt Projektstrukturen und Markdown-Anweisungen, die externe Coding-Agenten lesen können. Kein unbestätigtes Überschreiben und keine erfundene Code-/Fachanalyse.

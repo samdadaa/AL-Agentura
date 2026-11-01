@@ -1,6 +1,7 @@
 {
   "name": "al-agentura",
   "displayName": "AL Agentura",
+  "icon": "assets/Logo.png",
   "description": "AL Project Scaffolding & AI Agent Workspace Setup",
   "version": "0.0.1",
   "private": true,

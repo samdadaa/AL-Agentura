@@ -1,11 +1,16 @@
 import * as vscode from 'vscode';
 import { Logger } from '../logging/logger';
-import { AgenturaProfile, SETUP_CURRENT_PROJECT_COMMAND } from './setupCurrentProject';
+import type { AgenturaProfile } from './setupCurrentProject';
+import { randomUUID } from 'node:crypto';
+import { parseModuleList, NewProjectError } from '../core/newProject';
+import { readAppJsonSource, statIfPresent } from '../workspace/newProject';
+import { claimMicrosoftContinuation, completeMicrosoftProject } from '../generation/completeMicrosoftProject';
 
 const AL_ID = 'ms-dynamics-smb.al';
 const KEY = 'alAgentura.pendingMicrosoftProject.v1';
 const MAX_AGE_MS = 15 * 60 * 1000;
-interface Pending { profile: AgenturaProfile; createdAt: number; originalRoots: string[]; }
+interface Pending { id: string; profile: AgenturaProfile; modules: string[]; createdAt: number; originalRoots: string[]; }
+let continuation: Promise<void> | undefined;
 
 /** Only commands declared by the actual installed Microsoft extension are candidates. */
 export async function findMicrosoftProjectCommands(profile: AgenturaProfile): Promise<{ command: string; title: string }[]> {
@@ -28,38 +33,61 @@ export async function findMicrosoftProjectCommands(profile: AgenturaProfile): Pr
 function roots(): string[] { return (vscode.workspace.workspaceFolders ?? []).map(f => f.uri.toString()); }
 function candidate(pending: Pending): vscode.Uri | undefined {
   const dirs = vscode.workspace.workspaceFolders ?? [];
-  // Never guess in a multi-root workspace or silently target the previous project.
+  // Never guess in a multi-root workspace or silently target a pre-existing AL project.
   if (dirs.length !== 1) return undefined;
   const uri = dirs[0].uri;
   if (uri.scheme !== 'file' || pending.originalRoots.includes(uri.toString())) return undefined;
   return uri;
 }
 async function isALProject(root: vscode.Uri): Promise<boolean> {
-  try {
-    const info = await vscode.workspace.fs.stat(vscode.Uri.joinPath(root, 'app.json'));
-    return Boolean(info.type & vscode.FileType.File) && !(info.type & vscode.FileType.SymbolicLink);
-  } catch { return false; }
+  try { await readAppJsonSource(vscode.Uri.joinPath(root, 'app.json')); return true; }
+  catch { return false; } // Missing/partially written JSON is retried on changes and by polling.
 }
 
-/** Called when a new VS Code window is activated OR when the current workspace changes. */
+/** All entry points share one in-host guard; the storage claim also covers other windows. */
 export async function offerMicrosoftProjectContinuation(context: vscode.ExtensionContext, logger: Logger): Promise<void> {
-  const pending = context.globalState?.get<Pending>(KEY);
+  if (continuation) return continuation;
+  continuation = resumeMicrosoftProject(context, logger);
+  try { await continuation; } finally { continuation = undefined; }
+}
+
+async function resumeMicrosoftProject(context: vscode.ExtensionContext, logger: Logger): Promise<void> {
+  const pending = context.globalState.get<Pending>(KEY);
   if (!pending) return;
-  if (!Number.isFinite(pending.createdAt) || Date.now() - pending.createdAt > MAX_AGE_MS ||
-      !['standard', 'modular', 'bc-agent'].includes(pending.profile) || !Array.isArray(pending.originalRoots)) {
+  if (!Number.isFinite(pending.createdAt) || pending.createdAt > Date.now() || Date.now() - pending.createdAt > MAX_AGE_MS ||
+      !/^[a-f0-9-]{36}$/.test(pending.id) || !['standard', 'modular', 'bc-agent'].includes(pending.profile) ||
+      !Array.isArray(pending.originalRoots) || !pending.originalRoots.every(root => typeof root === 'string') ||
+      !Array.isArray(pending.modules) || !pending.modules.every(module => typeof module === 'string')) {
     await context.globalState.update(KEY, undefined);
+    void vscode.window.showWarningMessage('AL Agentura: Microsoft-Fortsetzung abgelaufen oder ungültig. Falls das Projekt bereits erstellt wurde, Setup Current Project verwenden.');
     return;
   }
   const root = candidate(pending);
-  if (!root || !(await isALProject(root))) return; // Microsoft may not have finished creating the project.
-  // Consume before prompts: never run twice if multiple windows/events race.
-  await context.globalState.update(KEY, undefined);
-  const selection = await vscode.window.showInformationMessage(
-    'AL Agentura: Microsofts AL-Projekt wurde erkannt. Jetzt Projektstruktur und Agenten-Dokumentation ergänzen?',
-    'AL Agentura ergänzen', 'Nicht jetzt');
-  if (selection !== 'AL Agentura ergänzen') { logger.info('Microsoft-Fortsetzung vom Benutzer übersprungen.'); return; }
-  logger.info('Microsoft-Projekt erkannt; bestätigte Agentura-Ergänzung wird gestartet.');
-  await vscode.commands.executeCommand(SETUP_CURRENT_PROJECT_COMMAND, { rootUri: root.toString(), profile: pending.profile });
+  if (!root || !(await isALProject(root))) return;
+  let phase = 'Fortsetzungssperre';
+  try {
+    if (!(await claimMicrosoftContinuation(context.globalStorageUri, pending.id))) return;
+    phase = 'Fortsetzungsstatus speichern';
+    // Consume before writes and workspace opening. A crash must never replay the job.
+    await context.globalState.update(KEY, undefined);
+    logger.info('Microsoft-Projekt erkannt; automatische Agentura-Ergänzung wird gestartet.');
+    phase = 'Projekt ergänzen';
+    const result = await completeMicrosoftProject(context.extensionUri, root, pending.profile, pending.modules);
+    // Reuse this window: opening the workspace must not leave a second continuation host.
+    try { await vscode.commands.executeCommand('vscode.openFolder', result.workspaceUri, { forceReuseWindow: true }); }
+    catch {
+      void vscode.window.showErrorMessage(`AL Agentura: Dateien ergänzt, Workspace konnte nicht geöffnet werden. Bitte manuell öffnen: ${result.workspaceUri.toString()}`);
+      return;
+    }
+    logger.info('Microsoft-Projekt ergänzt; Workspace-Öffnung angefordert.');
+  } catch (error: unknown) {
+    // Storage failures also stop the job instead of producing one error per polling tick.
+    if (context.globalState.get<Pending>(KEY)?.id === pending.id) await context.globalState.update(KEY, undefined);
+    logger.error('Automatische Microsoft-Fortsetzung fehlgeschlagen; keine automatische Wiederholung.');
+    void vscode.window.showErrorMessage(`AL Agentura: Automatische Fertigstellung fehlgeschlagen (${phase}). ` +
+      (error instanceof NewProjectError ? error.message + ' ' : '') +
+      'Vorhandene Dateien bleiben erhalten. Projekt prüfen und Setup Current Project für die fehlenden Einträge verwenden.');
+  }
 }
 
 /** One entry point; no command IDs are guessed and nothing is copied from Microsoft. */
@@ -75,10 +103,24 @@ export async function startMicrosoftProjectFlow(context: vscode.ExtensionContext
   if (!selected) return false;
   const previous = context.globalState.get<Pending>(KEY);
   if (previous && Date.now() - previous.createdAt < MAX_AGE_MS) {
-    const replace = await vscode.window.showWarningMessage('Ein früherer Microsoft-Projektablauf ist noch offen. Neuen starten?', { modal: true }, 'Neuen starten');
-    if (replace !== 'Neuen starten') return false;
+    void vscode.window.showInformationMessage('AL Agentura: Ein Microsoft-Projektablauf ist bereits offen. Diesen zuerst abschließen.');
+    return false;
   }
-  await context.globalState.update(KEY, { profile, createdAt: Date.now(), originalRoots: roots() } satisfies Pending);
+  let modules: string[] = [];
+  if (profile === 'modular') {
+    const input = await vscode.window.showInputBox({ title: 'Modulare Projektstruktur',
+      prompt: 'Module kommagetrennt angeben (z. B. Sales, Finance)',
+      validateInput: value => { try { parseModuleList(value); return undefined; } catch { return 'Gültige Modulnamen kommagetrennt angeben.'; } } });
+    if (input === undefined) return false;
+    modules = [...parseModuleList(input)];
+  }
+  // AL: Go! can populate an already open empty folder. Protect pre-existing AL
+  // projects, while allowing a newly created app.json in the same empty root.
+  const existingALRoots = await Promise.all(roots().map(async value =>
+    await statIfPresent(vscode.Uri.joinPath(vscode.Uri.parse(value, true), 'app.json')) ? value : undefined));
+  const pending: Pending = { id: randomUUID(), profile, modules, createdAt: Date.now(),
+    originalRoots: existingALRoots.filter((value): value is string => value !== undefined) };
+  await context.globalState.update(KEY, pending);
   logger.info(`Microsoft-Projektassistent gestartet (${selected.command}).`);
   try {
     await vscode.commands.executeCommand(selected.command);
@@ -86,7 +128,7 @@ export async function startMicrosoftProjectFlow(context: vscode.ExtensionContext
     await offerMicrosoftProjectContinuation(context, logger);
     return true;
   } catch {
-    await context.globalState.update(KEY, undefined);
+    if (context.globalState.get<Pending>(KEY)?.id === pending.id) await context.globalState.update(KEY, undefined);
     logger.error('Microsoft-Projektassistent konnte nicht erfolgreich gestartet werden.');
     await vscode.window.showErrorMessage('Microsoft-Projektassistent fehlgeschlagen. AL Language-Ausgabe prüfen.');
     return false;
@@ -94,18 +136,16 @@ export async function startMicrosoftProjectFlow(context: vscode.ExtensionContext
 }
 
 export function registerMicrosoftProjectResume(context: vscode.ExtensionContext, logger: Logger): vscode.Disposable {
-  let inProgress = false;
-  const resume = async () => {
-    if (inProgress) return;
-    inProgress = true;
-    try { await offerMicrosoftProjectContinuation(context, logger); }
-    catch { logger.error('Automatische Fortsetzung fehlgeschlagen. Setup Current Project bleibt verfügbar.'); }
-    finally { inProgress = false; }
-  };
-  // Initial activation in a newly opened project window.
-  void resume();
-  const workspace = vscode.workspace.onDidChangeWorkspaceFolders(() => { void resume(); });
+  const resume = () => { void offerMicrosoftProjectContinuation(context, logger).catch(() => {
+    logger.error('Automatische Fortsetzung konnte nicht geprüft werden.');
+  }); };
+  const workspace = vscode.workspace.onDidChangeWorkspaceFolders(resume);
   const watcher = vscode.workspace.createFileSystemWatcher('**/app.json');
-  watcher.onDidCreate(() => { void resume(); });
-  return { dispose() { workspace.dispose(); watcher.dispose(); } };
+  const created = watcher.onDidCreate(resume);
+  const changed = watcher.onDidChange(resume);
+  // Also covers missed events and app.json written in multiple chunks at startup.
+  const timer = setInterval(resume, 1000);
+  timer.unref();
+  resume();
+  return { dispose() { clearInterval(timer); workspace.dispose(); created.dispose(); changed.dispose(); watcher.dispose(); } };
 }

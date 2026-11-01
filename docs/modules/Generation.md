@@ -27,3 +27,13 @@ Elternordner werden vor Kindern eingeplant. Vorhandene passende Ziele erhalten `
 `src/generation/createNewProject.ts` wendet ausschließlich bestätigte neue lokale file-Ziele an. Keine Bestandsanwendung. Ziel, URI-Grenzen, Eltern, Symlinks und Existenz werden vorab und pro Operation geprüft; Dateien entstehen durch native `workspace.fs.copy` mit `overwrite: false`. Ein eigener exklusiver OS-Scratch (Unix 0700) stellt Inhalte bereit und wird anschließend bereinigt; nur dessen Erstellung verwendet Node fs, niemals ein Zielprojekt. Fremdprovider werden abgewiesen, nachdem der Host-Test eine Race-Lücke im providerübergreifenden Copy-Fallback gezeigt hat.
 
 Ergebnis: created/cancelled/blocked/partial mit angelegten Pfaden, gestopptem Ziel und ggf. temporärem Bereinigungsfehler. Teilfehler löschen keine Projektdateien. UI zeigt Vorschau/Zustimmung vorab und Einstieg/Ergebnis danach; Öffnen ist eine gesonderte Nutzerwahl. Allgemeine Preview-/Bestands-/SafeWriter-Pipeline bleibt EXT-009/010. [ADR 0003](../architecture/adr/0003-new-project-creation.md), [Tests](../quality/EXT-005.md).
+
+
+## Microsoft-Create-Project-Korrektur (01.11.2026, zur Prüfung)
+`commands/microsoftProjectFlow.ts` orchestriert die automatische Fortsetzung ohne nachträgliche Bestätigung. Module werden vor Microsoft erfasst. `generation/completeMicrosoftProject.ts` übernimmt ausschließlich additive lokale Dateianlage und eine relative Workspace-Datei; vorhandene Inhalte werden nicht ersetzt. BC AI Agent bewahrt seine Struktur. Der fertige Workspace öffnet automatisch im selben Fenster. Startup, app.json-Änderungen und Polling decken verzögerte Erstellung ab; gemeinsame Promise und exklusive persistente UUID-Claim-Datei im Extension-Speicher verhindern doppelte Ausführung. Teilfehler stoppen den Ablauf mit Reparaturhinweis. Manueller Bestands-Setup und unabhängiger Generator bleiben unverändert.
+
+[ADR 0004](../architecture/adr/0004-automatic-microsoft-completion.md) präzisiert die Bestätigungspflicht nur für diesen Nutzerauftrag. [Prüfbericht und Grenzen](../quality/MICROSOFT-AL-WORKFLOW.md). `package.json` verwendet das bestehende `assets/Logo.png` als Extension-Icon; Paketinhalt lokal geprüft.
+
+
+### Fehlerkorrektur am Speicher-Claim
+Die exklusive Sperre unterstützt auch `vscode-userdata:` als lokalen Desktop-Profilalias. Der echte Aktivierungskontext wird im Host-Regressionstest verwendet; ein reiner temporärer `file:`-Test genügt dafür nicht. Nichtlokale Schemes/Authorities bleiben abgewiesen. Speicherfehler werden ohne native Pfade oder fremde Fehlertexte gemeldet.
