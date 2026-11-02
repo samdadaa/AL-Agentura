@@ -33,16 +33,15 @@ Die Modelle in `src/core/templateModels.ts` konkretisieren Manifest, Variablen, 
 Setup orchestriert `ui/newProjectWizard` → `workspace/newProject`/Core-Entwurf → Textvorschau und modale Zustimmung → `generation/createNewProject` → Einstieg/Ergebnis → optionales Workspace-Öffnen. Ausschließlich noch fehlende lokale file-Ziele; keine Bestandsanwendung. Inhalte werden über einen eigenen OS-Scratch und native Provider-Copy ohne Überschreiben angelegt. [ADR 0003](adr/0003-new-project-creation.md) dokumentiert die notwendige Präzisierung zu ADR 0002 und den abgewiesenen providerübergreifenden Copy-Fallback.
 
 
-## Automatischer Microsoft-Abschluss
-Der explizit gewählte Microsoft-Erstellungsmodus nutzt einen begrenzten additiven Writer aus `generation/completeMicrosoftProject.ts` und öffnet automatisch den erzeugten relativen Workspace. Er ersetzt keine Bestandsdateien; die allgemeine Bestandsvorschau bleibt getrennt. [ADR 0004](adr/0004-automatic-microsoft-completion.md) dokumentiert Nutzerautorisierung, Ereignisse, persistente Claims und Teilfehlerverhalten.
-
+## Manuelle Projektübernahme (ab v1.0.4)
+AL Agentura startet keine Microsoft-Befehle. Entwickler erstellen ihre AL-App bei Bedarf selbst über AL Language und ergänzen anschließend im geöffneten Ordner mit `AL Agent: Setup Open AL Project`. Es gibt keine Hintergrundaufträge, Fensterüberwachung oder automatischen Fortsetzungsprozesse.
 
 ## Bestandsdokumentation und SafeWriter (EXT-008 bis EXT-010)
-Die oben als künftig beschriebene Bestandsanwendung ist jetzt umgesetzt: Modulbelege und Dokumentrenderer → reiner Ergänzungsplan → URI-Adapter → Inhaltsvorschau/Zustimmung → frischer Planvergleich → lokaler additiver Writer → Ergebnis. Konkrete Schnittstellen, Dateischutz und Providergrenze stehen in [ADR 0005](adr/0005-existing-project-generation.md) und [Generation](../modules/Generation.md). Keine automatische Bestandsanwendung beim Start; Microsofts ausdrücklich gewählte Neuanlage bleibt separat.
+Die oben als künftig beschriebene Bestandsanwendung ist jetzt umgesetzt: Modulbelege und Dokumentrenderer → reiner Ergänzungsplan → URI-Adapter → Inhaltsvorschau/Zustimmung → frischer Planvergleich → lokaler additiver Writer → Ergebnis. Konkrete Schnittstellen, Dateischutz und Providergrenze stehen in [ADR 0005](adr/0005-existing-project-generation.md) und [Generation](../modules/Generation.md). Keine automatische Bestandsanwendung beim Start; Ein unabhängiges Scaffold bleibt separat.
 
 
 ## V1-Qualitäts- und Release-Gate (EXT-011)
 `verify` kombiniert reguläre Tests, reale isolierte Hosts, Restricted Mode, Paket-/Installationsprüfung und Audit. Nachweise sind an Quell-/Test-/Tool-Stand und Paket-SHA gebunden. Der Installationshost testet normale installierte Produktdateien unter einem separaten API-Testtreiber. Stale Build-Ausgaben werden vor Paketierung entfernt. [ADR 0006](adr/0006-v1-quality-release.md) dokumentiert die beiden notwendigen Fehlerkorrekturen sowie Publisher-/Lizenzentscheidung und den manuellen Upload.
 
-## Zielgebundene Fortsetzung und vollständige Neuprojektdokumentation
-[ADR 0007](adr/0007-bound-project-completion.md) ersetzt die heuristische Erkennung fremder Fenster durch einen vor Microsoft ausdrücklich gewählten, exakt geprüften Zielroot. Ein gemeinsamer reiner Modulrenderer erzeugt bei modularer Neuanlage sofort die Modul-MDs und den Index; README gehört zum gemeinsamen deklarativen Dokumentpaket aller schreibenden Projektabläufe.
+## Dokumentation des Standalone-Scaffolds
+Die unabhängige Neuanlage über `AL Agent: Create Standalone Scaffold` erzeugt die Struktur und Dokumentationsdateien nach ausdrücklicher Bestätigung. Eine benötigte `app.json` wird nur auf expliziten Wunsch und mit überprüften Eingaben erzeugt oder aus einer Quelle übernommen.

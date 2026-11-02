@@ -39,8 +39,8 @@ export function registerSetupCurrentProjectCommand(extensionUri: vscode.Uri, log
           { label: 'Bestehende Struktur bewahren', id: 'preserve' as const, description: 'Nur fehlende Dokumentation und Gitignore; AL-Ordner unverändert' },
           { label: 'Standard', id: 'standard' as const, description: 'Standard-src-Ordner zusätzlich ergänzen' },
           { label: 'Modular', id: 'modular' as const, description: 'Explizit eingegebene src-Module zusätzlich ergänzen' },
-          { label: 'BC AI Agent', id: 'bc-agent' as const, description: 'Nur fehlende Agentura-Dokumentation' }
-        ], { title: 'AL Agent: Bestandsprojekt ergänzen' });
+          { label: 'BC AI Agent', id: 'bc-agent' as const, description: 'Nur fehlende Dokumentation (auch für BC-Agent-Projekte)' }
+        ], { title: 'AL Agent: AL-Projekt ergänzen' });
         if (!mode) return;
         let modules: readonly string[] = [];
         if (mode.id === 'modular') {

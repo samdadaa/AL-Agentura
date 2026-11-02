@@ -5,7 +5,7 @@ const path=require('node:path');
 const {manifestErrors}=require('../scripts/check-release.cjs');
 const {readZip}=require('../scripts/check-vsix.cjs');
 const manifest=require('../package.json'), lock=require('../package-lock.json');
-test('V1 manifest and lockfile satisfy public release prerequisites',()=>{
+test('v1.0.4 manifest and lockfile satisfy public release prerequisites',()=>{
   assert.deepEqual(manifestErrors(manifest,lock),[]);
   assert.match(manifest.version,/^1\.\d+\.\d+$/); assert.equal(manifest.publisher,'SamerDadah'); assert.equal(manifest.license,'MIT');
 });

@@ -28,7 +28,7 @@ function checkRelease() {
   const errors=manifestErrors(manifest,lock);
   const sourceHash=fingerprint();
   let packageHash, installedHash;
-  for (const name of ['unit','audit','host-all','host-microsoft','host-restricted','host-installed','package']) {
+  for (const name of ['unit','audit','host-all','host-restricted','host-installed','package']) {
     const file=path.join(root,'artifacts','quality',name+'.json');
     let evidence; try {evidence=JSON.parse(fs.readFileSync(file,'utf8'));} catch {errors.push(`Testnachweis fehlt: ${name}`);continue;}
     if (name==='package') packageHash=evidence.sha256;

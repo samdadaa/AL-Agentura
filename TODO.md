@@ -1,3 +1,5 @@
+> **Version 1.0.4:** Microsoft-Autointegration, Auftragsjournal, Fensterüberwachung und AL-Go-Diagnosebefehl sind ersatzlos entfernt. Frühere abgeschlossene oder historische Tickets sind keine aktuellen Produktanforderungen. Unterstützt wird das manuelle Einrichten eines geöffneten AL-Projekts sowie der unabhängige Scaffold-Generator. Siehe README.md.
+
 # Master TODO — AL Agentura
 
 **Stand:** 02.11.2026 · EXT-001 bis EXT-010 vom Benutzer abgenommen (Erledigt). EXT-011 mit ausdrücklich erweitertem V1-/Marketplace-Scope technisch umgesetzt, Zur Prüfung; manuelle Freigabe separat. Weitere Tickets bleiben unverändert.
@@ -595,7 +597,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 - Ohne AL Language wird nur ein Gerüst angelegt; keine `app.json`, `launch.json` oder `.alpackages` generiert.
 - Aktueller Korrekturstand: regulärer Compile und 63 Node-Tests erfolgreich; gezielter echter Microsoft-Abschluss-Host erfolgreich. Vollständiger Host scheitert im unveränderten unabhängigen Generator (fehlender docs-Elternordner).
 - **Noch zu testen:** Reale Microsoft-Command-IDs pro AL-Version, neue Host-Fenster mit geteiltem `globalState`, ggf. Verzögerung beim Erzeugen von `app.json`, Nutzerabbruch, tatsächliche Agent-Vorlage.
-- Details und Testschritte: `docs/quality/MICROSOFT-AL-WORKFLOW.md`.
+- Details und Testschritte: (entfernt: historischer Microsoft-Testbericht).
 
 
 ## Create-Project-Korrektur und Logo — ausdrücklicher Nutzerauftrag (01.11.2026)
@@ -607,7 +609,7 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 - [x] Compile, 63 Node-Tests, gezielten echten Host und VSIX-Logo erfolgreich geprüft; vollständigen Host ausgeführt und bestehenden Fehler im unabhängigen Generator dokumentiert. Microsoft-Assistent und sichtbare Installation noch manuell zu prüfen.
 - [ ] Benutzerabnahme (noch offen).
 
-Implementierungsnachweis: `src/commands/microsoftProjectFlow.ts`, `src/generation/completeMicrosoftProject.ts`, `package.json`. Ergebnisse und offene Prüfungen: `docs/quality/MICROSOFT-AL-WORKFLOW.md`; Architekturentscheidung: ADR 0004. Technische Umsetzung und Tests sind keine Benutzerfreigabe.
+Implementierungsnachweis: (entfernt: automatische Microsoft-Fortsetzung), (entfernt: Microsoft-Abschlusswriter), `package.json`. Ergebnisse und offene Prüfungen: (entfernt: historischer Microsoft-Testbericht); Architekturentscheidung: ADR 0004. Technische Umsetzung und Tests sind keine Benutzerfreigabe.
 
 
 ### Nachbesserung nach fehlgeschlagenem Standard-Durchlauf

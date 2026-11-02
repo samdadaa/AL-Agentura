@@ -1,3 +1,5 @@
+> **Historischer Nachweis:** Dieses Dokument beschreibt ältere Entwicklungsschritte. Verbindlich für Version 1.0.4 sind `README.md`, `docs/operations/MARKETPLACE.md` und `docs/architecture/ARCHITECTURE.md`. Microsoft-Autointegration wurde entfernt.
+
 # AL Agentura – Konzept und Entwicklungsroadmap
 
 **Stand:** 26. Oktober 2026  

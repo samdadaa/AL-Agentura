@@ -15,6 +15,5 @@ Node-Tests prüfen Aktivierung, Entsorgung, wiederholten Aufruf, Abbruch und Feh
 
 
 ## Microsoft-Create-Project-Korrektur (01.11.2026, zur Prüfung)
-`commands/microsoftProjectFlow.ts` orchestriert die automatische Fortsetzung ohne nachträgliche Bestätigung. Module werden vor Microsoft erfasst. `generation/completeMicrosoftProject.ts` übernimmt ausschließlich additive lokale Dateianlage und eine relative Workspace-Datei; vorhandene Inhalte werden nicht ersetzt. BC AI Agent bewahrt seine Struktur. Der fertige Workspace öffnet automatisch im selben Fenster. Startup, app.json-Änderungen und Polling decken verzögerte Erstellung ab; gemeinsame Promise und exklusive persistente UUID-Claim-Datei im Extension-Speicher verhindern doppelte Ausführung. Teilfehler stoppen den Ablauf mit Reparaturhinweis. Manueller Bestands-Setup und unabhängiger Generator bleiben unverändert.
 
 [ADR 0004](../architecture/adr/0004-automatic-microsoft-completion.md) präzisiert die Bestätigungspflicht nur für diesen Nutzerauftrag. [Prüfbericht und Grenzen](../quality/MICROSOFT-AL-WORKFLOW.md). `package.json` verwendet das bestehende `assets/Logo.png` als Extension-Icon; Paketinhalt lokal geprüft.

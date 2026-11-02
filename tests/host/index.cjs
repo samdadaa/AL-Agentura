@@ -13,7 +13,7 @@ exports.run = async function () {
   // onStartupFinished can activate before tests on slower hosts; both paths are valid.
   const contributed = extension.packageJSON.contributes.commands;
   assert.ok(contributed.some(command => command.command === 'alAgentura.createProject' &&
-    command.title === 'AL Agent: Create Project'));
+    command.title === 'AL Agent: Create Standalone Scaffold'));
   const messages = [];
   const original = vscode.window.showInformationMessage;
   const originalDialog = vscode.window.showOpenDialog;
@@ -30,7 +30,6 @@ exports.run = async function () {
     await require('./project.cjs').run(extension);
     await require('./existing-project.cjs').run(extension);
     await require('./new-project.cjs').run(extension);
-    await require('./microsoft-project.cjs').run(extension);
     fs.writeFileSync(process.env.AL_EXTENSION_HOST_REPORT, JSON.stringify({ passed: true, version: vscode.version }));
   } catch (error) {
     fs.writeFileSync(process.env.AL_EXTENSION_HOST_REPORT, JSON.stringify({ passed: false, error: error.stack || String(error) }));

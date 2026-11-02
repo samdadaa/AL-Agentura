@@ -2,8 +2,8 @@
   "name": "al-agentura",
   "displayName": "AL Agentura",
   "icon": "assets/Logo.png",
-  "description": "AL Project Scaffolding & AI Agent Workspace Setup",
-  "version": "1.0.3",
+  "description": "AL project scaffolding and agent-ready documentation for existing Business Central projects",
+  "version": "1.0.4",
   "publisher": "SamerDadah",
   "engines": {
     "vscode": "^1.90.0",
@@ -15,32 +15,26 @@
   "activationEvents": [
     "onCommand:alAgentura.createProject",
     "onCommand:alAgentura.setupCurrentProject",
-    "onCommand:alAgentura.openProject",
-    "onStartupFinished"
+    "onCommand:alAgentura.openProject"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "alAgentura.createProject",
-        "title": "AL Agent: Create Project"
+        "title": "AL Agent: Create Standalone Scaffold"
       },
       {
         "command": "alAgentura.analyzeExistingProject",
-        "title": "AL Agent: Analyze Existing Project"
+        "title": "AL Agent: Analyze Open AL Project"
       },
       {
         "command": "alAgentura.setupCurrentProject",
-        "title": "AL Agent: Setup Current Project"
+        "title": "AL Agent: Setup Open AL Project"
       },
       {
         "command": "alAgentura.openProject",
         "title": "AL Agent: Open Project"
-      },
-      {
-        "command": "alAgentura.testALGoIntegration",
-        "title": "AL Agent: Test AL Go Integration",
-        "enablement": "isWorkspaceTrusted"
       }
     ]
   },
@@ -51,14 +45,14 @@
     "package": "vsce package --allow-missing-repository",
     "test:host": "npm run compile && node tests/run-host.cjs",
     "vscode:prepublish": "npm run compile",
-    "test:host:microsoft": "node scripts/run-host-suite.cjs microsoft",
     "test:restricted": "node scripts/run-host-suite.cjs restricted",
     "test:installed": "node scripts/run-host-suite.cjs installed",
     "release:check": "node scripts/check-release.cjs",
     "test:package": "node scripts/check-vsix.cjs",
     "verify": "node scripts/verify.cjs",
     "audit": "node scripts/audit.cjs",
-    "smoke:manual": "node scripts/prepare-smoke-profile.cjs"
+    "smoke:manual": "node scripts/prepare-smoke-profile.cjs",
+    "clean:release": "node scripts/clean-release.cjs"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -73,7 +67,7 @@
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": "limited",
-      "description": "Analyse und lokale Textvorlagen funktionieren ohne Codeausführung. Microsoft-Projektbefehle sind im Restricted Mode deaktiviert."
+      "description": "Lesende Projektanalyse und lokale Textdatei-Vorlagen sind im eingeschränkten Modus verfügbar; keine Ausführung fremder Projektbefehle."
     }
   },
   "keywords": [
@@ -81,7 +75,9 @@
     "Business Central",
     "Dynamics 365",
     "scaffolding",
-    "workspace"
+    "AGENTS.md",
+    "coding agents",
+    "AL Guidelines"
   ],
   "bugs": {
     "url": "https://github.com/samdadaa/al-agentura/issues"

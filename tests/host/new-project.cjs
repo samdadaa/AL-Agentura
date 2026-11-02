@@ -23,7 +23,6 @@ exports.run = async function (extension) {
     execute: vscode.commands.executeCommand, getExtension: vscode.extensions.getExtension
   };
   // Exercise the real independent-generator command including its configuration steps.
-  vscode.extensions.getExtension = id => id === 'ms-dynamics-smb.al' ? { isActive: true, packageJSON: {} } : original.getExtension(id);
   const options = { name: 'Direct', profile: 'standard', modules: [] };
   async function folder(name) {
     const uri = vscode.Uri.joinPath(base, name); await vscode.workspace.fs.createDirectory(uri); return uri;

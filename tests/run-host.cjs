@@ -65,7 +65,7 @@ try {
       fs.copyFileSync(path.join(__dirname,'host',file),path.join(testDir,file));
     installedEntry=path.join(testDir,'index.cjs');
   }
-  const entry = { microsoft: 'microsoft-index.cjs', existing: 'existing-index.cjs', restricted: 'restricted-index.cjs' }[suite] || 'index.cjs';
+  const entry = { existing: 'existing-index.cjs', restricted: 'restricted-index.cjs' }[suite] || 'index.cjs';
   run(['--wait', '--new-window', '--skip-welcome', '--skip-release-notes', ...common,
     ...(restricted ? [] : ['--disable-workspace-trust']),
     `--extensionDevelopmentPath=${suite === 'installed' ? path.join(__dirname, 'driver') : root}`,

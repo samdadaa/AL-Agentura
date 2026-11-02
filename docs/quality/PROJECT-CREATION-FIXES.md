@@ -1,3 +1,5 @@
+> **Historischer Nachweis:** Dieses Dokument beschreibt ältere Entwicklungsschritte. Verbindlich für Version 1.0.4 sind `README.md`, `docs/operations/MARKETPLACE.md` und `docs/architecture/ARCHITECTURE.md`. Microsoft-Autointegration wurde entfernt.
+
 # Projektanlage — drei Fehlerkorrekturen (02.11.2026)
 
 **Status:** Technisch umgesetzt und automatisiert geprüft (Zur Prüfung); Benutzerabnahme offen. Version 1.0.2 aus vorhandenem Manifest übernommen. Keine Veröffentlichung oder Installation in persönliche Profile.
@@ -8,7 +10,7 @@
 2. **Modul-MDs fehlen bei Neuanlage:** Beide Neuanlagewege planten nur Modulordner und statischen Index. Der gemeinsame reine Renderer erzeugt jetzt sofort `docs/modules/details/src/<Modul>.md` für ausdrücklich ausgewählte, normalisierte Namen sowie einen verlinkten Index. Die deklarative Modulvorlage wird wiederverwendet. Fachliche Inhalte und Dateizahlen bleiben zu prüfen. Elternpfade werden vor Dateien angelegt.
 3. **README fehlt:** Das gemeinsame Vorlagenpaket enthält jetzt `README.md` mit Projektname und ausfüllbaren Abschnitten für Überblick, Voraussetzungen, Einrichtung, Verwendung, Entwicklung, Tests, Mitarbeit, Kontakt und Lizenz. Alle schreibenden Neuanlage-/Setup-Varianten nutzen es. Existierende README-Dateien werden bewahrt. Analyse, Öffnen und Diagnose bleiben ohne Dokumentanlage.
 
-Geänderte Verantwortungsbereiche: `src/commands/microsoftProjectFlow.ts`, `src/core/{agentDocs,moduleDocumentation,newProject}.ts`, `src/templates/bundled.ts`, `src/workspace/newProject.ts`, `src/generation/completeMicrosoftProject.ts`, deklarative README und die zugehörigen Unit-/Host-Tests. API-/Architekturbegründung: [ADR 0007](../architecture/adr/0007-bound-project-completion.md). Bedienung in Root-README und Modulverträgen aktualisiert.
+Geänderte Verantwortungsbereiche: (entfernt mit v1.0.4), `src/core/{agentDocs,moduleDocumentation,newProject}.ts`, `src/templates/bundled.ts`, `src/workspace/newProject.ts`, (entfernt mit v1.0.4), deklarative README und die zugehörigen Unit-/Host-Tests. API-/Architekturbegründung: [ADR 0007](../architecture/adr/0007-bound-project-completion.md). Bedienung in Root-README und Modulverträgen aktualisiert.
 
 ## Automatisierte Nachweise
 
