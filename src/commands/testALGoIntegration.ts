@@ -7,6 +7,10 @@ const AL_EXTENSION_ID = 'ms-dynamics-smb.al';
 /** Diagnostic only: never writes project files or changes the existing Create Project workflow. */
 export function registerTestALGoIntegrationCommand(logger: Logger): vscode.Disposable {
   return vscode.commands.registerCommand(TEST_AL_GO_COMMAND, async () => {
+    if (vscode.workspace.isTrusted === false) {
+      void vscode.window.showWarningMessage('AL Agentura: Microsoft-Integrationstests benötigen einen vertrauenswürdigen Workspace.');
+      return;
+    }
     const al = vscode.extensions.getExtension(AL_EXTENSION_ID);
     if (!al) {
       await vscode.window.showInformationMessage('AL Agentura: Microsoft AL Language ist in diesem VS-Code-Host nicht installiert. Der eigene Generator bleibt verfügbar.');

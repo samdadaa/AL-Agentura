@@ -1,6 +1,6 @@
 # Master TODO — AL Agentura
 
-**Stand:** 01.11.2026 · EXT-001 bis EXT-007 vom Benutzer abgenommen (Erledigt). EXT-008 bis EXT-010 ausdrücklich gemeinsam ausgewählt und technisch umgesetzt, Zur Prüfung. Historische Testnachweise bleiben getrennt von der Abnahme.
+**Stand:** 02.11.2026 · EXT-001 bis EXT-010 vom Benutzer abgenommen (Erledigt). EXT-011 mit ausdrücklich erweitertem V1-/Marketplace-Scope technisch umgesetzt, Zur Prüfung; manuelle Freigabe separat. Weitere Tickets bleiben unverändert.
 
 ## Verbindliche Arbeitsregeln
 - Vor Ticketbeginn `AGENTS.md`, `KONZEPT.md`, relevante Module, Architektur und Teststrategie lesen.
@@ -35,11 +35,11 @@ Nachweise: `docs/quality/NAMING.md`; bestehende Ticketabnahmen bleiben unveränd
 | EXT-005 | Neues AL-Projekt inklusive VS-Code-Workspace erstellen | Erledigt | P0 | EXT-003, EXT-004 |
 | EXT-006 | AL-app.json und Launch-Konfiguration sicher handhaben | Erledigt | P0 | EXT-003, EXT-005 |
 | EXT-007 | Agenten-Dokumentation und Benutzeranleitung als hochwertige Vorlagen | Erledigt | P0 | EXT-002, EXT-004 |
-| EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | Zur Prüfung | P1 | EXT-003, EXT-007 |
-| EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | Zur Prüfung | P0 | EXT-002, EXT-003 |
-| EXT-010 | Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren | Zur Prüfung | P0 | EXT-003, EXT-007, EXT-009 |
-| EXT-011 | Automatisierte Tests, Security- und Fehlerfall-Matrix | Offen | P0 | EXT-004, EXT-006, EXT-009, EXT-010 |
-| EXT-012 | VSIX-Paketierung, lokale Installation und Dokumentation | Offen | P1 | EXT-011 |
+| EXT-008 | Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte | Erledigt | P1 | EXT-003, EXT-007 |
+| EXT-009 | Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung | Erledigt | P0 | EXT-002, EXT-003 |
+| EXT-010 | Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren | Erledigt | P0 | EXT-003, EXT-007, EXT-009 |
+| EXT-011 | Automatisierte Tests, Security- und Fehlerfall-Matrix | Zur Prüfung | P0 | EXT-004, EXT-006, EXT-009, EXT-010 |
+| EXT-012 | VSIX-Paketierung, lokale Installation und Dokumentation | Zur Prüfung | P1 | EXT-011 |
 | EXT-013 | Eigene Markdown-Vorlagen importieren und lokal wiederverwenden | Offen | P2 | EXT-002, EXT-009 |
 | EXT-014 | AL-Projektcheck und neue Module als optionale Komfortfunktionen | Offen | P2 | EXT-003, EXT-008, EXT-010 |
 
@@ -326,7 +326,7 @@ Benutzerabnahme: am 01.11.2026 ausdrücklich für EXT-001 bis EXT-007 bestätigt
 
 ## EXT-008 — Modulindex, Moduldateien und Agenten-Initialisierung für Bestandsprojekte
 
-**Status:** Zur Prüfung · **Priorität:** P1 · **Abhängigkeiten:** EXT-003, EXT-007
+**Status:** Erledigt · **Priorität:** P1 · **Abhängigkeiten:** EXT-003, EXT-007
 
 ### Beschreibung und Hintergrund
 Bei bestehenden AL-Apps können viele Module existieren. Die Extension erkennt Ordner und AL-Objekte, erstellt zuerst eine belastbare Übersicht und überlässt die schrittweise fachliche Interpretation einem separat verwendeten Agenten.
@@ -354,16 +354,18 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
 
 ### Technischer Nachweis (01.11.2026)
 Gemeinsamer ausdrücklicher Auftrag EXT-008–010 technisch umgesetzt. Compile und 78 Node-Tests erfolgreich; echte Bestands-Host-Suite erfolgreich (Bytevergleich, Abbruch, Wiederholung, Konflikte, Stale/Race, Symlinks, Providergrenze und Command). Versionierte Vorlagen und Architekturentscheidung ADR 0005 dokumentiert. Gesamter Hostlauf scheitert weiterhin am zuvor bekannten, unveränderten Neuprojektfehler bei `docs/PROJECT.md`; dieser gehört nicht zu EXT-008–010. Benutzerabnahme der neuen Tickets bleibt offen. Details: [Prüfbericht](docs/quality/EXT-008-010.md).
 
+Benutzerabnahme: am 01.11.2026 mit „okay funktioniert“ bestätigt; historische Testnachweise bleiben erhalten.
+
 ## EXT-009 — Änderungsplan, Vorschau, Konfliktprüfung und sichere Bestätigung
 
-**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-003
+**Status:** Erledigt · **Priorität:** P0 · **Abhängigkeiten:** EXT-002, EXT-003
 
 ### Beschreibung und Hintergrund
 Ein-Klick darf niemals Datenverlust bedeuten. Vor jeder Dateierzeugung muss der Nutzer verstehen, was neu angelegt, übersprungen oder als Konflikt erkannt wird. Eine abbrechbare Vorschau trennt Analyse von Schreiben.
@@ -392,16 +394,18 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
 
 ### Technischer Nachweis (01.11.2026)
 Gemeinsamer ausdrücklicher Auftrag EXT-008–010 technisch umgesetzt. Compile und 78 Node-Tests erfolgreich; echte Bestands-Host-Suite erfolgreich (Bytevergleich, Abbruch, Wiederholung, Konflikte, Stale/Race, Symlinks, Providergrenze und Command). Versionierte Vorlagen und Architekturentscheidung ADR 0005 dokumentiert. Gesamter Hostlauf scheitert weiterhin am zuvor bekannten, unveränderten Neuprojektfehler bei `docs/PROJECT.md`; dieser gehört nicht zu EXT-008–010. Benutzerabnahme der neuen Tickets bleibt offen. Details: [Prüfbericht](docs/quality/EXT-008-010.md).
 
+Benutzerabnahme: am 01.11.2026 mit „okay funktioniert“ bestätigt; historische Testnachweise bleiben erhalten.
+
 ## EXT-010 — Bestandsprojekt ergänzen ohne AL-Code umzustrukturieren
 
-**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-007, EXT-009
+**Status:** Erledigt · **Priorität:** P0 · **Abhängigkeiten:** EXT-003, EXT-007, EXT-009
 
 ### Beschreibung und Hintergrund
 Bestehende BC-Apps sind oft unvollständig dokumentiert, aber funktionierend. Die Extension soll fehlende Git-/Agenten-/Dokumentationsdateien ergänzen, ohne bestehende Architektur, AL-Code oder persönliche Konfiguration zu beschädigen.
@@ -430,16 +434,18 @@ Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen
 ### Abnahme / Dokumentation
 - [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
 - [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
-- [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
+- [x] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
 
 ### Technischer Nachweis (01.11.2026)
 Gemeinsamer ausdrücklicher Auftrag EXT-008–010 technisch umgesetzt. Compile und 78 Node-Tests erfolgreich; echte Bestands-Host-Suite erfolgreich (Bytevergleich, Abbruch, Wiederholung, Konflikte, Stale/Race, Symlinks, Providergrenze und Command). Versionierte Vorlagen und Architekturentscheidung ADR 0005 dokumentiert. Gesamter Hostlauf scheitert weiterhin am zuvor bekannten, unveränderten Neuprojektfehler bei `docs/PROJECT.md`; dieser gehört nicht zu EXT-008–010. Benutzerabnahme der neuen Tickets bleibt offen. Details: [Prüfbericht](docs/quality/EXT-008-010.md).
 
+Benutzerabnahme: am 01.11.2026 mit „okay funktioniert“ bestätigt; historische Testnachweise bleiben erhalten.
+
 ## EXT-011 — Automatisierte Tests, Security- und Fehlerfall-Matrix
 
-**Status:** Offen · **Priorität:** P0 · **Abhängigkeiten:** EXT-004, EXT-006, EXT-009, EXT-010
+**Status:** Zur Prüfung · **Priorität:** P0 · **Abhängigkeiten:** EXT-004, EXT-006, EXT-009, EXT-010
 
 ### Beschreibung und Hintergrund
 Ein Generator muss zuverlässiger sein als ein großer manueller Prompt. Die wichtigsten Risiken sind Datenverlust, falsche Pfade, defekte Konfiguration und irreführende Erfolgsmeldungen. Qualität ist deshalb eine eigenständige Umsetzungseinheit.
@@ -448,34 +454,37 @@ Ein Generator muss zuverlässiger sein als ein großer manueller Prompt. Die wic
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] Unit-Tests für Manifest, Pfade, Variablen, Profile, Plan, Template-Rendering und Status schreiben.
-- [ ] Integrationstests mit VS-Code-Host und Test-Workspaces vorbereiten.
-- [ ] Leerer, modularer, bestehender, ungültiger, schreibgeschützter und Multi-Root-Fall abdecken.
-- [ ] Traversal, absolute Pfade, problematische Modulnamen, Symlinks und untrusted Workspace testen.
-- [ ] Testbericht mit tatsächlichen Ergebnissen, nicht nur Checkboxes erstellen.
-- [ ] Manuelle macOS-/Windows-/VSIX-Abnahme definieren.
+- [x] Unit-Tests für Manifest, Pfade, Variablen, Profile, Plan, Template-Rendering und Status schreiben.
+- [x] Integrationstests mit VS-Code-Host und Test-Workspaces vorbereiten.
+- [x] Leerer, modularer, bestehender, ungültiger, schreibgeschützter und Multi-Root-Fall abdecken.
+- [x] Traversal, absolute Pfade, problematische Modulnamen, Symlinks und untrusted Workspace testen.
+- [x] Testbericht mit tatsächlichen Ergebnissen, nicht nur Checkboxes erstellen.
+- [x] Manuelle macOS-/Windows-/VSIX-Abnahme definieren.
 
 ### Akzeptanzkriterien
-- [ ] Kritische Negativfälle automatisiert abgedeckt.
-- [ ] Build/Test-Ergebnisse dokumentiert.
-- [ ] Keine Behauptung einer Produktfreigabe ohne manuelle Abnahme.
+- [x] Kritische Negativfälle automatisiert abgedeckt.
+- [x] Build/Test-Ergebnisse dokumentiert.
+- [x] Keine Behauptung einer Produktfreigabe ohne manuelle Abnahme.
 
 ### Tests und Nachweise
-- [ ] Unit: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Integration: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Security: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] manuell: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Unit: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Integration: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Security: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [ ] manuell: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren. Nicht als durchgeführt markiert; sichtbare Plattform-/Microsoft-Abnahme gemäß `docs/operations/MARKETPLACE.md` offen.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
 
+### V1-Abschlussnachweis (02.11.2026)
+Technisch umgesetzt und Zur Prüfung: 86/86 Node-Tests, kompletter `verify` auf VS Code 1.90.2 und 1.142.0, echter Restricted Mode, Audit mit 0 bekannten Schwachstellen, isolierte Installation des tatsächlichen VSIX und strikter Release-Check erfolgreich. Früherer docs-Elternfehler behoben; alte Build-Commands werden nicht mitgeliefert. Version 1.0.0, Publisher SamerDadah, MIT vom Benutzer festgelegt. Paket-SHA und Testmatrix: [EXT-011](docs/quality/EXT-011.md). Visuelle Windows-/Microsoft-Abnahme und Benutzerfreigabe bleiben offen. Keine Veröffentlichung oder Git-Aktionen.
+
 ## EXT-012 — VSIX-Paketierung, lokale Installation und Dokumentation
 
-**Status:** Offen · **Priorität:** P1 · **Abhängigkeiten:** EXT-011
+**Status:** Zur Prüfung · **Priorität:** P1 · **Abhängigkeiten:** EXT-011
 
 ### Beschreibung und Hintergrund
 Die Extension soll vor einer Marketplace-Veröffentlichung wie eine normale Erweiterung lokal testbar sein. Das Paket darf keine unnötigen Entwicklungsdateien oder vertraulichen Informationen enthalten.
@@ -484,25 +493,28 @@ Die Extension soll vor einer Marketplace-Veröffentlichung wie eine normale Erwe
 Nach Umsetzung kann ein Entwickler die beschriebene Funktion zuverlässig nutzen, ohne weitere nicht dokumentierte Produktentscheidungen erraten zu müssen. Die Umsetzung hält die Sicherheits- und Architekturgrenzen aus `AGENTS.md` ein.
 
 ### Konkrete TODOs
-- [ ] `@vscode/vsce`, `.vscodeignore`, Publisher-Platzhalter und Extension-Metadaten prüfen.
-- [ ] VSIX bauen, Paketinhalt inspizieren, Vorlagen und Ressourcen einschließen.
-- [ ] Install-from-VSIX auf sauberem VS Code testen; Command Palette, Neuprojekt, Bestandsprojekt.
-- [ ] README mit Screenshots/Bedienung und Troubleshooting vorbereiten.
-- [ ] Marketplace-Publikation ausdrücklich nicht als Teil dieses Tickets durchführen.
+- [x] `@vscode/vsce`, `.vscodeignore`, Publisher-Platzhalter und Extension-Metadaten prüfen. Vorhandener V1-Vertrag bestätigt: vsce 4.1.0, SamerDadah, MIT, Version 1.0.0; keine zusätzlichen Runtime-Abhängigkeiten.
+- [x] VSIX gebaut und native ZIP-Inhaltsprüfung bestanden: 69 kontrollierte Einträge, alle Runtime-/Vorlagendateien, Lizenz, Logo und drei Screenshots bytegleich. Testprofile/Entwicklungstools ausgeschlossen; finale SHA im EXT-012-Bericht.
+- [x] Normale VSIX-Installation in frischem Profil sichtbar geprüft: Logo/Publisher/Version, Command Palette, Standard-Neugerüst mit relativem Workspace, Bestands-Setup und Wiederholung (0 neue Einträge). Finale Paketinstallation zusätzlich im Host-Gate; siehe `docs/quality/EXT-012.md`.
+- [x] README mit drei echten Demo-Screenshots, VSIX-Installation, Bedienung und Troubleshooting ergänzt; Bilder unter `assets/screenshots/`. HTTPS-Bilder vor Upload öffentlich bereitstellen (siehe EXT-012-Nachweis).
+- [x] Marketplace-Publikation ausdrücklich nicht als Teil dieses Tickets durchführen. Kein Publish-Befehl, keine Zugangsdaten, keine Git-Aktionen.
 
 ### Akzeptanzkriterien
-- [ ] VSIX lokal installierbar und aktivierbar.
-- [ ] Alle benötigten Templates im Paket.
-- [ ] Kein automatisches Publishing.
+- [x] VSIX lokal installierbar und aktivierbar.
+- [x] Alle benötigten Templates im Paket.
+- [x] Kein automatisches Publishing.
 
 ### Tests und Nachweise
-- [ ] VSIX-Paketinhalt: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Clean Install: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
-- [ ] Smoke: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+
+02.11.2026, macOS arm64: `npm run verify` mit VS Code 1.144.0 und 1.90.2 bestanden (Compile, 89/89 Node-Tests, Audit ohne bekannte Schwachstellen, vier reale Host-/Installations-Suites, Paket-/Release-Check). Finales VSIX erneut mit 1.144.0 installiert, unveränderte SHA bestätigt. Sichtbarer Demo-Smoke und drei Screenshots dokumentiert in [EXT-012](docs/quality/EXT-012.md). Windows-/Microsoft-Assistenten-/Marketplace-Abnahme bleibt separat offen.
+
+- [x] VSIX-Paketinhalt: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Clean Install: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
+- [x] Smoke: tatsächliche Ausführung, Ergebnis und ggf. offene Einschränkungen dokumentieren.
 
 ### Abnahme / Dokumentation
-- [ ] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
-- [ ] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
+- [x] Relevante Moduldateien, ggf. ADR, Benutzeranleitung und Ticketstatus aktualisiert.
+- [x] Änderungen und offene Risiken für Nutzerprüfung zusammengefasst.
 - [ ] Nutzer hat Ergebnis ausdrücklich abgenommen (erst dann `Erledigt`).
 
 ---
@@ -616,3 +628,34 @@ Nachweisfortschritt EXT-008–010: erste 76 Node-Tests und echte Bestands-Host-S
 Abschluss EXT-008–010: Bestandsplan, Writer, Inhaltsvorschau und Modulbelege implementiert; regulärer Compile, 78 Node-Tests und gezielter Bestands-Host erfolgreich. Ergänzende Microsoft-Suite und neue VSIX werden im Prüfbericht separat nachgewiesen. Keine weiteren Tickets umgesetzt; keine Git-Aktionen.
 
 Abschlussnachweis: ergänzende echte Microsoft-Host-Suite erfolgreich; `npm run package` erfolgreich; neuer Bestands-Command, Planer/Writer/UI, sämtliche Bestandsvorlagen und Logo bytegleich im VSIX geprüft. Neue Tickets EXT-008 bis EXT-010 bleiben Zur Prüfung; Benutzerabnahme offen. EXT-001 bis EXT-007 sind Erledigt. [Vollständiger Bericht und kurze Bedienprüfung](docs/quality/EXT-008-010.md).
+
+
+## EXT-011 — zusätzlicher ausdrücklicher V1-/Marketplace-Auftrag
+**Bestand:** 78 Node-Tests, echte Host-Suites und lokale VSIX vorhanden. Gesamthost scheitert bisher an fehlenden Elternordnern der generierten Dokumente. Manifest hat 0.0.1 / local-development; Lizenz, Changelog, Release-Gate und Untrusted-Host-Prüfung fehlen.
+**Ziel/Dateien/Risiken:** reproduzierbare vollständige Test-/Security-Matrix, notwendige Generatorfehler beheben, V1-Metadaten/README/Release-Artefakte ergänzen, Paketinhalt und saubere VSIX-Installation prüfen. Publisher-ID und Lizenz werden ausdrücklich abgefragt, nicht erfunden. Lokale Dateien und Git unverändert schützen; keine Veröffentlichung.
+**Testplan:** Compile, Node-Tests, voller Host, Restricted-Mode-Host, isolierte Installation des tatsächlichen VSIX und automatischer Release-/Paketcheck; manuelle macOS-/Windows-/Microsoft-Abnahme gesondert.
+- [x] V1-Blocker fehlender docs-/Launch-Elternordner mit Regressionstests beheben. Reiner Plan ergänzt Eltern vor Dateien; vollständiger Host erstmals erfolgreich.
+- [x] Untrusted Workspace: externe Microsoft-Ausführung blockieren, datenbasierte Funktionen testen. Echter Restricted-Mode-Host mit `isTrusted === false` erfolgreich; keine AL-Aktivierung, lokale Textgenerierung funktioniert.
+- [x] Version 1.0.0, MIT-Lizenz und Publisher `SamerDadah` nach ausdrücklicher Benutzerangabe, öffentliche README und Changelog vorbereitet.
+- [x] Wiederholbaren Release-Check, Paketprüfung und isolierten Installationsnachweis ergänzen. Nachweise und offene manuelle Schritte: `docs/quality/EXT-011.md`.
+- [x] CI und konkrete manuelle Release-Abnahme dokumentieren; keine Veröffentlichung. Nachweise und offene manuelle Schritte: `docs/quality/EXT-011.md`.
+
+EXT-011-Abhängigkeitsprüfung: vorhandenes Buildwerkzeug vsce auf 4.1.0 aktualisiert; gezieltes `@vscode/vsce`-Override auf minimatch 11.0.1 schließt GHSA-g3hv-75wg-m249. Keine Runtime-Abhängigkeit hinzugefügt. Nach Installation meldet npm audit 0 bekannte Schwachstellen; Release-Lauf prüft Audit erneut.
+
+V1-Abschluss 02.11.2026: technische Gates vollständig erfolgreich, Paket `al-agentura-1.0.0.vsix` erstellt und installiert geprüft. CI vorbereitet, nicht ausgeführt. Echte visuelle/Windows-/Microsoft-Abnahme und Benutzerfreigabe vor Marketplace-Upload bleiben offen.
+
+
+## Auftrag EXT-012 (02.11.2026)
+**Bestand:** Paketierung, Metadaten, Lizenz, ZIP-Prüfung und automatisierter Clean-Install aus EXT-011 implementiert und nachgewiesen. README enthält Bedienung, aber keine echten Screenshots und nur allgemeine Fehlerhinweise.
+**Ziel/Dateien:** reproduzierbare Paket-/Clean-Install-Abnahme, tatsächliche UI-Bilder aus einem isolierten Profil, konkrete Installations-/Fehleranleitung, README und Paketprüfung für mitgelieferte Dokumentationsbilder ergänzen. Kein Produktumbau, keine Veröffentlichung, keine Git-Aktionen.
+**Risiken/Testplan:** ausschließlich eigene Demo-Projekte; keine persönlichen Fenster/Projektinhalte aufnehmen. Bildlinks und Paketressourcen prüfen, vollständiger Build-/Test-/Installationslauf auf aktuellem und minimal unterstütztem VS Code. Manuelle Windows-/Marketplace-Abnahme getrennt halten. UI-Skill erfordert normalerweise node_repl; Tool fehlt. Nutzer hat alternative macOS-Werkzeuge ausdrücklich erlaubt. Eigener Electron-Renderer lieferte echte Screenshots; OS-Rechte blieben unverändert.
+
+
+Abschluss EXT-012: technisch Zur Prüfung. Wiederholbarer isolierter VSIX-Smoke, drei reale Screenshots, README-Installation/Fehlerhilfe und Bild-Paketprüfung ergänzt. 89 Node-Tests, vollständige Gates auf VS Code 1.144.0 und 1.90.2 sowie erneute Installation desselben finalen Pakets unter 1.144.0 erfolgreich. Finale SHA und Grenzen: [EXT-012-Nachweis](docs/quality/EXT-012.md). Öffentliche Bild-URLs und verbleibende Plattform-/Microsoft-Abnahme vor Veröffentlichung prüfen; Nutzerabnahme offen. Keine Git-Aktionen, keine Publikation, keine weiteren Tickets bearbeitet.
+
+## EXT-012 — Upload-Korrektur Icon (02.11.2026)
+Bestand: aktuelles Benutzerlogo noch 1254 × 1254 Pixel; Marketplace meldet maximal 1024 × 1024. Manifest/Lockfile wurden zwischenzeitlich vom Benutzer auf 1.0.1 gesetzt; diese Version bleibt erhalten. Ziel: proportional verkleinertes Original, Paket-Abmessungsprüfung mit Grenz-/Negativtests, neues VSIX und echte Installation. Keine Produktfunktionen, Git-Aktionen oder Veröffentlichung.
+- [x] Logo nach ausdrücklicher Zustimmung mit macOS `sips` auf 1024 × 1024 verkleinert.
+- [x] Paketprüfung für PNG-IHDR und maximal 1024 Pixel je Achse samt Grenz-/Negativtests ergänzt; V1-Versionstest akzeptiert die vorhandene Patchversion 1.0.1. Changelog, Quality-Modul und Upload-Anleitung aktualisiert.
+- [x] Compile, 90/90 Node-Tests, Audit (0 bekannte Schwachstellen), alle Host-Suites und echte VSIX-Installation mit VS Code 1.144.0 bestanden; finaler Paket-/Release-Check erfolgreich. Version 1.0.1, Icon 1024 × 1024, SHA `197286709f01588c64efbfad58a5662aab31ac13c886043190575beb2b4659e3`. Nach Aktualisierung der README wurden veraltete Testnachweise gezielt erneuert. Technisch Zur Prüfung; Upload-Annahme/Benutzerabnahme offen.
+- [ ] Benutzerabnahme der Upload-Korrektur.

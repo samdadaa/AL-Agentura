@@ -248,3 +248,13 @@ test('Storage failures identify the continuation step and stop without writes or
   assert.equal(h.errors.length, 1);
   assert.match(h.errors[0][0], /fehlgeschlagen \(Fortsetzungssperre\).*Zugriff verweigert/);
 });
+
+test('Restricted Mode never activates or runs Microsoft project commands', async () => {
+  const h = setup();
+  h.vscode.workspace.isTrusted = false;
+  h.vscode.extensions.getExtension = () => { throw new Error('Must not activate Microsoft code'); };
+  assert.equal(await h.flow.startMicrosoftProjectFlow(h.context, h.logger, 'standard'), false);
+  assert.deepEqual(h.records, []);
+  assert.equal(pending(h), undefined);
+  assert.match(h.messages[0][0], /nicht vertrauenswürdigen/);
+});

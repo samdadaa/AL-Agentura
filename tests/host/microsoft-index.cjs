@@ -3,17 +3,12 @@ const fs = require('node:fs');
 const vscode = require('vscode');
 exports.run = async function () {
   try {
-    const extension = vscode.extensions.getExtension('local-development.al-agentura');
+    const extension = vscode.extensions.getExtension(`${require('../../package.json').publisher}.al-agentura`);
     assert.ok(extension);
-    const flow = require('../../out/commands/microsoftProjectFlow');
-    const register = flow.registerMicrosoftProjectResume;
-    let actualContext;
-    flow.registerMicrosoftProjectResume = (context, logger) => {
-      actualContext = context;
-      return register(context, logger);
-    };
-    try { await extension.activate(); } finally { flow.registerMicrosoftProjectResume = register; }
-    assert.ok(actualContext, 'Activation context captured');
+    await extension.activate();
+    const driver = vscode.extensions.getExtension('al-agentura-tests.al-agentura-test-driver');
+    assert.ok(driver, 'Test-only API context driver is discoverable');
+    const actualContext = await driver.activate();
     const { claimMicrosoftContinuation } = require('../../out/generation/completeMicrosoftProject');
     try {
       const id = require('node:crypto').randomUUID();

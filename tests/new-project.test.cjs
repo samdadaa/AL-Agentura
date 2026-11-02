@@ -69,3 +69,14 @@ test('Mismatched profile and invalid configuration fail before filesystem work',
   assert.throws(() => draft({ ...options(), modules: ['Sales'] }), TemplateValidationError);
   assert.throws(() => draft({ ...options(), profile: 'modular', modules: ['../escape'] }), TemplateValidationError);
 });
+
+test('V1: every generated documentation and launch file has parents earlier in the plan', () => {
+  const paths = ['AGENTS.md','TODO.md','GETTING_STARTED.md','docs/PROJECT.md','docs/ARCHITECTURE.md','docs/CONVENTIONS.md','docs/SECURITY.md','docs/TESTS.md','docs/modules/INDEX.md'];
+  const agentDocs = Object.fromEntries(paths.map(file => [file, fs.readFileSync(path.join(base, 'agent-docs', file), 'utf8')]));
+  const result = createNewProjectDraft({ ...options(), includeLaunchJson: true }, standard, ignore, guide, agentDocs);
+  for (const [index, item] of result.operations.entries()) {
+    const parent = item.relativePath.split('/').slice(0, -1).join('/');
+    if (parent) assert.ok(result.operations.slice(0, index).some(op => op.relativePath === parent && op.kind === 'directory'), item.relativePath);
+  }
+  for (const directory of ['docs', 'docs/modules', '.vscode']) assert.equal(result.operations.filter(op => op.relativePath === directory).length, 1);
+});

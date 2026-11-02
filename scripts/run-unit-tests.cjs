@@ -1,0 +1,13 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const {spawnSync} = require('node:child_process');
+const {root,fingerprint,save} = require('./quality-evidence.cjs');
+const sourceHash = fingerprint();
+const files = fs.readdirSync(path.join(root,'tests')).filter(name=>name.endsWith('.test.cjs')).sort().map(name=>path.join(root,'tests',name));
+const run = spawnSync(process.execPath,['--test','--test-reporter=tap',...files],{encoding:'utf8',maxBuffer:10*1024*1024});
+process.stdout.write(run.stdout || ''); process.stderr.write(run.stderr || '');
+const number = key => Number((run.stdout || '').match(new RegExp('^# '+key+' (\\d+)','m'))?.[1] || 0);
+const counts = {tests:number('tests'),passedTests:number('pass'),failedTests:number('fail'),skippedTests:number('skipped')};
+const passed = run.status===0 && counts.tests>0 && counts.passedTests===counts.tests && counts.failedTests===0 && counts.skippedTests===0;
+save('unit',{passed,sourceHash,node:process.version,...counts});
+process.exitCode = passed ? 0 : 1;

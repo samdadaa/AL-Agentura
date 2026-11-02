@@ -39,3 +39,7 @@ Der explizit gewählte Microsoft-Erstellungsmodus nutzt einen begrenzten additiv
 
 ## Bestandsdokumentation und SafeWriter (EXT-008 bis EXT-010)
 Die oben als künftig beschriebene Bestandsanwendung ist jetzt umgesetzt: Modulbelege und Dokumentrenderer → reiner Ergänzungsplan → URI-Adapter → Inhaltsvorschau/Zustimmung → frischer Planvergleich → lokaler additiver Writer → Ergebnis. Konkrete Schnittstellen, Dateischutz und Providergrenze stehen in [ADR 0005](adr/0005-existing-project-generation.md) und [Generation](../modules/Generation.md). Keine automatische Bestandsanwendung beim Start; Microsofts ausdrücklich gewählte Neuanlage bleibt separat.
+
+
+## V1-Qualitäts- und Release-Gate (EXT-011)
+`verify` kombiniert reguläre Tests, reale isolierte Hosts, Restricted Mode, Paket-/Installationsprüfung und Audit. Nachweise sind an Quell-/Test-/Tool-Stand und Paket-SHA gebunden. Der Installationshost testet normale installierte Produktdateien unter einem separaten API-Testtreiber. Stale Build-Ausgaben werden vor Paketierung entfernt. [ADR 0006](adr/0006-v1-quality-release.md) dokumentiert die beiden notwendigen Fehlerkorrekturen sowie Publisher-/Lizenzentscheidung und den manuellen Upload.

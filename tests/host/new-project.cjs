@@ -20,8 +20,10 @@ exports.run = async function (extension) {
     dialog: vscode.window.showOpenDialog, input: vscode.window.showInputBox, pick: vscode.window.showQuickPick,
     warning: vscode.window.showWarningMessage, info: vscode.window.showInformationMessage,
     error: vscode.window.showErrorMessage, editor: vscode.window.showTextDocument,
-    execute: vscode.commands.executeCommand
+    execute: vscode.commands.executeCommand, getExtension: vscode.extensions.getExtension
   };
+  // Exercise the real independent-generator command including its configuration steps.
+  vscode.extensions.getExtension = id => id === 'ms-dynamics-smb.al' ? { isActive: true, packageJSON: {} } : original.getExtension(id);
   const options = { name: 'Direct', profile: 'standard', modules: [] };
   async function folder(name) {
     const uri = vscode.Uri.joinPath(base, name); await vscode.workspace.fs.createDirectory(uri); return uri;
@@ -37,16 +39,17 @@ exports.run = async function (extension) {
       return [step === 'parent' ? parent : config.source ?? source];
     };
     vscode.window.showInputBox = async spec => {
-      const step = spec.title.includes('Module') ? 'modules' : 'name';
+      const step = spec.title.includes('Module') ? 'modules' : spec.title === 'AL Publisher' ? 'publisher' : spec.title === 'AL App-Version' ? 'version' : spec.title.startsWith('AL Runtime') ? 'runtime' : spec.title === 'AL Objekt-ID von' ? 'from' : spec.title === 'AL Objekt-ID bis' ? 'to' : 'name';
       if (config.stopAt === step) return undefined;
-      const value = step === 'name' ? config.name : config.modules ?? 'Sales, Purchasing, sales';
+      const value = ({name: config.name, modules: config.modules ?? 'Sales, Purchasing, sales', publisher: 'Fixture', version: '1.0.0.0', runtime: '13.0', from: '50100', to: '50199'})[step];
       assert.equal(await spec.validateInput(value), undefined);
       return value;
     };
     vscode.window.showQuickPick = async (items, spec) => {
-      const step = spec.title.endsWith('Profil') ? 'profile' : 'config';
+      if (spec.title.includes('Projektmodus')) return items.find(item => item.profile === 'fallback');
+      const step = spec.title.endsWith('Profil') ? 'profile' : spec.title.includes('Debug-Konfiguration') ? 'launch' : 'config';
       if (config.stopAt === step) return undefined;
-      return items.find(item => step === 'profile' ? item.profile === (config.profile ?? 'standard') : item.copyApp === !!config.copyApp);
+      return items.find(item => step === 'profile' ? item.profile === (config.profile ?? 'standard') : step === 'launch' ? item.include === !!config.launch : config.copyApp ? item.copyApp : item.createApp === !!config.generateApp);
     };
     vscode.window.showWarningMessage = async () => {
       confirmations++;
@@ -85,7 +88,7 @@ exports.run = async function (extension) {
     assert.deepEqual((await vscode.workspace.fs.readDirectory(vscode.Uri.joinPath(modular.root, 'src'))).map(([name]) => name).sort(), ['Purchasing', 'Sales']);
     assert.equal(Buffer.from(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(modular.root, 'app.json'))).toString('utf8'), appContent);
     assert.equal(Buffer.from(await vscode.workspace.fs.readFile(source)).toString('utf8'), appContent);
-    for (const stopAt of ['parent', 'name', 'profile', 'modules', 'config', 'source', 'confirm']) {
+    for (const stopAt of ['parent', 'name', 'profile', 'modules', 'config', 'source', 'launch', 'confirm']) {
       const cancelled = await wizard({ name: `Cancel-${stopAt}`, profile: 'modular', copyApp: true, stopAt });
       assert.ok(cancelled.result === undefined || cancelled.result.status === 'cancelled');
       assert.deepEqual(await vscode.workspace.fs.readDirectory(cancelled.parent), []);
@@ -122,6 +125,17 @@ exports.run = async function (extension) {
     const traversing = { ...direct, operations: [{ ...direct.operations[0], relativePath: '../escape' }] };
     assert.equal((await createNewProject(traversing, true)).status, 'blocked');
     assert.deepEqual(await vscode.workspace.fs.readDirectory(directParent), []);
+    const configured = await wizard({ name: 'Configured', generateApp: true, launch: true });
+    assert.equal(configured.result.status, 'created');
+    const configuredApp = JSON.parse(Buffer.from(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(configured.root, 'app.json'))).toString());
+    assert.equal(configuredApp.publisher, 'Fixture');
+    assert.equal(configuredApp.runtime, '13.0');
+    assert.deepEqual(configuredApp.idRanges, [{ from: 50100, to: 50199 }]);
+    assert.ok(await vscode.workspace.fs.stat(vscode.Uri.joinPath(configured.root, '.vscode/launch.json')));
+    for (const stopAt of ['publisher', 'version', 'runtime', 'from', 'to']) {
+      const aborted = await wizard({ name: `Cancel-${stopAt}`, generateApp: true, stopAt });
+      assert.deepEqual(await vscode.workspace.fs.readDirectory(aborted.parent), []);
+    }
     await writerFailureChecks(base, bundle, guide, options);
     // Parallel invocation cannot open a second wizard while the first picker is pending.
     let release;
@@ -138,7 +152,7 @@ exports.run = async function (extension) {
     vscode.window.showOpenDialog = original.dialog; vscode.window.showInputBox = original.input;
     vscode.window.showQuickPick = original.pick; vscode.window.showWarningMessage = original.warning;
     vscode.window.showInformationMessage = original.info; vscode.window.showErrorMessage = original.error;
-    vscode.window.showTextDocument = original.editor; vscode.commands.executeCommand = original.execute;
+    vscode.window.showTextDocument = original.editor; vscode.commands.executeCommand = original.execute; vscode.extensions.getExtension = original.getExtension;
     await vscode.workspace.fs.delete(base, { recursive: true, useTrash: false });
   }
 };
@@ -169,6 +183,15 @@ async function writerFailureChecks(base, bundle, guide, options) {
   assert.equal(partial.failedPath, 'GETTING_STARTED.md');
   assert.ok(partial.createdPaths.includes('Failure.code-workspace'));
   assert.ok(await vscode.workspace.fs.stat(vscode.Uri.parse(failure.workspaceUri)));
+  const cleanupPlan = await prepareNewProject(parent, { ...options, name: 'CleanupWarning' }, bundle, guide);
+  let scratch;
+  try {
+    const cleanup = await createNewProject(cleanupPlan, true, { ...defaults,
+      async delete(uri) { scratch = uri; throw vscode.FileSystemError.NoPermissions(); }
+    });
+    assert.equal(cleanup.status, 'created');
+    assert.equal(cleanup.stagingCleanupFailed, true, 'Successful project creation must still report scratch cleanup failure');
+  } finally { if (scratch) await vscode.workspace.fs.delete(scratch, {recursive:true, useTrash:false}); }
   const link = vscode.Uri.joinPath(base, 'linked-parent');
   fs.symlinkSync(parent.fsPath, link.fsPath, 'dir');
   await assert.rejects(() => prepareNewProject(link, options, bundle, guide));

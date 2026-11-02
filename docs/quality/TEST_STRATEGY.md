@@ -16,3 +16,9 @@
 
 ## Nachweisformat
 Ticket-ID, Build-/Testkommando, Datum, Umgebung, Ergebnis, offene manuelle Abnahme. Kein `[x]` als Ersatz für Nachweise.
+
+
+## V1-Gesamtprüfung
+`npm run verify` ist das technische Gate. Erforderlich sind Node >=22, ein installiertes Desktop-VS-Code und Registry-Zugriff für Audit. Die Extension selbst bleibt offline. Hash-gebundene Nachweise liegen in `artifacts/quality/`, Paket unter `al-agentura-1.0.0.vsix`. Einzelne Suites können gezielt über `test:host`, `test:host:microsoft`, `test:restricted` und `test:installed` gestartet werden. `test:installed` setzt ein gebautes VSIX voraus.
+
+Der reale Restricted-Mode-Host darf Workspace Trust nicht durch einen Mock ersetzen. Der Installationshost muss die URI des normalen installierten Produkts prüfen. Vorlagen-/Quell-/Paketänderungen erfordern neue Nachweise. [EXT-011-Matrix](EXT-011.md) und [manuelle Plattformabnahme](../operations/MARKETPLACE.md) unterscheiden automatische, visuelle und fachliche Tests.

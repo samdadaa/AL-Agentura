@@ -121,6 +121,16 @@ exports.run = async function(extension) {
     assert.ok(['blocked', 'partial'].includes(deniedResult.status));
     assert.equal(Buffer.from(await io.readFile(vscode.Uri.joinPath(deniedRoot, 'app.json'))).toString(), '{"name":"Observed Fixture","runtime":"13.0"}');
 
+    const cleanupRoot = await fixture('CleanupFailure'), cleanupRefresh = refreshFor(cleanupRoot);
+    let scratch;
+    try {
+      const cleanup = await applyExistingProject(await cleanupRefresh(), true, cleanupRefresh, { ...defaults,
+        async delete(uri) { scratch = uri; throw vscode.FileSystemError.NoPermissions(); }
+      });
+      assert.equal(cleanup.status, 'partial'); assert.equal(cleanup.stagingCleanupFailed, true);
+      assert.match(cleanup.message, /bereinigt/);
+    } finally { if (scratch) await io.delete(scratch, {recursive:true, useTrash:false}); }
+
     const unsafeRoot = await fixture('Unsafe'), unsafePlan = await refreshFor(unsafeRoot)();
     for (const relativePath of ['../escape.md', '/absolute.md', 'new.al', 'app.json']) {
       const unsafe = { ...unsafePlan, operations: [{ entryId: relativePath, kind: 'file', action: 'create', relativePath,

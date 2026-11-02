@@ -3,9 +3,8 @@
   "displayName": "AL Agentura",
   "icon": "assets/Logo.png",
   "description": "AL Project Scaffolding & AI Agent Workspace Setup",
-  "version": "0.0.1",
-  "private": true,
-  "publisher": "local-development",
+  "version": "1.0.2",
+  "publisher": "SamerDadah",
   "engines": {
     "vscode": "^1.90.0",
     "node": ">=22"
@@ -40,26 +39,58 @@
       },
       {
         "command": "alAgentura.testALGoIntegration",
-        "title": "AL Agent: Test AL Go Integration"
+        "title": "AL Agent: Test AL Go Integration",
+        "enablement": "isWorkspaceTrusted"
       }
     ]
   },
   "scripts": {
-    "compile": "tsc -p ./",
+    "compile": "node scripts/compile.cjs",
     "watch": "tsc -watch -p ./",
-    "test": "npm run compile && node --test tests/*.test.cjs",
+    "test": "npm run compile && node scripts/run-unit-tests.cjs",
     "package": "vsce package --allow-missing-repository",
     "test:host": "npm run compile && node tests/run-host.cjs",
-    "vscode:prepublish": "npm run compile"
+    "vscode:prepublish": "npm run compile",
+    "test:host:microsoft": "node scripts/run-host-suite.cjs microsoft",
+    "test:restricted": "node scripts/run-host-suite.cjs restricted",
+    "test:installed": "node scripts/run-host-suite.cjs installed",
+    "release:check": "node scripts/check-release.cjs",
+    "test:package": "node scripts/check-vsix.cjs",
+    "verify": "node scripts/verify.cjs",
+    "audit": "node scripts/audit.cjs",
+    "smoke:manual": "node scripts/prepare-smoke-profile.cjs"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "1.90.0",
-    "typescript": "^5.6.0",
-    "@vscode/vsce": "^3.0.0"
+    "@vscode/vsce": "4.1.0",
+    "typescript": "^5.6.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/samdadaa/al-agentura.git"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "Analyse und lokale Textvorlagen funktionieren ohne Codeausführung. Microsoft-Projektbefehle sind im Restricted Mode deaktiviert."
+    }
+  },
+  "keywords": [
+    "AL",
+    "Business Central",
+    "Dynamics 365",
+    "scaffolding",
+    "workspace"
+  ],
+  "bugs": {
+    "url": "https://github.com/samdadaa/al-agentura/issues"
+  },
+  "homepage": "https://github.com/samdadaa/al-agentura#readme",
+  "license": "MIT",
+  "overrides": {
+    "@vscode/vsce": {
+      "minimatch": "11.0.1"
+    }
   }
 }

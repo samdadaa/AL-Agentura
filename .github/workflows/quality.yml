@@ -1,0 +1,41 @@
+name: V1 quality
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        vscode: [stable]
+        include:
+          - os: ubuntu-latest
+            vscode: 1.90.2
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node scripts/download-vscode.cjs ${{ matrix.vscode }}
+      - if: runner.os == 'Linux'
+        run: xvfb-run -a npm run verify
+      - if: runner.os != 'Linux'
+        run: npm run verify
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: quality-${{ matrix.os }}-${{ matrix.vscode }}
+          path: |
+            artifacts/quality/
+            al-agentura-*.vsix
+          retention-days: 7

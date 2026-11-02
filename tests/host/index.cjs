@@ -3,9 +3,14 @@ const vscode = require('vscode');
 const fs = require('node:fs');
 
 exports.run = async function () {
-  const extension = vscode.extensions.getExtension('local-development.al-agentura');
-  assert.ok(extension, 'Development extension is discoverable');
-  assert.equal(extension.isActive, false, 'Extension activates lazily');
+  const extension = vscode.extensions.getExtension(`${require('../../package.json').publisher}.al-agentura`);
+  assert.ok(extension, 'Extension is discoverable');
+  if (process.env.AL_EXPECT_INSTALLED) {
+    const path = require('node:path');
+    const relative = path.relative(process.env.AL_EXPECT_INSTALLED, extension.extensionUri.fsPath);
+    assert.ok(relative && !relative.startsWith('..') && !path.isAbsolute(relative), 'Product must load from the installed VSIX, not repository source');
+  }
+  // onStartupFinished can activate before tests on slower hosts; both paths are valid.
   const contributed = extension.packageJSON.contributes.commands;
   assert.ok(contributed.some(command => command.command === 'alAgentura.createProject' &&
     command.title === 'AL Agent: Create Project'));

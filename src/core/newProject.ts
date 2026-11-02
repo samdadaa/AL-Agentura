@@ -57,10 +57,21 @@ export function createNewProjectDraft(options: NewProjectOptions, manifest: Temp
     ...(appJsonContent !== undefined ? [{ path: 'app.json', content: appJsonContent }] : []),
     ...(options.includeLaunchJson ? [{ path: '.vscode/launch.json', content: generateLaunchJson() }] : [])
   ];
-  return { ...structure, name: options.name, workspaceFile, operations: [...structure.operations, ...files.map(file => ({
-    entryId: file.path, relativePath: file.path, kind: 'file' as const, action: 'create' as const,
-    reason: 'Neue Projektdatei im bestätigten Zielroot.', content: file.content
-  }))] };
+  const operations = [...structure.operations];
+  const directories = new Set(operations.filter(item => item.kind === 'directory').map(item => item.relativePath));
+  for (const file of files) {
+    const parts = file.path.split('/');
+    for (let index = 1; index < parts.length; index++) {
+      const parent = parts.slice(0, index).join('/');
+      if (!directories.has(parent)) {
+        directories.add(parent);
+        operations.push({ entryId: parent, relativePath: parent, kind: 'directory', action: 'create', reason: 'Elternverzeichnis einer neuen Projektdatei.' });
+      }
+    }
+    operations.push({ entryId: file.path, relativePath: file.path, kind: 'file', action: 'create',
+      reason: 'Neue Projektdatei im bestätigten Zielroot.', content: file.content });
+  }
+  return { ...structure, name: options.name, workspaceFile, operations };
 }
 
 /** Fixed operational errors only; never wrap raw provider/credential messages. */

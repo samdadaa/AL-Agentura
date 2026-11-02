@@ -11,3 +11,7 @@ Ein Ticket ist **technisch umgesetzt**, wenn Anforderungen und negative Pfade im
 - [ ] README, TODO, Modulbeschreibung und ADR aktualisiert
 - [ ] Keine Secrets, ungeprüften Abhängigkeiten oder ungesicherten Templates
 - [ ] Nutzerabnahme eingeholt (separat)
+
+
+## V1 vor Marketplace
+Technische Freigabe: `npm run verify` und aktueller `release:check` erfolgreich, Paket-SHA unverändert. Produktfreigabe: tatsächliche manuelle Plattform-/Microsoft-/VSIX-Abnahme nach `docs/operations/MARKETPLACE.md`. Der technische Check veröffentlicht nichts und bestätigt keine noch nicht ausgeführten manuellen Prüfungen.

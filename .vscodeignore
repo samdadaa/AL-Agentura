@@ -18,3 +18,8 @@ AGENTS.md
 TODO.md
 KONZEPT.md
 GETTING_STARTED.md
+
+scripts/**
+artifacts/**
+.github/**
+.gitignore

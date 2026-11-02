@@ -92,6 +92,10 @@ async function resumeMicrosoftProject(context: vscode.ExtensionContext, logger: 
 
 /** One entry point; no command IDs are guessed and nothing is copied from Microsoft. */
 export async function startMicrosoftProjectFlow(context: vscode.ExtensionContext, logger: Logger, profile: AgenturaProfile): Promise<boolean> {
+  if (vscode.workspace.isTrusted === false) {
+    void vscode.window.showWarningMessage('AL Agentura: Microsoft-Projektbefehle sind im nicht vertrauenswürdigen Workspace deaktiviert. Der lokale Generator und die lesende Analyse bleiben verfügbar.');
+    return false;
+  }
   const matches = await findMicrosoftProjectCommands(profile);
   if (!matches.length) {
     await vscode.window.showWarningMessage('Der benötigte Microsoft-Projektbefehl ist nicht verfügbar. AL Language aktualisieren oder den eigenen Agentura-Generator nutzen.');
