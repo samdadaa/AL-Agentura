@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { inspectProject } from '../analysis/inspectProject';
 import { renderAgentDocs } from '../core/agentDocs';
+import { renderNewModuleDocumentation } from '../core/moduleDocumentation';
 import { objectTypesFromManifest } from '../core/alStructure';
 import { NewProjectError } from '../core/newProject';
 import { planALStructure } from '../core/structurePlan';
@@ -63,7 +64,9 @@ export async function completeMicrosoftProject(extensionUri: vscode.Uri, root: v
   // A workspace with this name may contain unrelated folders/settings. Preserve it and
   // refuse to open it unless it actually includes this project via the generated contract.
   await validateWorkspaceIfPresent(workspaceUri);
-  const renderedFiles = [...renderAgentDocs(bundle.agentDocs, context.appJson.name ?? name), {
+  const moduleDocs = profile === 'modular' ? renderNewModuleDocumentation(modules, bundle.existingDocs) : [];
+  const modulePaths = new Set(moduleDocs.map(doc => doc.path));
+  const renderedFiles = [...renderAgentDocs(bundle.agentDocs, context.appJson.name ?? name).filter(doc => !modulePaths.has(doc.path)), ...moduleDocs, {
     path: workspaceFile,
     content: JSON.stringify({ folders: [{ path: '.' }], extensions: { recommendations: ['ms-dynamics-smb.al'] } }, null, 2) + '\n'
   }];

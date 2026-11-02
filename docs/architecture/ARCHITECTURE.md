@@ -43,3 +43,6 @@ Die oben als künftig beschriebene Bestandsanwendung ist jetzt umgesetzt: Modulb
 
 ## V1-Qualitäts- und Release-Gate (EXT-011)
 `verify` kombiniert reguläre Tests, reale isolierte Hosts, Restricted Mode, Paket-/Installationsprüfung und Audit. Nachweise sind an Quell-/Test-/Tool-Stand und Paket-SHA gebunden. Der Installationshost testet normale installierte Produktdateien unter einem separaten API-Testtreiber. Stale Build-Ausgaben werden vor Paketierung entfernt. [ADR 0006](adr/0006-v1-quality-release.md) dokumentiert die beiden notwendigen Fehlerkorrekturen sowie Publisher-/Lizenzentscheidung und den manuellen Upload.
+
+## Zielgebundene Fortsetzung und vollständige Neuprojektdokumentation
+[ADR 0007](adr/0007-bound-project-completion.md) ersetzt die heuristische Erkennung fremder Fenster durch einen vor Microsoft ausdrücklich gewählten, exakt geprüften Zielroot. Ein gemeinsamer reiner Modulrenderer erzeugt bei modularer Neuanlage sofort die Modul-MDs und den Index; README gehört zum gemeinsamen deklarativen Dokumentpaket aller schreibenden Projektabläufe.

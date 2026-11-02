@@ -71,7 +71,7 @@ test('Mismatched profile and invalid configuration fail before filesystem work',
 });
 
 test('V1: every generated documentation and launch file has parents earlier in the plan', () => {
-  const paths = ['AGENTS.md','TODO.md','GETTING_STARTED.md','docs/PROJECT.md','docs/ARCHITECTURE.md','docs/CONVENTIONS.md','docs/SECURITY.md','docs/TESTS.md','docs/modules/INDEX.md'];
+  const paths = ['AGENTS.md','TODO.md','GETTING_STARTED.md','README.md','docs/PROJECT.md','docs/ARCHITECTURE.md','docs/CONVENTIONS.md','docs/SECURITY.md','docs/TESTS.md','docs/modules/INDEX.md'];
   const agentDocs = Object.fromEntries(paths.map(file => [file, fs.readFileSync(path.join(base, 'agent-docs', file), 'utf8')]));
   const result = createNewProjectDraft({ ...options(), includeLaunchJson: true }, standard, ignore, guide, agentDocs);
   for (const [index, item] of result.operations.entries()) {

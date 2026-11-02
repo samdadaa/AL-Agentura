@@ -1,4 +1,5 @@
 import { ExistingDocumentationTemplates, renderExistingDocument } from './existingDocumentationTemplates';
+import { normalizeModules } from './alStructure';
 import { ProjectContext } from './projectModels';
 import { pathKey, validateRelativePath } from './templateValidation';
 
@@ -80,4 +81,18 @@ export function renderModuleDocumentation(context: ProjectContext, selectedPaths
         MODULE_SOURCES: module.sources.join(', '), MODULE_FILES: module.alFiles.length ? module.alFiles.map(file =>
           `- ${md(file)} — Objekttyp, ID und Verantwortung im Code prüfen.`).join('\n') : module.sources.includes('al-file-paths') ? 'Keine direkt zugeordneten AL-Dateien; untergeordnete Kandidaten separat prüfen.' : 'Keine AL-Dateien erkannt; nur Ordnerstruktur belegt.' })
     }))];
+}
+
+/** Explicitly requested new module scaffolds; never claim already implemented AL code. */
+export function renderNewModuleDocumentation(modules: readonly string[], templates: ExistingDocumentationTemplates): readonly { path: string; content: string }[] {
+  const names = normalizeModules(modules);
+  const rows = names.map(name => `| ${md(name)} | src/${md(name)} | Gewähltes Modulgerüst | Zu prüfen | [Gerüst](details/src/${encodeURIComponent(name)}.md) — fachlich zu prüfen |`).join('\n');
+  return [{ path: 'docs/modules/INDEX.md', content: renderExistingDocument(templates, 'index', {
+    MODULE_ROWS: rows || 'Keine Module ausgewählt.', TOTAL_AL_FILES: 'Zu prüfen (Modulgerüst, keine Dateianalyse)'
+  }) }, ...names.map(name => ({
+    path: moduleDocumentPath({ name, relativePath: `src/${name}`, sources: [], alFiles: [] }),
+    content: renderExistingDocument(templates, 'module', { MODULE_NAME: md(name), MODULE_PATH: md(`src/${name}`),
+      MODULE_SOURCES: 'Ausdrücklich gewähltes Modulgerüst bei Projekterstellung; keine fachliche Analyse.',
+      MODULE_FILES: 'Zu prüfen; dieses Gerüst enthält keine Aussage über vorhandene AL-Dateien.' })
+  }))];
 }

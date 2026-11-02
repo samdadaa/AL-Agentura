@@ -8,7 +8,7 @@ function setup(shared = {}) {
   const records = [], messages = [], errors = [];
   const state = shared.state ?? new Map(), claims = shared.claims ?? new Set();
   const events = {};
-  let ready = true, failure, openingFailure, claimFailure, existingApp = true;
+  let ready = true, failure, openingFailure, claimFailure, existingApp = false;
   const alCommands = [
     { command: 'al.project.go', title: 'AL: Go!' },
     { command: 'al.project.agent', title: 'AL: Create Project Agent' },
@@ -40,6 +40,7 @@ function setup(shared = {}) {
       showWarningMessage: async (...args) => { messages.push(args); },
       showQuickPick: async values => values[0],
       showInputBox: async () => 'Sales, Finance',
+      showOpenDialog: async () => [uri('file:///tmp/new-project')],
       showErrorMessage: async (...args) => { errors.push(args); }
     }
   };
@@ -257,4 +258,43 @@ test('Restricted Mode never activates or runs Microsoft project commands', async
   assert.deepEqual(h.records, []);
   assert.equal(pending(h), undefined);
   assert.match(h.messages[0][0], /nicht vertrauenswürdigen/);
+});
+
+
+test('Unrelated existing window cannot consume the shared request before the target window', async () => {
+  const origin = setup();
+  await origin.flow.startMicrosoftProjectFlow(origin.context, origin.logger, 'modular');
+  const other = setup({ state: new Map(origin.state), claims: origin.claims });
+  other.vscode.workspace.workspaceFolders = [other.root('file:///tmp/customer-existing')];
+  await other.flow.offerMicrosoftProjectContinuation(other.context, other.logger);
+  assert.equal(completeCount(other), 0);
+  assert.equal(other.claims.size, 0);
+  assert.ok(pending(other));
+  const target = setup({ state: new Map(origin.state), claims: origin.claims });
+  target.vscode.workspace.workspaceFolders = [target.root()];
+  await target.flow.offerMicrosoftProjectContinuation(target.context, target.logger);
+  assert.equal(completeCount(target), 1);
+  assert.equal(target.records.find(r => r[0] === 'complete')[2].toString(), 'file:///tmp/new-project');
+});
+
+test('Cancelled target selection and an existing AL target do not start Microsoft', async () => {
+  for (const existing of [false, true]) {
+    const h = setup();
+    if (existing) h.existingApp(true);
+    else h.vscode.window.showOpenDialog = async () => undefined;
+    assert.equal(await h.flow.startMicrosoftProjectFlow(h.context, h.logger, 'standard'), false);
+    assert.equal(pending(h), undefined);
+    assert.equal(h.records.length, 0);
+  }
+});
+
+test('Legacy continuation without a bound target is discarded without writes', async () => {
+  const h = setup();
+  await h.flow.startMicrosoftProjectFlow(h.context, h.logger, 'standard');
+  delete pending(h).targetRoot;
+  h.vscode.workspace.workspaceFolders = [h.root()];
+  await h.flow.offerMicrosoftProjectContinuation(h.context, h.logger);
+  assert.equal(completeCount(h), 0);
+  assert.equal(h.claims.size, 0);
+  assert.equal(pending(h), undefined);
 });

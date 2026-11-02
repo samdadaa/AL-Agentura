@@ -7,7 +7,7 @@ const { planExistingProject } = require('../out/core/existingProject');
 const { EXISTING_DOCUMENT_TOKENS, loadExistingDocumentationTemplates, renderExistingDocument } = require('../out/core/existingDocumentationTemplates');
 const { loadManifest, loadProfileCatalog } = require('../out/templates/catalog');
 const base = path.resolve(__dirname, '../resources/templates');
-const docPaths = ['AGENTS.md', 'TODO.md', 'GETTING_STARTED.md', 'docs/PROJECT.md', 'docs/ARCHITECTURE.md', 'docs/CONVENTIONS.md', 'docs/SECURITY.md', 'docs/TESTS.md', 'docs/modules/INDEX.md'];
+const docPaths = ['AGENTS.md', 'TODO.md', 'GETTING_STARTED.md', 'README.md', 'docs/PROJECT.md', 'docs/ARCHITECTURE.md', 'docs/CONVENTIONS.md', 'docs/SECURITY.md', 'docs/TESTS.md', 'docs/modules/INDEX.md'];
 const existingDocs = loadExistingDocumentationTemplates(fs.readFileSync(path.join(base, 'existing-project/version.json'), 'utf8'),
   Object.fromEntries(Object.keys(EXISTING_DOCUMENT_TOKENS).map(id => [id, fs.readFileSync(path.join(base, 'existing-project', id + '.md'), 'utf8')])));
 const bundle = { existingDocs,
@@ -156,4 +156,40 @@ test('Nested structural candidates receive disjoint file lists at the closest ob
   const modules = detectModuleCandidates(ctx);
   assert.deepEqual(modules.find(m => m.relativePath === 'src/Sales').alFiles, ['src/Sales/Direct.al']);
   assert.deepEqual(modules.find(m => m.relativePath === 'src/Sales/Details').alFiles, ['src/Sales/Details/Tables/Nested.al']);
+});
+
+
+test('New modular documentation covers explicit normalized modules and stable index links', () => {
+  const { renderNewModuleDocumentation } = require('../out/core/moduleDocumentation');
+  const docs = renderNewModuleDocumentation(['Sales', 'sales', 'Finance'], bundle.existingDocs);
+  assert.deepEqual(docs.map(doc => doc.path), ['docs/modules/INDEX.md', 'docs/modules/details/src/Sales.md', 'docs/modules/details/src/Finance.md']);
+  assert.match(docs[0].content, /details\/src\/Sales\.md/);
+  assert.match(docs[1].content, /Gewähltes|gewähltes/);
+  assert.doesNotMatch(docs[1].content, /\{\{/);
+  assert.deepEqual(renderNewModuleDocumentation([], bundle.existingDocs).map(doc => doc.path), ['docs/modules/INDEX.md']);
+  assert.throws(() => renderNewModuleDocumentation(['../outside'], bundle.existingDocs));
+});
+
+
+test('README is added by setup and an existing README is skipped unchanged', () => {
+  const created = plan().operations.find(op => op.relativePath === 'README.md');
+  assert.equal(created.action, 'create');
+  assert.match(created.content, /# Observed/);
+  const skipped = plan(context(['README.md'])).operations.find(op => op.relativePath === 'README.md');
+  assert.equal(skipped.action, 'skip');
+});
+
+
+test('Modular new-project plan includes module docs, one linked index and ordered parents', () => {
+  const { createNewProjectDraft } = require('../out/core/newProject');
+  const draft = createNewProjectDraft({ name: 'NewModular', profile: 'modular', modules: ['Sales', 'Finance'] },
+    bundle.manifests.find(m => m.id === 'al-modular'), bundle.gitignore, '', bundle.agentDocs, bundle.existingDocs);
+  assert.equal(draft.operations.filter(op => op.relativePath === 'docs/modules/INDEX.md').length, 1);
+  for (const name of ['Sales', 'Finance']) {
+    assert.ok(draft.operations.some(op => op.relativePath === `docs/modules/details/src/${name}.md`));
+  }
+  for (const [index, op] of draft.operations.entries()) {
+    const parent = op.relativePath.split('/').slice(0, -1).join('/');
+    if (parent) assert.ok(draft.operations.slice(0, index).some(item => item.relativePath === parent && item.kind === 'directory'), op.relativePath);
+  }
 });

@@ -45,3 +45,6 @@ Die exklusive Sperre unterstützt auch `vscode-userdata:` als lokalen Desktop-Pr
 `generation/applyExistingProject.ts` schreibt ausschließlich nach Zustimmung, erfolgreicher lokaler Preflight und vollständigem frischem Planvergleich. Stale/Conflicts stoppen vor Writes; pro Operation folgen erneute Eltern-/Existenzprüfung, native Copy ohne Überschreiben und Inhaltsprüfung. Scratch außerhalb des Projekts, kein Rollback; Status applied/cancelled/blocked/stale/partial mit Create-/Skip-Pfaden, Fehlerpfad und Bereinigungsfehlern. Command und Writer blockieren parallele Aufrufe. Remote-/Virtual-Anwendung bleibt vor Writes gesperrt (ADR 0003); Planung bleibt URI-basiert.
 
 `Setup Current Project` enthält keine Dateischreiblogik mehr. Standardauswahl bewahrt die bestehende AL-Struktur. [Prüfbericht](../quality/EXT-008-010.md).
+
+## Fehlerkorrektur Neuanlage (02.11.2026)
+Beide modularen Neuanlagewege rendern ausgewählte Module über `renderNewModuleDocumentation` aus der deklarativen Modulvorlage: `docs/modules/details/src/<Modul>.md` und verlinkter Index, keine behauptete Fachsemantik. Elternpfade werden vor Dateien erstellt. Microsofts Writer wird nur im ausdrücklich gebundenen Projektroot aufgerufen. [ADR 0007](../architecture/adr/0007-bound-project-completion.md).

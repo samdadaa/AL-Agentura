@@ -3,7 +3,7 @@
   "displayName": "AL Agentura",
   "icon": "assets/Logo.png",
   "description": "AL Project Scaffolding & AI Agent Workspace Setup",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "SamerDadah",
   "engines": {
     "vscode": "^1.90.0",

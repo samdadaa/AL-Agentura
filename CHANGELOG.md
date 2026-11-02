@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 — 2026-11-02
+
+- Microsoft-Projektfortsetzung an ausdrücklich gewählten Zielordner gebunden; fremde Projektfenster bleiben unverändert.
+- Modul-MDs und verlinkten Index sofort bei modularer Neuanlage ergänzt.
+- README-Vorlage für Neuanlage und Bestands-Setup mit ausfüllbaren Standardabschnitten ergänzt; vorhandene README bleibt erhalten.
+
 ## 1.0.1 — 2026-11-02
 
 - Marketplace-Icon proportional auf 1024 × 1024 Pixel verkleinert.

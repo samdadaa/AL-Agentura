@@ -9,7 +9,7 @@ import { claimMicrosoftContinuation, completeMicrosoftProject } from '../generat
 const AL_ID = 'ms-dynamics-smb.al';
 const KEY = 'alAgentura.pendingMicrosoftProject.v1';
 const MAX_AGE_MS = 15 * 60 * 1000;
-interface Pending { id: string; profile: AgenturaProfile; modules: string[]; createdAt: number; originalRoots: string[]; }
+interface Pending { id: string; profile: AgenturaProfile; modules: string[]; createdAt: number; targetRoot: string; }
 let continuation: Promise<void> | undefined;
 
 /** Only commands declared by the actual installed Microsoft extension are candidates. */
@@ -30,13 +30,18 @@ export async function findMicrosoftProjectCommands(profile: AgenturaProfile): Pr
   });
 }
 
-function roots(): string[] { return (vscode.workspace.workspaceFolders ?? []).map(f => f.uri.toString()); }
+function isLocalTarget(value: string): boolean {
+  try {
+    const uri = vscode.Uri.parse(value, true);
+    return uri.scheme === 'file' && !uri.authority && !uri.query && !uri.fragment && uri.path.startsWith('/');
+  } catch { return false; }
+}
 function candidate(pending: Pending): vscode.Uri | undefined {
   const dirs = vscode.workspace.workspaceFolders ?? [];
-  // Never guess in a multi-root workspace or silently target a pre-existing AL project.
+  // Only the explicitly selected project may consume the shared continuation.
   if (dirs.length !== 1) return undefined;
   const uri = dirs[0].uri;
-  if (uri.scheme !== 'file' || pending.originalRoots.includes(uri.toString())) return undefined;
+  if (uri.scheme !== 'file' || uri.authority || uri.toString() !== pending.targetRoot) return undefined;
   return uri;
 }
 async function isALProject(root: vscode.Uri): Promise<boolean> {
@@ -56,14 +61,14 @@ async function resumeMicrosoftProject(context: vscode.ExtensionContext, logger: 
   if (!pending) return;
   if (!Number.isFinite(pending.createdAt) || pending.createdAt > Date.now() || Date.now() - pending.createdAt > MAX_AGE_MS ||
       !/^[a-f0-9-]{36}$/.test(pending.id) || !['standard', 'modular', 'bc-agent'].includes(pending.profile) ||
-      !Array.isArray(pending.originalRoots) || !pending.originalRoots.every(root => typeof root === 'string') ||
+      typeof pending.targetRoot !== 'string' || !isLocalTarget(pending.targetRoot) ||
       !Array.isArray(pending.modules) || !pending.modules.every(module => typeof module === 'string')) {
     await context.globalState.update(KEY, undefined);
     void vscode.window.showWarningMessage('AL Agentura: Microsoft-Fortsetzung abgelaufen oder ungültig. Falls das Projekt bereits erstellt wurde, Setup Current Project verwenden.');
     return;
   }
   const root = candidate(pending);
-  if (!root || !(await isALProject(root))) return;
+  if (!root || !(await isALProject(root)) || candidate(pending)?.toString() !== root.toString()) return;
   let phase = 'Fortsetzungssperre';
   try {
     if (!(await claimMicrosoftContinuation(context.globalStorageUri, pending.id))) return;
@@ -118,12 +123,18 @@ export async function startMicrosoftProjectFlow(context: vscode.ExtensionContext
     if (input === undefined) return false;
     modules = [...parseModuleList(input)];
   }
-  // AL: Go! can populate an already open empty folder. Protect pre-existing AL
-  // projects, while allowing a newly created app.json in the same empty root.
-  const existingALRoots = await Promise.all(roots().map(async value =>
-    await statIfPresent(vscode.Uri.joinPath(vscode.Uri.parse(value, true), 'app.json')) ? value : undefined));
-  const pending: Pending = { id: randomUUID(), profile, modules, createdAt: Date.now(),
-    originalRoots: existingALRoots.filter((value): value is string => value !== undefined) };
+  // Microsoft exposes no documented completion/target API. Bind the request before
+  // invoking it, so another window can never claim an unrelated AL root.
+  const targets = await vscode.window.showOpenDialog({ canSelectFiles: false, canSelectFolders: true,
+    canSelectMany: false, title: 'Exakten Microsoft-Projektordner wählen (im Microsoft-Assistenten denselben Ordner verwenden)',
+    openLabel: 'Projektziel festlegen' });
+  const target = targets?.[0];
+  if (!target) return false;
+  if (!isLocalTarget(target.toString()) || await statIfPresent(vscode.Uri.joinPath(target, 'app.json'))) {
+    await vscode.window.showWarningMessage('AL Agentura: Einen lokalen Zielordner ohne app.json wählen. Bestehende AL-Projekte mit Setup Current Project ergänzen.');
+    return false;
+  }
+  const pending: Pending = { id: randomUUID(), profile, modules, createdAt: Date.now(), targetRoot: target.toString() };
   await context.globalState.update(KEY, pending);
   logger.info(`Microsoft-Projektassistent gestartet (${selected.command}).`);
   try {

@@ -42,7 +42,7 @@ exports.run = async function (extension) {
     await io.writeFile(vscode.Uri.joinPath(blockedDirectory, 'microsoft-continuations'), encode('not a directory'));
     await assert.rejects(() => claimMicrosoftContinuation(blockedDirectory, randomUUID()), /Fortsetzungssperre:/);
 
-    const preserved = { 'AGENTS.md': 'user instructions', 'TODO.md': 'user tickets', '.gitignore': 'custom rules',
+    const preserved = { 'AGENTS.md': 'user instructions', 'TODO.md': 'user tickets', 'README.md': 'user readme', '.gitignore': 'custom rules',
       'HelloWorld.al': 'pageextension 50100 Hello extends "Customer List" {}', '.vscode/launch.json': '{"custom":true}' };
     const root = await project('Standard', preserved);
     const app = await read(root, 'app.json');
@@ -63,11 +63,19 @@ exports.run = async function (extension) {
     assert.equal((await io.stat(vscode.Uri.joinPath(modular, 'src/Sales/Tables'))).type, vscode.FileType.Directory);
     assert.equal((await io.stat(vscode.Uri.joinPath(modular, 'src/Finance/Codeunits'))).type, vscode.FileType.Directory);
 
+    for (const name of ['Sales', 'Finance']) {
+      assert.match(await read(modular, `docs/modules/details/src/${name}.md`), new RegExp(`Modul: ${name}`));
+      assert.ok((await read(modular, 'docs/modules/INDEX.md')).includes(`details/src/${name}.md`));
+    }
+    assert.equal((await completeMicrosoftProject(extension.extensionUri, modular, 'modular', ['Sales', 'Finance'])).created, 0);
+
     const agent = await project('Agent', { 'app/Setup/Agent.al': 'preserved Microsoft agent' });
     await completeMicrosoftProject(extension.extensionUri, agent, 'bc-agent', []);
     assert.equal(await read(agent, 'app/Setup/Agent.al'), 'preserved Microsoft agent');
     assert.ok(!(await io.readDirectory(agent)).some(([name]) => name === 'src' || name === '.gitignore'));
     assert.ok(await io.stat(vscode.Uri.joinPath(agent, 'Agent.code-workspace')));
+    assert.match(await read(agent, 'README.md'), /Microsoft Fixture/);
+    assert.match(await read(modular, 'README.md'), /## Installation und Einrichtung/);
 
     const conflict = await project('Conflict', { 'docs': 'file blocking directory' });
     await assert.rejects(() => completeMicrosoftProject(extension.extensionUri, conflict, 'standard', []));

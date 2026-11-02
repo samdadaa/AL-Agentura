@@ -4,10 +4,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { renderAgentDocs } = require('../out/core/agentDocs');
 const root = path.join(__dirname, '../resources/templates/agent-docs');
-const files = ['AGENTS.md', 'TODO.md', 'GETTING_STARTED.md', 'docs/PROJECT.md', 'docs/ARCHITECTURE.md',
+const files = ['AGENTS.md', 'TODO.md', 'GETTING_STARTED.md', 'README.md', 'docs/PROJECT.md', 'docs/ARCHITECTURE.md',
   'docs/CONVENTIONS.md', 'docs/SECURITY.md', 'docs/TESTS.md', 'docs/modules/INDEX.md'];
 const templates = Object.fromEntries(files.map(file => [file, fs.readFileSync(path.join(root, file), 'utf8')]));
-test('EXT-007: Nine substantive files, all required documents and links, no unresolved variables', () => {
+test('EXT-007: Ten substantive files, all required documents and links, no unresolved variables', () => {
   const docs = renderAgentDocs(templates, 'WasserApp Test');
   assert.deepEqual(docs.map(item => item.path), files);
   for (const doc of docs) {

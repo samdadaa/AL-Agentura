@@ -42,7 +42,7 @@ exports.run = async function(extension) {
   }
   const refreshFor = (root, opts = settings()) => () => prepareExistingProject(root, opts, bundle);
   try {
-    const preserved = { 'AGENTS.md': 'custom agent rules\r\n', 'TODO.md': 'custom work', '.gitignore': 'custom-ignore\n',
+    const preserved = { 'AGENTS.md': 'custom agent rules\r\n', 'TODO.md': 'custom work', 'README.md': 'custom readme', '.gitignore': 'custom-ignore\n',
       '.vscode/launch.json': '{"custom":"unchanged"}', 'docs/modules/INDEX.md': '# Existing index',
       'docs/modules/details/src/Sales.md': '# Existing Sales facts', 'old/Existing.md': 'old custom docs' };
     const root = await fixture('Preserved', preserved);

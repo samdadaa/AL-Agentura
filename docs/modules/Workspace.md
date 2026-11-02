@@ -26,3 +26,6 @@ Die `.code-workspace` liegt im neuen Root und referenziert `.`. `openProjectWork
 
 ## Bestands-Setup (EXT-009/010)
 `Setup Current Project` nutzt weiterhin `resolveWorkspaceRoot` (No-root-Dialog, Single-root, explizite Auswahl bei Multi-root). URI-Adapter und Vorschau erhalten Scheme/Authority. Der Writer unterstützt vorerst nur native lokale `file`-Ziele ohne Authority; alle Zielzugriffe verwenden `workspace.fs`, Node fs nur den privaten OS-Scratch. Nicht unterstützte Provider erhalten keine Schreiboperation. [ADR 0005](../architecture/adr/0005-existing-project-generation.md).
+
+## Verbindliche Zielbindung (02.11.2026)
+Die frühere automatische Auswahl anhand irgendeiner neuen `app.json` ist ersetzt: Vor Microsoft wird der exakte lokale Zielordner gewählt, Pending enthält dessen vollständige URI. Nur das Fenster mit genau diesem einzelnen Root darf ergänzen und seinen Workspace öffnen. Fremde Fenster erwerben keinen Claim. Ohne Zielbindung keine automatische Anwendung; Abbruch startet Microsoft nicht. [ADR 0007](../architecture/adr/0007-bound-project-completion.md).

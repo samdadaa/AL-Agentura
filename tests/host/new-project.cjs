@@ -88,6 +88,12 @@ exports.run = async function (extension) {
     assert.deepEqual((await vscode.workspace.fs.readDirectory(vscode.Uri.joinPath(modular.root, 'src'))).map(([name]) => name).sort(), ['Purchasing', 'Sales']);
     assert.equal(Buffer.from(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(modular.root, 'app.json'))).toString('utf8'), appContent);
     assert.equal(Buffer.from(await vscode.workspace.fs.readFile(source)).toString('utf8'), appContent);
+    for (const name of ['Sales', 'Purchasing']) {
+      assert.match(Buffer.from(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(modular.root, `docs/modules/details/src/${name}.md`))).toString(), new RegExp(`Modul: ${name}`));
+    }
+    for (const root of [standard.root, modular.root]) {
+      assert.match(Buffer.from(await vscode.workspace.fs.readFile(vscode.Uri.joinPath(root, 'README.md'))).toString(), /## Voraussetzungen/);
+    }
     for (const stopAt of ['parent', 'name', 'profile', 'modules', 'config', 'source', 'launch', 'confirm']) {
       const cancelled = await wizard({ name: `Cancel-${stopAt}`, profile: 'modular', copyApp: true, stopAt });
       assert.ok(cancelled.result === undefined || cancelled.result.status === 'cancelled');

@@ -27,7 +27,7 @@ export async function loadBundledTemplates(extensionUri: vscode.Uri): Promise<Bu
   }
   for (const profile of catalog.profiles) resolveProfile(profile.id, catalog, manifests);
   const templatePaths = [
-    'AGENTS.md', 'TODO.md', 'GETTING_STARTED.md',
+    'AGENTS.md', 'TODO.md', 'GETTING_STARTED.md', 'README.md',
     'docs/PROJECT.md', 'docs/ARCHITECTURE.md', 'docs/CONVENTIONS.md',
     'docs/SECURITY.md', 'docs/TESTS.md', 'docs/modules/INDEX.md'
   ];

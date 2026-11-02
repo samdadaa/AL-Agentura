@@ -9,18 +9,20 @@ Die Extension selbst enthält keine KI, benötigt keinen Account und sendet kein
 ## Neues Projekt
 
 1. Command Palette öffnen → **AL Agent: Create Project**.
-2. Mit installierter Microsoft AL Language: **Standard AL**, **Modular AL** oder **BC AI Agent** auswählen und die erforderlichen Microsoft-Eingaben abschließen. Die Agent-Vorlage steht nur zur Verfügung, wenn die installierte Microsoft-Version einen passenden Befehl bereitstellt.
+2. Mit installierter Microsoft AL Language: **Standard AL**, **Modular AL** oder **BC AI Agent** auswählen. Den exakten lokalen Projektzielordner ohne `app.json` festlegen und im Microsoft-Assistenten denselben Ordner verwenden; die erforderlichen Microsoft-Eingaben abschließen. Die Agent-Vorlage steht nur zur Verfügung, wenn die installierte Microsoft-Version einen passenden Befehl bereitstellt.
 3. Sobald im geöffneten Zielordner eine gültige `app.json` erkannt wird, ergänzt Agentura automatisch fehlende Struktur und Markdown-Dateien, erstellt eine relative `.code-workspace` und öffnet das vollständige Projekt. Modulnamen werden vorher abgefragt. Bestehende Dateien bleiben erhalten.
 
 **Agentura allein** bietet den unabhängigen Generator mit Vorschau und ausdrücklicher Bestätigung. Ohne AL Language entsteht ein Projektgerüst mit Workspace und Dokumentation; eine kompilierbare AL-Konfiguration muss anschließend ergänzt werden. Mit AL Language kann der unabhängige Generator eine geprüfte `app.json` übernehmen oder eine Konfiguration mit bewusst eingegebenen Werten und optionaler Sandbox-Launch-Vorlage erstellen.
 
-Standard verwendet `src/<Objekttyp>`, Modular `src/<Modul>/<Objekttyp>`. BC AI Agent bewahrt Microsofts Projektstruktur und ergänzt Dokumentation sowie Workspace.
+Standard verwendet `src/<Objekttyp>`, Modular `src/<Modul>/<Objekttyp>`. Bei modularer Neuanlage entstehen sofort `docs/modules/details/src/<Modul>.md` und ein verlinkter Modulindex. BC AI Agent bewahrt Microsofts Projektstruktur und ergänzt Dokumentation sowie Workspace.
 
 ## Bestehendes Projekt ergänzen
 
 1. Lokales AL-Projekt öffnen → **AL Agent: Setup Current Project**.
 2. **Bestehende Struktur bewahren** wählen und gewünschte Modulgerüste auswählen. Zusätzliche Standard-/Modulordner werden nur auf ausdrückliche Auswahl angelegt.
 3. Vorschau mit neuen Inhalten, vorhandenen Dateien und Konflikten prüfen → **Fehlende Dateien anlegen** bestätigen.
+
+Alle Projekt-Erstellungsvarianten und **Setup Current Project** ergänzen eine fehlende `README.md` mit ausfüllbaren Abschnitten für Einrichtung, Nutzung, Entwicklung, Tests, Support und Lizenz. Bestehende README-Dateien bleiben erhalten. Die lesenden Analyse-/Öffnen-/Diagnosebefehle legen keine Dokumente an.
 
 `docs/modules/INDEX.md` und `DISCOVERY.md` dokumentieren erkannte Pfade und Quellen. Ausgewählte Modulgerüste entstehen unter `docs/modules/details/`. Fachliche Inhalte bleiben **Zu prüfen**. `docs/GAPS.md` nennt Lücken; `AGENT_INITIALIZATION.md` enthält den kopierbaren Prompt für einen externen Agenten. Bestehende Dokumente bleiben unverändert. Ein weiterer Durchlauf erzeugt keine Duplikate.
 
@@ -35,7 +37,7 @@ Standard verwendet `src/<Objekttyp>`, Modular `src/<Modul>/<Objekttyp>`. BC AI A
 - Sicheres Schreiben unterstützt derzeit native lokale `file`-Ziele. Remote-/Virtual-Analyse und Planung bleiben möglich; dort wird die Anwendung vor Dateianlage verweigert. VS Code Desktop ab **1.90** ist erforderlich; keine Web-Extension.
 - Abbruch vor Bestätigung verändert keine Projektdatei. Nach Zustimmung wird der Bestandsplan erneut geprüft. Konflikte oder veraltete Pläne stoppen die Anwendung. Teilfehler werden gemeldet; bereits angelegte Dateien werden nicht automatisch gelöscht.
 - Im **Restricted Mode** bleiben Analyse und lokale Textvorlagen verfügbar. Externe Microsoft-Projektbefehle und deren Integrationstest sind deaktiviert. Agentura führt keine Workspace-Skripte, Templates als Code oder AL-Kompilierung aus.
-- Microsofts Fertigstellung wird anhand eines einzelnen lokalen Workspace-Roots mit lesbarer `app.json` erkannt. Während eines offenen Microsoft-Ablaufs kein fremdes AL-Projekt öffnen. Bereits zuvor geöffnete AL-Projekte werden ausgeschlossen; ein vorher leerer Root darf von Microsoft befüllt werden. Die Fortsetzung läuft nach 15 Minuten ab. Bei stillem Microsoft-Abbruch oder nicht erkanntem Fensterwechsel **Setup Current Project** verwenden.
+- Microsofts Fertigstellung wird ausschließlich in einem Fenster erkannt, dessen einzelner lokaler Workspace-Root exakt dem vorher gewählten Projektziel entspricht und eine lesbare `app.json` enthält. Andere Projektfenster dürfen die Fortsetzung nicht übernehmen. Bei abweichender Zielwahl im Microsoft-Assistenten erfolgt keine automatische Ergänzung. Die Fortsetzung läuft nach 15 Minuten ab. Bei stillem Microsoft-Abbruch oder nicht erkanntem Fensterwechsel **Setup Current Project** verwenden.
 - Scangrenzen: 10.000 Einträge, 32 Verzeichnisebenen, 1 MiB `app.json`. `.git`, `node_modules` und AL-Paket-/Cacheverzeichnisse werden nicht betreten. Symlinks werden nicht verfolgt; unsichere Zielpfade blockieren.
 - Keine automatische fachliche Codeerklärung, kein Compiler und keine garantierte automatische Erkennung der Markdown-Regeln durch einen Agenten. Einen konkreten Auftrag ausdrücklich auswählen und den Startprompt bewusst senden.
 

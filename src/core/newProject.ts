@@ -1,3 +1,5 @@
+import { ExistingDocumentationTemplates } from './existingDocumentationTemplates';
+import { renderNewModuleDocumentation } from './moduleDocumentation';
 import { renderAgentDocs } from './agentDocs';
 import { parseAppJson } from '../analysis/appJson';
 import { ALConfiguration, generateALAppJson, generateLaunchJson, validateExistingALAppJson } from './alConfiguration';
@@ -34,7 +36,7 @@ export function parseModuleList(text: string): readonly string[] {
   return normalizeModules(names);
 }
 
-export function createNewProjectDraft(options: NewProjectOptions, manifest: TemplateManifest, gitignore: string, guide: string, agentDocs?: Readonly<Record<string, string>>): NewProjectDraft {
+export function createNewProjectDraft(options: NewProjectOptions, manifest: TemplateManifest, gitignore: string, guide: string, agentDocs?: Readonly<Record<string, string>>, moduleTemplates?: ExistingDocumentationTemplates): NewProjectDraft {
   validateProjectName(options.name);
   if (options.modules.length > 50) fail('input', 'Höchstens 50 Module pro Neuprojekt auswählen.');
   const context = { rootUri: '', state: 'new' as const, appJsonStatus: 'missing' as const,
@@ -51,9 +53,12 @@ export function createNewProjectDraft(options: NewProjectOptions, manifest: Temp
     }
   }
   const workspaceFile = `${options.name}.code-workspace`;
+  const moduleDocs = options.profile === 'modular' && moduleTemplates ? renderNewModuleDocumentation(options.modules, moduleTemplates) : [];
+  const modulePaths = new Set(moduleDocs.map(doc => doc.path));
   const files = [
     { path: workspaceFile, content: JSON.stringify({ folders: [{ path: '.' }], extensions: { recommendations: ['ms-dynamics-smb.al'] } }, null, 2) + '\n' },
-    ...(agentDocs ? renderAgentDocs(agentDocs, options.name) : [{ path: 'GETTING_STARTED.md', content: guide }]),
+    ...(agentDocs ? renderAgentDocs(agentDocs, options.name).filter(doc => !modulePaths.has(doc.path)) : [{ path: 'GETTING_STARTED.md', content: guide }]),
+    ...moduleDocs,
     ...(appJsonContent !== undefined ? [{ path: 'app.json', content: appJsonContent }] : []),
     ...(options.includeLaunchJson ? [{ path: '.vscode/launch.json', content: generateLaunchJson() }] : [])
   ];
